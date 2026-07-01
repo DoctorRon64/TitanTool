@@ -1,0 +1,285 @@
+:root {
+}
+
+.hud-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 24px;
+    padding-right: 32px;
+    padding-bottom: 28px;
+    padding-left: 32px;
+}
+
+.boss-hud {
+    align-self: center;
+    width: 74%;
+    min-width: 420px;
+    max-width: 980px;
+}
+
+.boss-header,
+.player-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 5px;
+}
+
+.boss-title,
+.player-title {
+    color: rgb(235, 241, 246);
+    -unity-font-style: bold;
+    letter-spacing: 0;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(8, 12, 16);
+}
+
+.boss-title {
+    font-size: 20px;
+}
+
+.player-title {
+    font-size: 15px;
+}
+
+.health-number {
+    color: rgb(235, 241, 246);
+    -unity-font-style: bold;
+    -unity-text-align: middle-right;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(8, 12, 16);
+}
+
+.boss-number {
+    font-size: 16px;
+}
+
+.player-number {
+    font-size: 13px;
+}
+
+.health-bar {
+    height: 24px;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    background-color: rgb(9, 13, 18);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgb(92, 106, 116);
+    border-right-color: rgb(92, 106, 116);
+    border-bottom-color: rgb(92, 106, 116);
+    border-left-color: rgb(92, 106, 116);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.health-bar .unity-progress-bar__background {
+    background-color: rgb(25, 31, 36);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.health-bar .unity-progress-bar__progress {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.health-bar .unity-progress-bar__title {
+    color: rgba(255, 255, 255, 0);
+    font-size: 1px;
+}
+
+.boss-bar .unity-progress-bar__progress {
+    background-color: rgb(206, 40, 56);
+}
+
+.player-bar .unity-progress-bar__progress {
+    background-color: rgb(50, 189, 116);
+}
+
+.health-bar.health-warning .unity-progress-bar__progress {
+    background-color: rgb(229, 166, 45);
+}
+
+.health-bar.health-danger .unity-progress-bar__progress {
+    background-color: rgb(220, 64, 56);
+}
+
+.boss-underline {
+    height: 2px;
+    width: 100%;
+    margin-top: 5px;
+    background-color: rgb(83, 174, 211);
+}
+
+.player-hud {
+    width: 310px;
+    min-width: 280px;
+    max-width: 360px;
+    padding-top: 10px;
+    padding-right: 12px;
+    padding-bottom: 10px;
+    padding-left: 12px;
+    background-color: rgba(7, 11, 16, 0.75);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgb(70, 88, 98);
+    border-right-color: rgb(70, 88, 98);
+    border-bottom-color: rgb(70, 88, 98);
+    border-left-color: rgb(70, 88, 98);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.player-bar {
+    height: 20px;
+}
+
+.player-status-row {
+    flex-direction: row;
+    margin-top: 8px;
+}
+
+.status-pip {
+    width: 28px;
+    height: 4px;
+    margin-right: 5px;
+    background-color: rgb(45, 56, 64);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.status-pip-active {
+    background-color: rgb(83, 174, 211);
+}
+
+.hidden {
+    display: none;
+}
+
+.gameover-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(4, 7, 10, 0.68);
+}
+
+.gameover-panel {
+    width: 560px;
+    max-width: 86%;
+    min-height: 260px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 28px;
+    padding-right: 36px;
+    padding-bottom: 30px;
+    padding-left: 36px;
+    background-color: rgba(10, 15, 20, 0.94);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-color: rgb(83, 174, 211);
+    border-right-color: rgb(83, 174, 211);
+    border-bottom-color: rgb(83, 174, 211);
+    border-left-color: rgb(83, 174, 211);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.gameover-badge {
+    min-width: 132px;
+    padding-top: 5px;
+    padding-right: 14px;
+    padding-bottom: 5px;
+    padding-left: 14px;
+    margin-bottom: 14px;
+    color: rgb(9, 13, 18);
+    background-color: rgb(83, 174, 211);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    font-size: 13px;
+    letter-spacing: 0;
+}
+
+.gameover-title {
+    color: rgb(238, 244, 249);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    font-size: 42px;
+    letter-spacing: 0;
+}
+
+.gameover-message {
+    max-width: 460px;
+    margin-top: 10px;
+    color: rgb(205, 216, 224);
+    -unity-text-align: middle-center;
+    font-size: 17px;
+    white-space: normal;
+}
+
+.gameover-rule {
+    width: 72%;
+    height: 2px;
+    margin-top: 22px;
+    margin-bottom: 15px;
+    background-color: rgb(70, 88, 98);
+}
+
+.gameover-hint {
+    color: rgb(157, 173, 184);
+    -unity-text-align: middle-center;
+    font-size: 14px;
+}
+
+.gameover-overlay.gameover-victory .gameover-panel {
+    border-top-color: rgb(58, 203, 121);
+    border-right-color: rgb(58, 203, 121);
+    border-bottom-color: rgb(58, 203, 121);
+    border-left-color: rgb(58, 203, 121);
+}
+
+.gameover-overlay.gameover-victory .gameover-badge {
+    background-color: rgb(58, 203, 121);
+}
+
+.gameover-overlay.gameover-defeat .gameover-panel {
+    border-top-color: rgb(220, 64, 56);
+    border-right-color: rgb(220, 64, 56);
+    border-bottom-color: rgb(220, 64, 56);
+    border-left-color: rgb(220, 64, 56);
+}
+
+.gameover-overlay.gameover-defeat .gameover-badge {
+    background-color: rgb(220, 64, 56);
+}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -169,7 +169,7 @@ namespace TitanTool.Editor {
         protected virtual bool hasOutput => false;
     }
 
-    internal static class BossGraphNodeMetadataUtility {
+    public static class BossGraphNodeMetadataUtility {
         private static readonly FieldInfo s_implementationField = typeof(Unity.GraphToolkit.Editor.Node)
             .GetField("m_Implementation", BindingFlags.Instance | BindingFlags.NonPublic);
 

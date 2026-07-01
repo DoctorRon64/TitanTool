@@ -2104,7 +2104,7 @@ MonoBehaviour:
   m_isOnGround: {fileID: 11400000, guid: f895712861909fe489810693ad308c03, type: 2}
   m_groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: -1
   m_groundCheck: {fileID: 3418073565699835475}
   m_groundCheckRadius: 0.2
 --- !u!4 &5608641499275199376
