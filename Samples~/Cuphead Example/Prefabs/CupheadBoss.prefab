@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c981436ae3b64c0a9cf677b0e56f55d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TitanTool.Runtime::TitanTool.Runtime.BossDirector
-  m_graph: {fileID: 7194093555672020370, guid: bb9a8cabf3f567843927b2b8588190d2, type: 3}
+  m_graph: {fileID: 7194093555672020370, guid: 77851e588f73937418ec29c1d6d3a1bd, type: 3}
   m_tickRate: 0.1
   m_debugLogging: 0
   m_player: {fileID: 0}
