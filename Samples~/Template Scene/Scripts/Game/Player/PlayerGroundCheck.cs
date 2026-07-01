@@ -4,7 +4,7 @@ using Utility;
 namespace Game.Player {
     public class PlayerGroundCheck : MonoBehaviour {
         [SerializeField] private BoolSignalAsset m_isOnGround;
-        [SerializeField] private LayerMask m_groundLayer = ~0;
+        [SerializeField] private LayerMask m_groundLayer = 1 << 6;
         [SerializeField] private Transform m_groundCheck;
         [SerializeField] private float m_groundCheckRadius = 0.2f;
         private bool m_previousGroundedState;
@@ -17,8 +17,7 @@ namespace Game.Player {
             if (m_groundCheck == null)
                 return;
 
-            LayerMask groundLayer = m_groundLayer.value == 0 ? ~0 : m_groundLayer;
-            bool isGrounded = Physics2D.OverlapCircle(m_groundCheck.position, m_groundCheckRadius, groundLayer);
+            bool isGrounded = Physics2D.OverlapCircle(m_groundCheck.position, m_groundCheckRadius, m_groundLayer);
             if (isGrounded == m_previousGroundedState) return;
             m_previousGroundedState = isGrounded;
             m_isOnGround?.Invoke(isGrounded);

@@ -2053,10 +2053,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f10db9eb7f455ebc37ec8252245b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Player.PlayerDamageShake
-  m_impulseSource: {fileID: 0}
+  m_impulseSource: {fileID: 4316709047962169021}
   m_shakeForce: 3
   m_onHealthChanged: {fileID: 11400000, guid: 6fcfe4e7b90541d4a937ac7505f48e90, type: 2}
   m_hurtSound: {fileID: 11400000, guid: 74e372af0e4884e4dbe10210514ba8f9, type: 2}
+--- !u!114 &4316709047962169021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7293925550734722928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 1
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.1
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: -1, y: -1, z: 0}
 --- !u!114 &5394891257243845192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2104,7 +2157,7 @@ MonoBehaviour:
   m_isOnGround: {fileID: 11400000, guid: f895712861909fe489810693ad308c03, type: 2}
   m_groundLayer:
     serializedVersion: 2
-    m_Bits: -1
+    m_Bits: 64
   m_groundCheck: {fileID: 3418073565699835475}
   m_groundCheckRadius: 0.2
 --- !u!4 &5608641499275199376
@@ -2174,6 +2227,7 @@ GameObject:
   - component: {fileID: 6484740247089454844}
   - component: {fileID: 5394891257243845192}
   - component: {fileID: 4652855463868540508}
+  - component: {fileID: 4316709047962169021}
   - component: {fileID: 3147582456406163733}
   - component: {fileID: 1237080597962123156}
   - component: {fileID: 8087521771019573449}

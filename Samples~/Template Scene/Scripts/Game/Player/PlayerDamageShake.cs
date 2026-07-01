@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 using Utility;
@@ -9,6 +9,14 @@ namespace Game.Player {
         [SerializeField] private float m_shakeForce = 3f;
         [SerializeField] private DoubleIntSignalAsset m_onHealthChanged;
         [SerializeField] private AudioAsset m_hurtSound;
+
+        private void Awake() {
+            if (m_impulseSource == null)
+                m_impulseSource = GetComponent<CinemachineImpulseSource>();
+
+            if (m_impulseSource == null)
+                m_impulseSource = gameObject.AddComponent<CinemachineImpulseSource>();
+        }
         
         private void OnEnable() {
             m_onHealthChanged.AddListener(DamageShake);
@@ -19,7 +27,7 @@ namespace Game.Player {
         }
 
         private void DamageShake(int _maxHealth, int _newHealth) {
-            Utility.CameraShakeManager.instance.Shake(m_impulseSource,m_shakeForce);
+            Utility.CameraShakeManager.instance.Shake(m_impulseSource, m_shakeForce);
             Game.AudioManager.instance.Play(m_hurtSound);
         }
     }
