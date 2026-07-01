@@ -944,7 +944,7 @@ MonoBehaviour:
     - rid: 1402544186550911074
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 9f500474a9b347659b46d58bf5889f1e, type: 2}
+        m_Value: {fileID: 11400000, guid: b82e417f15874604804cbf2a282ee289, type: 2}
     - rid: 1402544186550911075
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -1212,7 +1212,7 @@ MonoBehaviour:
     - rid: 1402544186550911116
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: cbd323683d03458ead5d9660e913ce01, type: 2}
+        m_Value: {fileID: 11400000, guid: 1232b016765a43ddacc7543d692d480c, type: 2}
     - rid: 1402544186550911117
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -1307,7 +1307,7 @@ MonoBehaviour:
     - rid: 1402544186550911140
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 0ffafacf86964f699f6da850f1be4df6, type: 2}
+        m_Value: {fileID: 11400000, guid: 77f4952a79f44f2dae6218884f2a6dd2, type: 2}
     - rid: 1402544186550911141
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -1402,7 +1402,7 @@ MonoBehaviour:
     - rid: 1402544186550911159
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 2a9775c4be08417e8df8617a0885ba35, type: 2}
+        m_Value: {fileID: 11400000, guid: 8b978306a908439184e44a71e224b92b, type: 2}
     - rid: 1402544186550911160
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -2636,7 +2636,7 @@ MonoBehaviour:
     - rid: 1402544186550911392
       type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: 0
+        m_Value: 1
     - rid: 1402544186550911393
       type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data: 
@@ -2659,7 +2659,7 @@ MonoBehaviour:
     - rid: 1402544186550911398
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 2a9775c4be08417e8df8617a0885ba35, type: 2}
+        m_Value: {fileID: 11400000, guid: 8b978306a908439184e44a71e224b92b, type: 2}
     - rid: 1402544186550911399
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -3439,7 +3439,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 089c7ff85df8e360ec741e735e9d02ac
         m_Version: 2
-        m_Position: {x: -323.269, y: 1887.1504}
+        m_Position: {x: -285.36905, y: 1891.3525}
         m_Title: 
         m_Tooltip: Redirects flow wires to keep the graph layout tidy.
         m_NodePreviewModel:
@@ -4583,7 +4583,7 @@ MonoBehaviour:
     - rid: 7926195740118876953
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: 1
+        m_Value: 0
     - rid: 7926195740118876954
       type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -4759,7 +4759,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: eee7e062a722668a136e681c0fb37c63
         m_Version: 2
-        m_Position: {x: 815.18896, y: 2711.72}
+        m_Position: {x: 794.18896, y: 2714.72}
         m_Title: Boss Timout sec
         m_Tooltip: 
         m_NodePreviewModel:

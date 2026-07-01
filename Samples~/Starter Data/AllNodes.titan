@@ -1,0 +1,1828 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790b4d75d92f4b0984310a268dbd952f, type: 3}
+  m_Name: AllNodes
+  m_EditorClassIdentifier: Unity.GraphToolkit.Editor::Unity.GraphToolkit.Editor.Implementation.GraphObjectImp
+  m_GraphModel:
+    rid: 1402544301841318093
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1402544301841318093
+      type: {class: GraphModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 9346475684618184493
+          m_Value1: 6942945007341642850
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 2d277e8b1d5ab58162a4abe9b24b5a60
+        m_Name: AllNodes
+        m_GraphNodeModels:
+        - rid: 1402544301841318096
+        - rid: 1402544301841318102
+        - rid: 1402544301841318109
+        - rid: 1402544301841318116
+        - rid: 1402544301841318127
+        - rid: 1402544301841318136
+        - rid: 1402544301841318142
+        - rid: 1402544301841318155
+        - rid: 1402544301841318159
+        - rid: 1402544301841318163
+        - rid: 1402544301841318168
+        - rid: 1402544301841318171
+        - rid: 1402544301841318175
+        - rid: 1402544301841318179
+        - rid: 1402544301841318192
+        - rid: 1402544301841318205
+        - rid: 1402544301841318212
+        - rid: 1402544301841318214
+        - rid: 1402544301841318217
+        - rid: 1402544301841318229
+        - rid: 1402544301841318236
+        - rid: 1402544301841318247
+        - rid: 1402544301841318251
+        m_GraphWireModels: []
+        m_GraphStickyNoteModels: []
+        m_GraphPlacematModels: []
+        m_GraphVariableModels: []
+        m_GraphPortalModels: []
+        m_SectionModels:
+        - rid: 1402544301841318094
+        m_LocalSubgraphs: []
+        m_LastKnownBounds:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        m_GraphElementMetaData:
+        - m_Guid:
+            m_Value0: 8526830375860835217
+            m_Value1: 4984583482224267142
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 911332bd0c63557686cf418344cc2c45
+          m_Category: 0
+          m_Index: 0
+        - m_Guid:
+            m_Value0: 9815284058387849457
+            m_Value1: 4831976509503058055
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: f120c3f5d8e436888730f6d308a10e43
+          m_Category: 0
+          m_Index: 1
+        - m_Guid:
+            m_Value0: 6268161441754270148
+            m_Value1: 5201125160521190218
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: c44990029ffbfc564a4b36d9c61b2e48
+          m_Category: 0
+          m_Index: 2
+        - m_Guid:
+            m_Value0: 1727826815608137524
+            m_Value1: 14847173135366351862
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 34a7b7995579fa17f6eb3b8c4dc10bce
+          m_Category: 0
+          m_Index: 3
+        - m_Guid:
+            m_Value0: 17550442969191074814
+            m_Value1: 16863748253549119496
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: fecb62ede4b28ff308c8684ab01108ea
+          m_Category: 0
+          m_Index: 4
+        - m_Guid:
+            m_Value0: 6455820683840609691
+            m_Value1: 5431021331848960131
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 9b5df021b5ae975983186d6420dd5e4b
+          m_Category: 0
+          m_Index: 5
+        - m_Guid:
+            m_Value0: 6337562859500224719
+            m_Value1: 1636804793099100586
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: cf4038c6d78bf357aa2154834919b716
+          m_Category: 0
+          m_Index: 6
+        - m_Guid:
+            m_Value0: 5712147145861002313
+            m_Value1: 85162409587172141
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 4974ce9d909f454f2de3a8a3c28e2e01
+          m_Category: 0
+          m_Index: 7
+        - m_Guid:
+            m_Value0: 15954336103015624284
+            m_Value1: 13414443774592748849
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 5cae6fef273069dd310d0d4c8aad29ba
+          m_Category: 0
+          m_Index: 8
+        - m_Guid:
+            m_Value0: 7433167209463148856
+            m_Value1: 3452558589705277782
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 38f121c431ea276756519bb1bef3e92f
+          m_Category: 0
+          m_Index: 9
+        - m_Guid:
+            m_Value0: 12555366146209040681
+            m_Value1: 7870675485270539078
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 2949c121fd9e3dae46fbec39a7413a6d
+          m_Category: 0
+          m_Index: 10
+        - m_Guid:
+            m_Value0: 2642298656064121948
+            m_Value1: 8279339603625000780
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 5cac31d1a054ab244c3fe4f0801fe672
+          m_Category: 0
+          m_Index: 11
+        - m_Guid:
+            m_Value0: 1448593091947509701
+            m_Value1: 4049617107270132877
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: c5b79dfdbd6f1a148d642ea34d213338
+          m_Category: 0
+          m_Index: 12
+        - m_Guid:
+            m_Value0: 16956641779391960406
+            m_Value1: 14321670011892143201
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 569534b4db1752eb61143211ffcac0c6
+          m_Category: 0
+          m_Index: 13
+        - m_Guid:
+            m_Value0: 10585186113171377706
+            m_Value1: 9731891645768472009
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 2a4efaecaf22e692c9159fdae39f0e87
+          m_Category: 0
+          m_Index: 14
+        - m_Guid:
+            m_Value0: 15620650078997101206
+            m_Value1: 5239322142101444385
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 96ba4c2f7cb2c7d82197cba7bacfb548
+          m_Category: 0
+          m_Index: 15
+        - m_Guid:
+            m_Value0: 4853107667301980939
+            m_Value1: 8248584170365874565
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 0b5b42e6b5b359438571919e99db7872
+          m_Category: 0
+          m_Index: 16
+        - m_Guid:
+            m_Value0: 13396204852524963333
+            m_Value1: 12557038073690166308
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 05561d5556e1e8b924945b15998f43ae
+          m_Category: 0
+          m_Index: 17
+        - m_Guid:
+            m_Value0: 14367729284857887634
+            m_Value1: 2441552638559451720
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 927bee3ca96d64c748fac0593023e221
+          m_Category: 0
+          m_Index: 18
+        - m_Guid:
+            m_Value0: 2295484982224189243
+            m_Value1: 16501495424861189340
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 3b77b7e86d33db1fdcb49505a91601e5
+          m_Category: 0
+          m_Index: 19
+        - m_Guid:
+            m_Value0: 6649099334751421954
+            m_Value1: 6429319410051276247
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 020625d49d58465cd75da17ff0873959
+          m_Category: 0
+          m_Index: 20
+        - m_Guid:
+            m_Value0: 15706962337658268005
+            m_Value1: 17364468138058464822
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 65698fec0657fad9363e904ac5fbfaf0
+          m_Category: 0
+          m_Index: 21
+        - m_Guid:
+            m_Value0: 10380872209015658
+            m_Value1: 2154413042052957505
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 6a237a2859e12400410509473f03e61d
+          m_Category: 0
+          m_Index: 22
+        m_EntryPoint:
+          rid: 1402544301841318096
+        m_Graph:
+          rid: 1402544301841318095
+    - rid: 1402544301841318094
+      type: {class: SectionModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 9245789746269537591
+          m_Value1: 8256482354738974912
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 374558b6c9a44f80c0507ff8f4ea9472
+        m_Version: 2
+        m_Items: []
+        m_Title: 
+    - rid: 1402544301841318095
+      type: {class: BossGraph, ns: TitanTool.Editor, asm: TitanTool.Editor}
+      data:
+        m_rebuildQueued: 0
+        m_assetPath: 
+    - rid: 1402544301841318096
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 8526830375860835217
+          m_Value1: 4984583482224267142
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 911332bd0c63557686cf418344cc2c45
+        m_Version: 2
+        m_Position: {x: 360.21973, y: 1348.3833}
+        m_Title: 
+        m_Tooltip: Triggers parameters or plays animation clips on the boss animator.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_Command
+          - In
+          - CrossFadeDuration
+          - AnimationClip
+          m_ValueList:
+          - rid: 1402544301841318097
+          - rid: 1402544301841318098
+          - rid: 3553034034931302506
+          - rid: 3553034034931302505
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318100
+    - rid: 1402544301841318097
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.AnimationCommand, TitanTool.Runtime,
+              Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 5
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.AnimationCommand, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318098
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318100
+      type: {class: AnimationNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.AnimationNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 992aa155-1a6e-4cae-a477-1e73905b5cb6
+        m_childGuids: []
+    - rid: 1402544301841318102
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 9815284058387849457
+          m_Value1: 4831976509503058055
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: f120c3f5d8e436888730f6d308a10e43
+        m_Version: 2
+        m_Position: {x: 1007.43335, y: -383.11655}
+        m_Title: 
+        m_Tooltip: Passes when a blackboard number matches the selected comparison.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ValueType
+          - __option_Comparison
+          - In
+          - KeyName
+          - IntThreshold
+          m_ValueList:
+          - rid: 1402544301841318103
+          - rid: 1402544301841318104
+          - rid: 1402544301841318105
+          - rid: 1402544301841318106
+          - rid: 1402544301841318107
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318108
+    - rid: 1402544301841318103
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.BlackboardNumberType,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.BlackboardNumberType,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318104
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.BlackboardComparison,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 3
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.BlackboardComparison,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318105
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318106
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: Counter
+    - rid: 1402544301841318107
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 3
+    - rid: 1402544301841318108
+      type: {class: BlackboardCompareNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.BlackboardCompareNode,
+          TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: e2da6227-a7ab-43d1-a153-863c72abd8d8
+        m_childGuids: []
+    - rid: 1402544301841318109
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 6268161441754270148
+          m_Value1: 5201125160521190218
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: c44990029ffbfc564a4b36d9c61b2e48
+        m_Version: 2
+        m_Position: {x: 1007.15625, y: -158.81415}
+        m_Title: 
+        m_Tooltip: Sets or modifies a numeric value stored on the blackboard.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ValueType
+          - __option_Operation
+          - In
+          - KeyName
+          - IntOperand
+          m_ValueList:
+          - rid: 1402544301841318110
+          - rid: 1402544301841318111
+          - rid: 1402544301841318112
+          - rid: 1402544301841318113
+          - rid: 1402544301841318114
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318115
+    - rid: 1402544301841318110
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.BlackboardNumberType,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.BlackboardNumberType,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318111
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.BlackboardMathOperation,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.BlackboardMathOperation,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318112
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318113
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: Counter
+    - rid: 1402544301841318114
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318115
+      type: {class: BlackboardMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.BlackboardMathNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: fccb6711-6207-4a70-af55-83c59608ce91
+        m_childGuids: []
+    - rid: 1402544301841318116
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 1727826815608137524
+          m_Value1: 14847173135366351862
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 34a7b7995579fa17f6eb3b8c4dc10bce
+        m_Version: 2
+        m_Position: {x: -727.80286, y: -28.535212}
+        m_Title: 
+        m_Tooltip: Lets its child run only after the cooldown has finished.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_StartReady
+          - In
+          - Duration
+          m_ValueList:
+          - rid: 1402544301841318117
+          - rid: 1402544301841318118
+          - rid: 1402544301841318119
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318120
+    - rid: 1402544301841318117
+      type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318118
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318119
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318120
+      type: {class: CooldownNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.CooldownNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 457fee92-1aa0-4807-933b-78794d02c8c4
+        m_childGuids: []
+    - rid: 1402544301841318127
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 17550442969191074814
+          m_Value1: 16863748253549119496
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: fecb62ede4b28ff308c8684ab01108ea
+        m_Version: 2
+        m_Position: {x: 417.46564, y: -361.74274}
+        m_Title: 
+        m_Tooltip: Moves the boss toward a player, point, or fixed position.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_TargetSource
+          - __option_StopOnArrival
+          - In
+          - Offset
+          - Speed
+          - StopDistance
+          - Timeout
+          m_ValueList:
+          - rid: 1402544301841318128
+          - rid: 1402544301841318129
+          - rid: 1402544301841318130
+          - rid: 1402544301841318131
+          - rid: 1402544301841318132
+          - rid: 1402544301841318133
+          - rid: 1402544301841318134
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318135
+    - rid: 1402544301841318128
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318129
+      type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318130
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318131
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 0, y: 0}
+    - rid: 1402544301841318132
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 4
+    - rid: 1402544301841318133
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 0.2
+    - rid: 1402544301841318134
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 0
+    - rid: 1402544301841318135
+      type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.MoveToNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 69d308c9-b391-419d-a2f0-34a8bc3551e0
+        m_childGuids: []
+    - rid: 1402544301841318136
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 6455820683840609691
+          m_Value1: 5431021331848960131
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 9b5df021b5ae975983186d6420dd5e4b
+        m_Version: 2
+        m_Position: {x: -718.11755, y: 601.10504}
+        m_Title: 
+        m_Tooltip: Runs all child branches at the same time and returns based on
+          the success and failure rules.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ChildCount
+          - __option_SuccessRule
+          - __option_FailureRule
+          - In
+          m_ValueList:
+          - rid: 1402544301841318137
+          - rid: 1402544301841318138
+          - rid: 1402544301841318139
+          - rid: 1402544301841318140
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318141
+    - rid: 1402544301841318137
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 2
+    - rid: 1402544301841318138
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Base.ParallelSuccessRule, TitanTool.Runtime,
+              Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Base.ParallelSuccessRule, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318139
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Base.ParallelFailureRule, TitanTool.Runtime,
+              Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Base.ParallelFailureRule, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318140
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318141
+      type: {class: ParallelNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.ParallelNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 8d03394a-299b-4af0-a076-cd469b7640df
+        m_childGuids: []
+    - rid: 1402544301841318142
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 6337562859500224719
+          m_Value1: 1636804793099100586
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: cf4038c6d78bf357aa2154834919b716
+        m_Version: 2
+        m_Position: {x: 373.4264, y: 1184.392}
+        m_Title: 
+        m_Tooltip: Runs its child only while boss health is inside this percent range.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - In
+          - MinHealthPercent
+          - MaxHealthPercent
+          m_ValueList:
+          - rid: 1402544301841318143
+          - rid: 1402544301841318144
+          - rid: 1402544301841318145
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318146
+    - rid: 1402544301841318143
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318144
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 0
+    - rid: 1402544301841318145
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 100
+    - rid: 1402544301841318146
+      type: {class: PhaseNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.PhaseNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 1321c8cd-627b-4420-8357-4c74640241e4
+        m_childGuids: []
+    - rid: 1402544301841318155
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 5712147145861002313
+          m_Value1: 85162409587172141
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 4974ce9d909f454f2de3a8a3c28e2e01
+        m_Version: 2
+        m_Position: {x: -224.74557, y: 204.5996}
+        m_Title: 
+        m_Tooltip: Chooses one child at random and runs it.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ChildCount
+          - In
+          m_ValueList:
+          - rid: 1402544301841318156
+          - rid: 1402544301841318157
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318158
+    - rid: 1402544301841318156
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 2
+    - rid: 1402544301841318157
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318158
+      type: {class: RandomSelectorNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.RandomSelectorNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: d60920d9-b742-4228-bc78-ee4c9bcdf4ae
+        m_childGuids: []
+    - rid: 1402544301841318159
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 15954336103015624284
+          m_Value1: 13414443774592748849
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 5cae6fef273069dd310d0d4c8aad29ba
+        m_Version: 2
+        m_Position: {x: 1372.511, y: 145.8833}
+        m_Title: 
+        m_Tooltip: Outputs a random value between the minimum and maximum range.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ValueType
+          - Min
+          - Max
+          m_ValueList:
+          - rid: 7926195740118876545
+          - rid: 7926195740118876556
+          - rid: 7926195740118876557
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318162
+    - rid: 1402544301841318162
+      type: {class: RandomConstantNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data: 
+    - rid: 1402544301841318163
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 7433167209463148856
+          m_Value1: 3452558589705277782
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 38f121c431ea276756519bb1bef3e92f
+        m_Version: 2
+        m_Position: {x: -715.81726, y: 303.71512}
+        m_Title: 
+        m_Tooltip: Runs its child repeatedly for the configured number of loops.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ChildCount
+          - In
+          - RepeatCount
+          m_ValueList:
+          - rid: 1402544301841318164
+          - rid: 1402544301841318165
+          - rid: 1402544301841318166
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318167
+    - rid: 1402544301841318164
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318165
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318166
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 2
+    - rid: 1402544301841318167
+      type: {class: RepeaterNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.RepeaterNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: e3844351-903f-4db0-8cd2-ae2e98b927b1
+        m_childGuids: []
+    - rid: 1402544301841318168
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 12555366146209040681
+          m_Value1: 7870675485270539078
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 2949c121fd9e3dae46fbec39a7413a6d
+        m_Version: 2
+        m_Position: {x: -699.9473, y: 479.6075}
+        m_Title: 
+        m_Tooltip: Redirects flow wires to keep the graph layout tidy.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - In
+          m_ValueList:
+          - rid: 1402544301841318169
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318170
+    - rid: 1402544301841318169
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318170
+      type: {class: RerouteNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.RerouteNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 66d2d2f5-5585-4b26-9b05-bb34f148dff0
+        m_childGuids: []
+    - rid: 1402544301841318171
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 2642298656064121948
+          m_Value1: 8279339603625000780
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 5cac31d1a054ab244c3fe4f0801fe672
+        m_Version: 2
+        m_Position: {x: -711.85, y: 148.98257}
+        m_Title: 
+        m_Tooltip: Runs its child once, then returns the configured result on later
+          visits.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_CompletedStatus
+          - In
+          m_ValueList:
+          - rid: 1402544301841318172
+          - rid: 1402544301841318173
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318174
+    - rid: 1402544301841318172
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Base.RunOnceCompletedStatus,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Base.RunOnceCompletedStatus,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318173
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318174
+      type: {class: RunOnceNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.RunOnceNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: d5afc7b9-015e-41c1-853a-712bd43a481e
+        m_childGuids: []
+    - rid: 1402544301841318175
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 1448593091947509701
+          m_Value1: 4049617107270132877
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: c5b79dfdbd6f1a148d642ea34d213338
+        m_Version: 2
+        m_Position: {x: -205.65814, y: -150.79607}
+        m_Title: 
+        m_Tooltip: Runs children in order until one succeeds.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ChildCount
+          - In
+          m_ValueList:
+          - rid: 1402544301841318176
+          - rid: 1402544301841318177
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318178
+    - rid: 1402544301841318176
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 2
+    - rid: 1402544301841318177
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318178
+      type: {class: SelectorNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.SelectorNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: fc436269-569f-4b99-8133-4eb649266b07
+        m_childGuids: []
+    - rid: 1402544301841318179
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 16956641779391960406
+          m_Value1: 14321670011892143201
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 569534b4db1752eb61143211ffcac0c6
+        m_Version: 2
+        m_Position: {x: -217.19861, y: 19.210518}
+        m_Title: 
+        m_Tooltip: Runs children in order and stops when one fails.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ChildCount
+          - In
+          m_ValueList:
+          - rid: 1402544301841318180
+          - rid: 1402544301841318181
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318182
+    - rid: 1402544301841318180
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 2
+    - rid: 1402544301841318181
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318182
+      type: {class: SequenceNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.SequenceNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: e701306a-ff22-47fe-b5be-8d1a6869de25
+        m_childGuids: []
+    - rid: 1402544301841318192
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 10585186113171377706
+          m_Value1: 9731891645768472009
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 2a4efaecaf22e692c9159fdae39f0e87
+        m_Version: 2
+        m_Position: {x: 386.3557, y: 204.11557}
+        m_Title: 
+        m_Tooltip: Spawns bullets in the selected pattern from the chosen source.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_Pattern
+          - __option_PositionSource
+          - __option_AimSource
+          - __option_OwnerTeam
+          - In
+          - BulletPrefab
+          - Offset
+          - BulletCount
+          - SpreadAngle
+          - Speed
+          m_ValueList:
+          - rid: 1402544301841318193
+          - rid: 1402544301841318194
+          - rid: 1402544301841318195
+          - rid: 1402544301841318196
+          - rid: 1402544301841318197
+          - rid: 1402544301841318198
+          - rid: 1402544301841318200
+          - rid: 1402544301841318201
+          - rid: 1402544301841318202
+          - rid: 1402544301841318203
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318204
+    - rid: 1402544301841318193
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.ShootPattern, TitanTool.Runtime,
+              Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.ShootPattern, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318194
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 2
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318195
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.ShootAimSource, TitanTool.Runtime,
+              Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 4
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.ShootAimSource, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318196
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: Utility.DamagableTeam, Utility, Version=0.0.0.0, Culture=neutral,
+              PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: Utility.DamagableTeam, Utility, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+    - rid: 1402544301841318197
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318198
+      type: {class: 'Constant`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {fileID: 0}
+    - rid: 1402544301841318200
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 0, y: 0}
+    - rid: 1402544301841318201
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318202
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 45
+    - rid: 1402544301841318203
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 8
+    - rid: 1402544301841318204
+      type: {class: ShootPatternNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.ShootPatternNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: d6cd88f3-e610-4305-b2e3-8fb2355e87b5
+        m_childGuids: []
+    - rid: 1402544301841318205
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 15620650078997101206
+          m_Value1: 5239322142101444385
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 96ba4c2f7cb2c7d82197cba7bacfb548
+        m_Version: 2
+        m_Position: {x: 384.06262, y: 556.35645}
+        m_Title: 
+        m_Tooltip: Instantiates a prefab at a fixed position, target point, or boss-relative
+          source.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_PositionSource
+          - In
+          - InPrefabPort
+          - Offset
+          m_ValueList:
+          - rid: 1402544301841318206
+          - rid: 1402544301841318207
+          - rid: 1402544301841318208
+          - rid: 1402544301841318210
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318211
+    - rid: 1402544301841318206
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318207
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318208
+      type: {class: 'Constant`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {fileID: 0}
+    - rid: 1402544301841318210
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 0, y: 0}
+    - rid: 1402544301841318211
+      type: {class: SpawnNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.SpawnNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 89d2eb4e-3590-4ed6-abfb-b4b98c155691
+        m_childGuids: []
+        m_prefabPath: 
+    - rid: 1402544301841318212
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 4853107667301980939
+          m_Value1: 8248584170365874565
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 0b5b42e6b5b359438571919e99db7872
+        m_Version: 2
+        m_Position: {x: -224.47784, y: -321.4081}
+        m_Title: 
+        m_Tooltip: Entry point for the boss graph.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList: []
+          m_ValueList: []
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318213
+    - rid: 1402544301841318213
+      type: {class: StartNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.StartNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 48b08f96-96b3-48d5-86ec-ab0fb25432a6
+        m_childGuids: []
+    - rid: 1402544301841318214
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 13396204852524963333
+          m_Value1: 12557038073690166308
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 05561d5556e1e8b924945b15998f43ae
+        m_Version: 2
+        m_Position: {x: 1348.3629, y: 439.5425}
+        m_Title: 
+        m_Tooltip: Cancels currently running actions and clears their runtime state.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - In
+          m_ValueList:
+          - rid: 7926195740118876848
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318216
+    - rid: 1402544301841318216
+      type: {class: AbortNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.AbortNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 37e619aa-b78c-454a-8ba5-6951b0b57c9c
+        m_childGuids: []
+    - rid: 1402544301841318217
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 14367729284857887634
+          m_Value1: 2441552638559451720
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 927bee3ca96d64c748fac0593023e221
+        m_Version: 2
+        m_Position: {x: 379.94135, y: 1569.4021}
+        m_Title: 
+        m_Tooltip: Changes the boss SpriteRenderer to the selected sprite.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - In
+          - Sprite
+          m_ValueList:
+          - rid: 1402544301841318218
+          - rid: 1402544301841318219
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318220
+    - rid: 1402544301841318218
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318219
+      type: {class: 'Constant`1[[UnityEngine.Sprite, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {fileID: 0}
+    - rid: 1402544301841318220
+      type: {class: SwapSpriteNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.SwapSpriteNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 65c27481-c1f5-416c-a9c4-cd223a36045a
+        m_childGuids: []
+    - rid: 1402544301841318229
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 2295484982224189243
+          m_Value1: 16501495424861189340
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 3b77b7e86d33db1fdcb49505a91601e5
+        m_Version: 2
+        m_Position: {x: 377.72443, y: -94.79614}
+        m_Title: 
+        m_Tooltip: Instantly moves the boss to a player, point, or fixed position.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_TargetSource
+          - __option_StopMovement
+          - In
+          - TargetPoint
+          - Offset
+          m_ValueList:
+          - rid: 1402544301841318230
+          - rid: 1402544301841318231
+          - rid: 1402544301841318232
+          - rid: 1402544318111285255
+          - rid: 1402544301841318234
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318235
+    - rid: 1402544301841318230
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 3
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318231
+      type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318232
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318234
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 0, y: 0}
+    - rid: 1402544301841318235
+      type: {class: TeleportToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.TeleportToNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 7f20f28e-8003-4d37-a971-b2a008c424ca
+        m_childGuids: []
+    - rid: 1402544301841318236
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 6649099334751421954
+          m_Value1: 6429319410051276247
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 020625d49d58465cd75da17ff0873959
+        m_Version: 2
+        m_Position: {x: 383.80798, y: 767.692}
+        m_Title: 
+        m_Tooltip: Launches a Rigidbody2D prefab from one source toward another.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_SpawnSource
+          - __option_TargetSource
+          - __option_OwnerTeam
+          - In
+          - Prefab
+          - SpawnOffset
+          - TargetOffset
+          - FlightTime
+          - AngularVelocity
+          m_ValueList:
+          - rid: 1402544301841318237
+          - rid: 1402544301841318238
+          - rid: 1402544301841318239
+          - rid: 1402544301841318240
+          - rid: 1402544301841318241
+          - rid: 1402544301841318242
+          - rid: 1402544301841318243
+          - rid: 1402544301841318244
+          - rid: 1402544301841318245
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318246
+    - rid: 1402544301841318237
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318238
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.SpawnPositionSource, TitanTool.Runtime,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 1402544301841318239
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: Utility.DamagableTeam, Utility, Version=0.0.0.0, Culture=neutral,
+              PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: Utility.DamagableTeam, Utility, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
+    - rid: 1402544301841318240
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318241
+      type: {class: 'Constant`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {fileID: 0}
+    - rid: 1402544301841318242
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 0, y: 0}
+    - rid: 1402544301841318243
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 0, y: 0}
+    - rid: 1402544301841318244
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318245
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 0
+    - rid: 1402544301841318246
+      type: {class: ThrowNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.ThrowNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 58c0fc81-3a7e-4bab-826e-085b2d63e283
+        m_childGuids: []
+    - rid: 1402544301841318247
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 15706962337658268005
+          m_Value1: 17364468138058464822
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 65698fec0657fad9363e904ac5fbfaf0
+        m_Version: 2
+        m_Position: {x: -700.21747, y: -166.83717}
+        m_Title: 
+        m_Tooltip: Pauses this branch for the configured duration.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - In
+          - InDuration
+          m_ValueList:
+          - rid: 1402544301841318248
+          - rid: 1402544301841318249
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318250
+    - rid: 1402544301841318248
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318249
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318250
+      type: {class: WaitNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.WaitNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: ad5020b0-41a4-4556-a54a-2bff1b6a1dde
+        m_childGuids: []
+    - rid: 1402544301841318251
+      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 10380872209015658
+          m_Value1: 2154413042052957505
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 6a237a2859e12400410509473f03e61d
+        m_Version: 2
+        m_Position: {x: -231.55054, y: 381.2914}
+        m_Title: 
+        m_Tooltip: Chooses one child at random, using weights to favor some branches.
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList:
+          - __option_ChildCount
+          - In
+          - Weight0
+          - Weight1
+          m_ValueList:
+          - rid: 1402544301841318252
+          - rid: 1402544301841318253
+          - rid: 1402544301841318254
+          - rid: 1402544301841318255
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_Node:
+          rid: 1402544301841318256
+    - rid: 1402544301841318252
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 2
+    - rid: 1402544301841318253
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
+    - rid: 1402544301841318254
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318255
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 1402544301841318256
+      type: {class: WeightedRandomSelectorNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      data:
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.WeightedRandomSelectorNode,
+          TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeGuid: 4d86c879-24f5-41bd-8cce-5fd45f238184
+        m_childGuids: []
+    - rid: 1402544318111285255
+      type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {fileID: 11400000, guid: 561bd0362b3055249a83ff224a8de7b5, type: 2}
+    - rid: 3553034034931302505
+      type: {class: 'Constant`1[[UnityEngine.AnimationClip, UnityEngine.AnimationModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {fileID: 0}
+    - rid: 3553034034931302506
+      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 0.1
+    - rid: 7926195740118876545
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+              Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926195740118876556
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 0
+    - rid: 7926195740118876557
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 10
+    - rid: 7926195740118876848
+      type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data: 
