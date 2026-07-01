@@ -1,0 +1,42 @@
+{
+    "name":  "com.drron.titantool",
+    "displayName":  "TitanTool",
+    "version":  "0.1.1",
+    "unity":  "6000.0",
+    "description":  "A Unity boss behavior graph tool for building, validating, compiling, and debugging boss encounters.",
+    "keywords":  [
+                     "boss",
+                     "graph",
+                     "ai",
+                     "behavior-tree",
+                     "tools"
+                 ],
+    "author":  {
+                   "name":  "Doctor Ron"
+               },
+    "license":  "MIT",
+    "dependencies":  {
+                         "com.unity.cinemachine":  "3.1.6",
+                         "com.unity.graphtoolkit":  "0.4.0-exp.2",
+                         "com.unity.2d.aseprite":  "3.0.1",
+                         "com.unity.inputsystem":  "1.19.0",
+                         "com.unity.render-pipelines.universal":  "17.3.0"
+                     },
+    "samples":  [
+                    {
+                        "displayName":  "Starter Data",
+                        "description":  "Default TitanTool graph and target point keys for a new boss setup.",
+                        "path":  "Samples~/Starter Data"
+                    },
+                    {
+                        "displayName":  "Cuphead Example",
+                        "description":  "A Cuphead-style sample graph, all-nodes reference graph, scene data, sprites, and prefabs.",
+                        "path":  "Samples~/Cuphead Example"
+                    },
+                    {
+                        "displayName":  "Template Scene",
+                        "description":  "Playable TitanTool template boss scene with sample game scripts, prefabs, UI, visuals, audio, and default graph wiring.",
+                        "path":  "Samples~/Template Scene"
+                    }
+                ]
+}

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b3b63d9f2a4c1f812b594d79f3cf75, type: 3}
+  m_Name: PlayerShootSFX
+  m_EditorClassIdentifier: Utility::Utility.AudioAsset
+  clips:
+  - {fileID: 8300000, guid: 6c4d771e221ee654faaf518699b539da, type: 3}
+  volume: 0.2
+  pitch: {x: 0.8, y: 1.2}

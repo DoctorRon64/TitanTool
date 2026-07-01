@@ -1,0 +1,34 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/css.uss?fileID=7433441132597879392&amp;guid=a280dd323b334f547bfa4d604fe7178f&amp;type=3#css"/>
+    <ui:VisualElement class="hud-root">
+        <ui:VisualElement class="boss-hud">
+            <ui:VisualElement class="boss-header">
+                <ui:Label text="TITAN" class="boss-title"/>
+                <ui:Label name="BossHealthText" text="-- / --" class="health-number boss-number"/>
+            </ui:VisualElement>
+            <ui:ProgressBar name="BossHealth" low-value="0" high-value="100" class="health-bar boss-bar"/>
+            <ui:VisualElement class="boss-underline"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="player-hud">
+            <ui:VisualElement class="player-header">
+                <ui:Label text="PLAYER&#10;" class="player-title"/>
+                <ui:Label name="PlayerHealthText" text="-- / --" class="health-number player-number"/>
+            </ui:VisualElement>
+            <ui:ProgressBar name="PlayerHealth" low-value="0" high-value="100" class="health-bar player-bar"/>
+            <ui:VisualElement class="player-status-row">
+                <ui:VisualElement class="status-pip status-pip-active"/>
+                <ui:VisualElement class="status-pip status-pip-active"/>
+                <ui:VisualElement class="status-pip"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="GameOverOverlay" class="gameover-overlay hidden">
+            <ui:VisualElement class="gameover-panel">
+                <ui:Label name="GameOverBadge" text="RESULT" class="gameover-badge"/>
+                <ui:Label name="GameOverTitle" text="GAME OVER" class="gameover-title"/>
+                <ui:Label name="GameOverMessage" text="The fight has ended." class="gameover-message"/>
+                <ui:VisualElement class="gameover-rule"/>
+                <ui:Label name="GameOverHint" text="Press Restart to try again." class="gameover-hint"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,197 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Unity.GraphToolkit.Editor;
+using UnityEngine;
+
+namespace TitanTool.Editor {
+    public abstract class NodeFlow {
+    }
+
+    [Serializable]
+    public abstract class BossGraphNode : Unity.GraphToolkit.Editor.Node {
+        [SerializeField] private string m_runtimeTypeName;
+        [SerializeField] private string m_runtimeGuid;
+        protected const string EXECUTION_PORT_DEFAULT_NAME = "ExecutionPort";
+        protected const string EXECUTION_PORT_IN = "In";
+        protected const string EXECUTION_PORT_OUT = "Out";
+        public string runtimeGuid => m_runtimeGuid;
+        public string runtimeTypeName => m_runtimeTypeName;
+        protected virtual int outputCount => 0;
+        public GraphNodeRegistration registration => NodeTypeRegistry.GetRegistrationForEditor(GetType());
+        public string displayName => registration?.displayName ?? GetType().Name;
+        public BossGraphNodeCategory category => registration?.category ?? BossGraphNodeCategory.Utility;
+        public Color categoryColor => registration?.color ?? BossGraphNodeCategoryColors.GetColor(category);
+        public string icon => registration?.icon ?? BossGraphNodeIcons.GetDefaultIcon(category);
+        public string tooltip => registration?.tooltip ?? displayName;
+
+        [SerializeField] private List<string> m_childGuids = new();
+        public IReadOnlyList<string> childGuids => m_childGuids;
+
+        public void Initialize(Type runtime) {
+            m_runtimeTypeName = runtime.AssemblyQualifiedName;
+            m_runtimeGuid = Guid.NewGuid().ToString();
+            BossGraphNodeMetadataUtility.Apply(this, icon, tooltip);
+            //title = runtime.Name;
+        }
+
+        public void InitializeNode(Type runtimeType) {
+            BossGraphNodeMetadataUtility.Apply(this, icon, tooltip);
+
+            if (!string.IsNullOrEmpty(m_runtimeGuid))
+                return;
+
+            m_runtimeGuid = Guid.NewGuid().ToString();
+            m_runtimeTypeName = runtimeType.AssemblyQualifiedName;
+        }
+
+        public void RegenerateRuntimeGuid() {
+            m_runtimeGuid = Guid.NewGuid().ToString();
+        }
+
+
+        //public void Bind(string guid) => m_runtimeGuid = guid;
+        public BossGraphValidationIssue[] GetValidationIssues() {
+            List<BossGraphValidationIssue> issues = new();
+
+            if (string.IsNullOrEmpty(runtimeGuid)) {
+                issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Error, $"{GetType().Name} is missing a runtime GUID.", this));
+            } else if (!Guid.TryParse(runtimeGuid, out _)) {
+                issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Error, $"{GetType().Name} has an invalid runtime GUID: {runtimeGuid}", this));
+            }
+
+            if (NodeTypeRegistry.GetRuntime(GetType()) == null)
+                issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Error, $"No runtime type is registered for {GetType().Name}.", this));
+
+            if (this is IGraphNodeValidator validator)
+                validator.Validate(new BossGraphNodeValidationContext(this, issues));
+
+            return issues.ToArray();
+        }
+
+        public Type GetRuntimeType() {
+            if (string.IsNullOrEmpty(m_runtimeTypeName)) {
+                Debug.LogError("Runtime type name missing.");
+                return null;
+            }
+
+            Type type = Type.GetType(m_runtimeTypeName);
+            if (type == null) {
+                Debug.LogError($"Failed to resolve runtime type:\n{m_runtimeTypeName}");
+            }
+
+            return type;
+        }
+
+        protected IReadOnlyList<string> AddInputOutputExecutionPorts(IPortDefinitionContext context) {
+            if (hasInput) {
+                context.AddInputPort<NodeFlow>(EXECUTION_PORT_IN)
+                    .WithDisplayName(string.Empty)
+                    .WithConnectorUI(PortConnectorUI.Arrowhead)
+                    .Build();
+            }
+
+            IReadOnlyList<string> outputPortNames = GetCompactedExecutionOutputPortNames();
+            if (hasOutput) {
+                foreach (string portName in outputPortNames) {
+                    context.AddOutputPort<NodeFlow>(portName)
+                        .WithDisplayName(string.Empty)
+                        .WithConnectorUI(PortConnectorUI.Arrowhead)
+                        .Build();
+                }
+            }
+
+            return outputPortNames;
+        }
+
+        protected IReadOnlyList<string> GetCompactedExecutionOutputPortNames() {
+            if (!hasOutput || outputCount <= 0)
+                return Array.Empty<string>();
+
+            INode node = this;
+            List<string> connectedNames = new();
+            List<string> emptyNames = new();
+
+            for (int i = 0; i < node.outputPortCount; i++) {
+                IPort port = node.GetOutputPort(i);
+                if (port == null || !IsExecutionOutputPortName(port.name))
+                    continue;
+
+                if (port.isConnected)
+                    connectedNames.Add(port.name);
+                else
+                    emptyNames.Add(port.name);
+            }
+
+            connectedNames.Sort(CompareExecutionPortNames);
+            emptyNames.Sort(CompareExecutionPortNames);
+
+            List<string> names = connectedNames
+                .Concat(emptyNames)
+                .Take(outputCount)
+                .ToList();
+
+            HashSet<string> usedNames = names.ToHashSet();
+            for (int index = 0; names.Count < outputCount; index++) {
+                string candidate = $"{EXECUTION_PORT_OUT}{index}";
+                if (usedNames.Add(candidate))
+                    names.Add(candidate);
+            }
+
+            return names;
+        }
+
+        protected static int GetExecutionOutputPortIndex(string portName) {
+            return IsExecutionOutputPortName(portName)
+                ? GetExecutionOutputPortIndexUnchecked(portName)
+                : -1;
+        }
+
+        private static bool IsExecutionOutputPortName(string portName) {
+            return portName != null &&
+                   portName.StartsWith(EXECUTION_PORT_OUT, StringComparison.Ordinal) &&
+                   GetExecutionOutputPortIndexUnchecked(portName) >= 0;
+        }
+
+        private static int CompareExecutionPortNames(string left, string right) {
+            return GetExecutionOutputPortIndexUnchecked(left)
+                .CompareTo(GetExecutionOutputPortIndexUnchecked(right));
+        }
+
+        private static int GetExecutionOutputPortIndexUnchecked(string portName) {
+            return int.TryParse(portName[EXECUTION_PORT_OUT.Length..], out int index)
+                ? index
+                : -1;
+        }
+
+        protected virtual bool hasInput => true;
+        protected virtual bool hasOutput => false;
+    }
+
+    internal static class BossGraphNodeMetadataUtility {
+        private static readonly FieldInfo s_implementationField = typeof(Unity.GraphToolkit.Editor.Node)
+            .GetField("m_Implementation", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        public static void Apply(BossGraphNode node, string icon, string tooltip) {
+            Apply((Unity.GraphToolkit.Editor.Node)node, icon, tooltip);
+        }
+
+        public static void ApplyTooltip(Unity.GraphToolkit.Editor.Node node, string tooltip) {
+            Apply(node, null, tooltip);
+        }
+
+        private static void Apply(Unity.GraphToolkit.Editor.Node node, string icon, string tooltip) {
+            object implementation = s_implementationField?.GetValue(node);
+            PropertyInfo iconProperty = implementation?.GetType().GetProperty("IconTypeString");
+            if (!string.IsNullOrWhiteSpace(icon) && iconProperty?.CanWrite == true) {
+                iconProperty.SetValue(implementation, icon);
+            }
+
+            PropertyInfo tooltipProperty = implementation?.GetType().GetProperty("Tooltip");
+            if (!string.IsNullOrWhiteSpace(tooltip) && tooltipProperty?.CanWrite == true) {
+                tooltipProperty.SetValue(implementation, tooltip);
+            }
+        }
+    }
+}
