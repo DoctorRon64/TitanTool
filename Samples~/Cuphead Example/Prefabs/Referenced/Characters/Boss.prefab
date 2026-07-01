@@ -1,0 +1,245 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3295837445338227893
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4431331812270695295}
+  - component: {fileID: 2320241353992319373}
+  - component: {fileID: 5906510229502770013}
+  - component: {fileID: 6093356042052827530}
+  - component: {fileID: 5701681253814373198}
+  m_Layer: 0
+  m_Name: Boss
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4431331812270695295
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295837445338227893}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.11, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1473458509937131979}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2320241353992319373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295837445338227893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c981436ae3b64c0a9cf677b0e56f55d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TitanTool.Runtime::TitanTool.Runtime.BossDirector
+  m_graph: {fileID: 0}
+  m_tickRate: 0.1
+  m_paused: 0
+  m_debugLogging: 0
+  m_player: {fileID: 0}
+  m_animator: {fileID: 65296862328669894}
+  m_spriteRenderer: {fileID: 2680637189785256820}
+  m_spawnPoints: []
+  <team>k__BackingField: 1
+--- !u!114 &5906510229502770013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295837445338227893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60b49941bcad4378a6875f68c5a3986a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TitanTool.Runtime::TitanTool.Runtime.BossHealth
+  m_maxHealth: 500
+  m_healthChanged: {fileID: 11400000, guid: 04110a05980f8ad4baf0dfaf4dbb6896, type: 2}
+  m_onDeath: {fileID: 11400000, guid: 9291090d8f42c7343a33f2df72f2cebd, type: 2}
+  <team>k__BackingField: 1
+--- !u!50 &6093356042052827530
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295837445338227893}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!61 &5701681253814373198
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295837445338227893}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.00000047683716, y: 0.9011917}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 7.9896927, y: 7.995594}
+  m_EdgeRadius: 0
+--- !u!1001 &4240594509324880561
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4431331812270695295}
+    m_Modifications:
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8951212402939001545, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      propertyPath: m_Name
+      value: boss_sprite
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8951212402939001545, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 65296862328669894}
+  m_SourcePrefab: {fileID: 100100000, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+--- !u!4 &1473458509937131979 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3362878889257618298, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+  m_PrefabInstance: {fileID: 4240594509324880561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &2680637189785256820 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 2299676326712445381, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+  m_PrefabInstance: {fileID: 4240594509324880561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5107229846031298680 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8951212402939001545, guid: 532bba3e8df040e89ddfd8e116f01241, type: 3}
+  m_PrefabInstance: {fileID: 4240594509324880561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &65296862328669894
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5107229846031298680}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7f7535491fc84cb3bcb10e05955e92a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

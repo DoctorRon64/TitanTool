@@ -1058,7 +1058,7 @@ MonoBehaviour:
     - rid: 1402544071903281476
       type: {class: 'Constant`1[[UnityEngine.AnimationClip, UnityEngine.AnimationModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 7400000, guid: c7d70b6a28269ce4bb58b112eea8f9fd, type: 2}
+        m_Value: {fileID: 7400000, guid: 27fc164e8d3a49eda63d6e50e800b544, type: 2}
     - rid: 1402544071903281478
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -1962,7 +1962,7 @@ MonoBehaviour:
     - rid: 1402544071903281669
       type: {class: 'Constant`1[[UnityEngine.AnimationClip, UnityEngine.AnimationModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 7400000, guid: 25143643f46528f43bc8183d08957129, type: 2}
+        m_Value: {fileID: 7400000, guid: 90ea1c315f1648b6834de5f94016c5f0, type: 2}
     - rid: 1402544071903281670
       type: {class: AnimationNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -2518,7 +2518,7 @@ MonoBehaviour:
     - rid: 1402544137362473032
       type: {class: 'Constant`1[[UnityEngine.AnimationClip, UnityEngine.AnimationModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 7400000, guid: c7d70b6a28269ce4bb58b112eea8f9fd, type: 2}
+        m_Value: {fileID: 7400000, guid: 27fc164e8d3a49eda63d6e50e800b544, type: 2}
     - rid: 1402544137362473033
       type: {class: AnimationNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -2557,7 +2557,7 @@ MonoBehaviour:
     - rid: 1402544137362473048
       type: {class: 'Constant`1[[UnityEngine.AnimationClip, UnityEngine.AnimationModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 7400000, guid: 25143643f46528f43bc8183d08957129, type: 2}
+        m_Value: {fileID: 7400000, guid: 90ea1c315f1648b6834de5f94016c5f0, type: 2}
     - rid: 1402544137362473049
       type: {class: AnimationNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
