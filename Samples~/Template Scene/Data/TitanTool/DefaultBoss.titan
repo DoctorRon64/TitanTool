@@ -127,6 +127,7 @@ MonoBehaviour:
         m_GraphVariableModels:
         - rid: 1402544186550911218
         - rid: 7926195740118876952
+        - rid: 7926195748975149282
         m_GraphPortalModels: []
         m_SectionModels:
         - rid: 1402544186550911055
@@ -786,6 +787,14 @@ MonoBehaviour:
             Hash: 55df08512d647b55007c6f3e36873d97
           m_Category: 2
           m_Index: 41
+        - m_Guid:
+            m_Value0: 192185073579085655
+            m_Value1: 1792803375700676713
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 574fd0614ec7aa026990c2e82b51e118
+          m_Category: 1
+          m_Index: 2
         m_EntryPoint:
           rid: 1402544186550911057
         m_Graph:
@@ -803,6 +812,7 @@ MonoBehaviour:
         m_Items:
         - rid: 1402544186550911218
         - rid: 7926195740118876952
+        - rid: 7926195748975149282
         m_Title: 
     - rid: 1402544186550911056
       type: {class: BossGraph, ns: TitanTool.Editor, asm: TitanTool.Editor}
@@ -944,7 +954,7 @@ MonoBehaviour:
     - rid: 1402544186550911074
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: b82e417f15874604804cbf2a282ee289, type: 2}
+        m_Value: {fileID: 11400000, guid: f121fe3e2f927754786e0df0f47a543c, type: 2}
     - rid: 1402544186550911075
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -1212,7 +1222,7 @@ MonoBehaviour:
     - rid: 1402544186550911116
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 1232b016765a43ddacc7543d692d480c, type: 2}
+        m_Value: {fileID: 11400000, guid: abf98dd5e8a2b3a44aab2dea1a877486, type: 2}
     - rid: 1402544186550911117
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -1307,7 +1317,7 @@ MonoBehaviour:
     - rid: 1402544186550911140
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 77f4952a79f44f2dae6218884f2a6dd2, type: 2}
+        m_Value: {fileID: 11400000, guid: 561bd0362b3055249a83ff224a8de7b5, type: 2}
     - rid: 1402544186550911141
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -1402,7 +1412,7 @@ MonoBehaviour:
     - rid: 1402544186550911159
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 8b978306a908439184e44a71e224b92b, type: 2}
+        m_Value: {fileID: 11400000, guid: f8aa2d29a62357d4bbbdfdb568773a7c, type: 2}
     - rid: 1402544186550911160
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -2234,7 +2244,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 7b19e4b896d85da725dfcd77c5add2c6
         m_Version: 2
-        m_Position: {x: 50.704796, y: 1885.8809}
+        m_Position: {x: 24.849922, y: 1888.9226}
         m_Title: PhaseNode
         m_Tooltip: Runs its child only while boss health is inside this percent range.
         m_NodePreviewModel:
@@ -2466,7 +2476,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 3059a0f282da90a712b90766bd3aff9f
         m_Version: 2
-        m_Position: {x: -499.17392, y: 335.93573}
+        m_Position: {x: -503.17392, y: 337.93573}
         m_Title: 
         m_Tooltip: Runs children in order until one succeeds.
         m_NodePreviewModel:
@@ -2659,7 +2669,7 @@ MonoBehaviour:
     - rid: 1402544186550911398
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 8b978306a908439184e44a71e224b92b, type: 2}
+        m_Value: {fileID: 11400000, guid: f8aa2d29a62357d4bbbdfdb568773a7c, type: 2}
     - rid: 1402544186550911399
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -3583,7 +3593,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 53e31a86042ce230da5c63819e80a42e
         m_Version: 2
-        m_Position: {x: 799.36176, y: -12.4684725}
+        m_Position: {x: 789.0118, y: -13.618472}
         m_Title: Boss Speed
         m_Tooltip: 
         m_NodePreviewModel:
@@ -3981,8 +3991,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 713.9748
-          y: 38.26574
+          x: 682.9248
+          y: 47.465744
           width: 286.325
           height: 100
     - rid: 7926195740118876884
@@ -4073,8 +4083,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 971.42505
-          y: 1042.0247
+          x: 959.5226
+          y: 1034.0897
           width: 245
           height: 100
     - rid: 7926195740118876888
@@ -4818,3 +4828,30 @@ MonoBehaviour:
           m_PortDirection: 1
           m_PortOrientation: 0
           m_Title: Timeout Sec
+    - rid: 7926195748975149282
+      type: {class: VariableDeclarationModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 192185073579085655
+          m_Value1: 1792803375700676713
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 574fd0614ec7aa026990c2e82b51e118
+        m_Version: 2
+        m_Name: StRING
+        m_UniqueId: 
+        m_DataType:
+          m_Identification: System.String, System.Private.CoreLib, Version=4.0.0.0,
+            Culture=neutral, PublicKeyToken=b77a5c561934e089
+        m_IsExposed: 0
+        m_Scope: 0
+        m_ShowOnInspectorOnly: 0
+        m_Tooltip: 
+        m_InitializationValue:
+          rid: 7926195748975149283
+        m_Modifiers: 1
+        m_VariableFlags: 0
+    - rid: 7926195748975149283
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: JOEY
