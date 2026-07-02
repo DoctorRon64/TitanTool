@@ -147,7 +147,11 @@ namespace TitanTool.Runtime.Nodes.Base {
                 if (!visited.Add(current))
                     return;
 
-                ResetNode(current);
+                if (GetStatus(current) == NodeStatus.Running && !IsExecuting(current)) {
+                    AbortNode(current);
+                } else {
+                    ResetNode(current);
+                }
 
                 foreach (Node child in current.children) {
                     if (child != null)
