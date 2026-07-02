@@ -356,7 +356,20 @@ namespace TitanTool.Editor {
                 return;
             }
 
-            VisualElement controls = EnsureChildControls(nodeView);
+            VisualElement optionField = FindChildCountOptionField(nodeView, graphNode);
+            if (optionField == null || optionField.parent == null) {
+                HideChildControls(nodeView);
+                return;
+            }
+
+            VisualElement parent = optionField.parent;
+            int fieldIndex = parent.IndexOf(optionField);
+            VisualElement previousControls = nodeView.Q<VisualElement>(CHILD_CONTROLS_NAME);
+            if (previousControls != null && previousControls.parent != parent)
+                previousControls.RemoveFromHierarchy();
+
+            VisualElement controls = EnsureChildControls(parent, Mathf.Max(0, fieldIndex));
+            optionField.style.display = DisplayStyle.None;
             controls.style.display = DisplayStyle.Flex;
             controls.style.backgroundColor = new Color(color.r, color.g, color.b, 0.46f);
 
@@ -377,18 +390,100 @@ namespace TitanTool.Editor {
             addButton.userData = new ChildControlBinding(graphNode, 1);
         }
 
-        private static VisualElement EnsureChildControls(VisualElement nodeView) {
-            VisualElement controls = nodeView.Q<VisualElement>(CHILD_CONTROLS_NAME);
-            if (controls != null)
+        private static VisualElement FindChildCountOptionField(VisualElement nodeView, BossGraphNode graphNode) {
+            object optionPortModel = GetChildCountOptionPortModel(graphNode);
+            if (optionPortModel != null) {
+                foreach (VisualElement element in Traverse(nodeView)) {
+                    if (IsInsideChildControls(element))
+                        continue;
+
+                    object model = GetProperty(element, "Model");
+                    if (ReferenceEquals(model, optionPortModel))
+                        return GetOptionFieldRoot(element, nodeView);
+                }
+            }
+
+            foreach (VisualElement element in Traverse(nodeView)) {
+                if (IsInsideChildControls(element))
+                    continue;
+
+                if (element is Label label && string.Equals(label.text, "Children", StringComparison.OrdinalIgnoreCase))
+                    return GetOptionFieldRoot(label, nodeView);
+            }
+
+            return null;
+        }
+
+        private static object GetChildCountOptionPortModel(BossGraphNode graphNode) {
+            INodeOption option = graphNode.GetNodeOptionByName(CHILD_COUNT_OPTION_NAME);
+            return GetProperty(option, "PortModel");
+        }
+
+        private static VisualElement GetOptionFieldRoot(VisualElement element, VisualElement nodeView) {
+            VisualElement current = element;
+            VisualElement best = element.parent ?? element;
+
+            while (current != null && current.parent != null && current.parent != nodeView) {
+                if (LooksLikeOptionField(current))
+                    best = current;
+
+                current = current.parent;
+            }
+
+            return best;
+        }
+
+        private static bool LooksLikeOptionField(VisualElement element) {
+            string typeName = element.GetType().Name;
+            if (typeName.Contains("Field", StringComparison.OrdinalIgnoreCase) ||
+                typeName.Contains("InlineValue", StringComparison.OrdinalIgnoreCase) ||
+                typeName.Contains("ModelProperty", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            foreach (string className in element.GetClasses()) {
+                if (className.Contains("field", StringComparison.OrdinalIgnoreCase) ||
+                    className.Contains("property", StringComparison.OrdinalIgnoreCase) ||
+                    className.Contains("inline-value", StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsInsideChildControls(VisualElement element) {
+            for (VisualElement current = element; current != null; current = current.parent) {
+                if (current.name == CHILD_CONTROLS_NAME)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static VisualElement EnsureChildControls(VisualElement parent, int index) {
+            VisualElement controls = parent.Q<VisualElement>(CHILD_CONTROLS_NAME);
+            if (controls != null) {
+                if (controls.parent != parent) {
+                    controls.RemoveFromHierarchy();
+                    parent.Insert(Mathf.Clamp(index, 0, parent.childCount), controls);
+                }
+
                 return controls;
+            }
 
             controls = new VisualElement { name = CHILD_CONTROLS_NAME };
-            controls.style.position = Position.Absolute;
-            controls.style.left = 10f;
-            controls.style.top = 26f;
+            controls.style.position = Position.Relative;
+            controls.style.left = StyleKeyword.Auto;
+            controls.style.right = StyleKeyword.Auto;
+            controls.style.top = StyleKeyword.Auto;
+            controls.style.bottom = StyleKeyword.Auto;
             controls.style.height = 22f;
+            controls.style.marginLeft = 6f;
+            controls.style.marginRight = 6f;
+            controls.style.marginTop = 2f;
+            controls.style.marginBottom = 2f;
             controls.style.flexDirection = FlexDirection.Row;
             controls.style.alignItems = Align.Center;
+            controls.style.justifyContent = Justify.Center;
             controls.style.borderTopLeftRadius = 4f;
             controls.style.borderTopRightRadius = 4f;
             controls.style.borderBottomLeftRadius = 4f;
@@ -411,7 +506,7 @@ namespace TitanTool.Editor {
             controls.Add(removeButton);
             controls.Add(countLabel);
             controls.Add(addButton);
-            nodeView.Add(controls);
+            parent.Insert(Mathf.Clamp(index, 0, parent.childCount), controls);
             return controls;
         }
 
