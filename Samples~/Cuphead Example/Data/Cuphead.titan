@@ -29,7 +29,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 89ee674052a9fb91e4b619f620aba534
         m_Version: 2
-        m_Position: {x: 687.29425, y: -1307.125}
+        m_Position: {x: 687.29425, y: -1258.4569}
         m_Title: 
         m_Tooltip: Runs children in order until one succeeds.
         m_NodePreviewModel:
@@ -113,7 +113,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 5510743ce7ae5bf51ac42061aafa24a7
         m_Version: 2
-        m_Position: {x: 1813.694, y: -1113.1973}
+        m_Position: {x: 1813.694, y: -1154.8324}
         m_Title: PhaseNode
         m_Tooltip: Runs its child only while boss health is inside this percent range.
         m_NodePreviewModel:
@@ -153,7 +153,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 19e9e14904575cb0388a43115f970679
         m_Version: 2
-        m_Position: {x: 1515.6962, y: -1046.5734}
+        m_Position: {x: 1515.6962, y: -1088.2085}
         m_Title: SequenceNode
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -191,7 +191,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: a2b76523f4b228378dd5860fe4ab607e
         m_Version: 2
-        m_Position: {x: 1822.6578, y: -836.6676}
+        m_Position: {x: 1822.6578, y: -878.30273}
         m_Title: WaitNode
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
@@ -298,14 +298,14 @@ MonoBehaviour:
         m_TitleAlignment: 0
         m_Position:
           serializedVersion: 2
-          x: 1467.8063
-          y: -1188.9205
+          x: 1468
+          y: -1230.6351
           width: 903
-          height: 617
+          height: 670.9131
         m_Comment: 
         m_ElementColor:
-          m_Color: {r: 0.20784314, g: 0.22745098, b: 0.2784314, a: 1}
-          m_HasUserColor: 0
+          m_Color: {r: 0, g: 0.4986515, b: 1, a: 1}
+          m_HasUserColor: 1
     - rid: 1402544071903281362
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -362,7 +362,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: f4a17a5d84100b85243995fb6a062d2e
         m_Version: 2
-        m_Position: {x: 2097.9365, y: -1015.619}
+        m_Position: {x: 2097.9365, y: -1057.2542}
         m_Title: 
         m_Tooltip: Instantiates a prefab at a fixed position, target point, or boss-relative
           source.
@@ -494,7 +494,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: c67acb3fa4ea3a30bfd815361f4cb636
         m_Version: 2
-        m_Position: {x: 2470.979, y: -164.02686}
+        m_Position: {x: 2570.7568, y: -165.01741}
         m_Title: EarthBullet
         m_Tooltip: 
         m_NodePreviewModel:
@@ -590,7 +590,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 7373274433b2b70fd92a9dd58b24ed17
         m_Version: 2
-        m_Position: {x: 1807.1705, y: -897.6776}
+        m_Position: {x: 1807.1705, y: -939.31274}
         m_Title: Tear
         m_Tooltip: 
         m_NodePreviewModel:
@@ -648,7 +648,7 @@ MonoBehaviour:
           m_UniqueId: InPrefabPort
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Prefab
+          m_Title: Object Prefab
     - rid: 1402544071903281403
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -659,9 +659,9 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: f972052998a93e34e5c2bdc596e411fb
         m_Version: 2
-        m_Position: {x: 1745.2557, y: -709.95245}
+        m_Position: {x: 1699.1688, y: -745.5007}
         m_Title: 
-        m_Tooltip: Outputs a random Vector2 inside the minimum and maximum range.
+        m_Tooltip: Outputs a random value between the minimum and maximum range.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -669,9 +669,11 @@ MonoBehaviour:
           m_KeyList:
           - Min
           - Max
+          - __option_ValueType
           m_ValueList:
-          - rid: 1402544071903281404
-          - rid: 1402544071903281405
+          - rid: 7926195760522854675
+          - rid: 7926195760522854676
+          - rid: 7926195760522854656
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -687,14 +689,6 @@ MonoBehaviour:
           m_HasUserColor: 0
         m_Node:
           rid: 1402544071903281406
-    - rid: 1402544071903281404
-      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: {x: -17, y: 9}
-    - rid: 1402544071903281405
-      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: {x: 8, y: 9}
     - rid: 1402544071903281406
       type: {class: RandomConstantNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data: 
@@ -729,7 +723,7 @@ MonoBehaviour:
           m_UniqueId: Offset
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Offset
+          m_Title: Spawn Offset
     - rid: 1402544071903281412
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -740,7 +734,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 194e83eed401a37b585df3aa0230f383
         m_Version: 2
-        m_Position: {x: 1762.0576, y: -1834.7133}
+        m_Position: {x: 1749.9209, y: -1883.2601}
         m_Title: 
         m_Tooltip: Runs its child once, then returns the configured result on later
           visits.
@@ -800,7 +794,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 7f53cf7c5b0b7e92f9bcb83d69ae66c8
         m_Version: 2
-        m_Position: {x: 1503.076, y: -1865.4116}
+        m_Position: {x: 1490.9393, y: -1913.9585}
         m_Title: SequenceNode
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -852,7 +846,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: db8c67c28fa604ae7493c187bf237a73
         m_Version: 2
-        m_Position: {x: 2521.3218, y: -2101.6643}
+        m_Position: {x: 2509.185, y: -2150.2112}
         m_Title: 
         m_Tooltip: Triggers parameters or plays animation clips on the boss animator.
         m_NodePreviewModel:
@@ -913,7 +907,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 4b3f187775de57ade425dc359c697b97
         m_Version: 2
-        m_Position: {x: 2009.3275, y: -1827.4257}
+        m_Position: {x: 1997.1908, y: -1875.9725}
         m_Title: SequenceNode
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -965,7 +959,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 6b2339cbb610449095d13e97f4eec7d8
         m_Version: 2
-        m_Position: {x: 2820.7388, y: -1880.3569}
+        m_Position: {x: 2808.602, y: -1928.9038}
         m_Title: 
         m_Tooltip: Instantly moves the boss to a player, point, or fixed position.
         m_NodePreviewModel:
@@ -1047,14 +1041,14 @@ MonoBehaviour:
         m_TitleAlignment: 0
         m_Position:
           serializedVersion: 2
-          x: 1470.8063
-          y: -2131.1365
-          width: 1755.7415
+          x: 1458.8633
+          y: -2179.5469
+          width: 1809.2305
           height: 867
         m_Comment: 
         m_ElementColor:
-          m_Color: {r: 0.20784314, g: 0.22745098, b: 0.2784314, a: 1}
-          m_HasUserColor: 0
+          m_Color: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+          m_HasUserColor: 1
     - rid: 1402544071903281476
       type: {class: 'Constant`1[[UnityEngine.AnimationClip, UnityEngine.AnimationModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -1133,7 +1127,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 78ab992d55f0758bd1ed5b072d1c80a2
         m_Version: 2
-        m_Position: {x: 1749.4905, y: -1996.9589}
+        m_Position: {x: 1737.3538, y: -2045.5057}
         m_Title: PhaseNode
         m_Tooltip: Runs its child only while boss health is inside this percent range.
         m_NodePreviewModel:
@@ -1223,7 +1217,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 87bf8a9716f719812a1cd00c5700e4f1
         m_Version: 2
-        m_Position: {x: 2510.27, y: -374.55588}
+        m_Position: {x: 2635.1753, y: -376.86893}
         m_Title: PhaseNode
         m_Tooltip: Runs its child only while boss health is inside this percent range.
         m_NodePreviewModel:
@@ -1313,7 +1307,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 5c0ec9a837c52f8a042b1cdf36db1ba4
         m_Version: 2
-        m_Position: {x: 970.3672, y: -308.14902}
+        m_Position: {x: 874.1718, y: -309.898}
         m_Title: 
         m_Tooltip: Redirects flow wires to keep the graph layout tidy.
         m_NodePreviewModel:
@@ -1424,12 +1418,12 @@ MonoBehaviour:
           serializedVersion: 2
           x: 2669
           y: -3891
-          width: 1830.4502
-          height: 1606
+          width: 1830
+          height: 1603.0034
         m_Comment: 
         m_ElementColor:
-          m_Color: {r: 0.20784314, g: 0.22745098, b: 0.2784314, a: 1}
-          m_HasUserColor: 0
+          m_Color: {r: 0.6226415, g: 0.34350815, b: 0, a: 1}
+          m_HasUserColor: 1
     - rid: 1402544071903281603
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -1440,7 +1434,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: f1abcd87525692febbc8f289ee1172b2
         m_Version: 2
-        m_Position: {x: 2446.9712, y: 28.57447}
+        m_Position: {x: 2571.8765, y: 26.261421}
         m_Title: 
         m_Tooltip: Sets or modifies a numeric value stored on the blackboard.
         m_NodePreviewModel:
@@ -1556,7 +1550,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 48b2591a0f4fe1a5aae467e11d1abb6d
         m_Version: 2
-        m_Position: {x: 1670.0433, y: -128.30899}
+        m_Position: {x: 1794.9487, y: -130.62204}
         m_Title: 
         m_Tooltip: Passes when a blackboard number matches the selected comparison.
         m_NodePreviewModel:
@@ -1640,7 +1634,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 017aa1423567419272c19fc41a645a41
         m_Version: 2
-        m_Position: {x: 1347.6514, y: -338.44263}
+        m_Position: {x: 1472.5568, y: -340.75568}
         m_Title: SequenceNode
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -1756,7 +1750,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: bcb9e6472475b08c19cf4d13807c0175
         m_Version: 2
-        m_Position: {x: 1665.6614, y: 223.68562}
+        m_Position: {x: 1790.5668, y: 221.37257}
         m_Title: BlackboardMathNode
         m_Tooltip: Sets or modifies a numeric value stored on the blackboard.
         m_NodePreviewModel:
@@ -1840,7 +1834,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: ea36f92bd8f00030b8d1b58e26b2e251
         m_Version: 2
-        m_Position: {x: 1668.042, y: 90.00525}
+        m_Position: {x: 1792.9474, y: 87.6922}
         m_Title: WaitNode
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
@@ -1897,8 +1891,8 @@ MonoBehaviour:
         m_TitleAlignment: 0
         m_Position:
           serializedVersion: 2
-          x: 1635.0566
-          y: -157.02762
+          x: 1759.962
+          y: -159.34067
           width: 338
           height: 608.05
         m_Comment: 
@@ -1915,7 +1909,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 0f3da8eb566734d7ef6d606ed364db71
         m_Version: 2
-        m_Position: {x: 2741.9272, y: -1434.5344}
+        m_Position: {x: 2729.7905, y: -1483.0813}
         m_Title: AnimationNode
         m_Tooltip: Triggers parameters or plays animation clips on the boss animator.
         m_NodePreviewModel:
@@ -1980,7 +1974,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 256ffb90ec5df8f069339d2b067142c7
         m_Version: 2
-        m_Position: {x: 2788.7285, y: -2100.965}
+        m_Position: {x: 2907.3872, y: -2152.5537}
         m_Title: WaitNode
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
@@ -2032,7 +2026,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 878d38bd26e66b964e21eaa720da2bf1
         m_Version: 2
-        m_Position: {x: 3346.518, y: -2862.4517}
+        m_Position: {x: 3331.2, y: -2857.5525}
         m_Title: SequenceNode
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -2084,7 +2078,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 6731d225bb412b0eaa028606f926d868
         m_Version: 2
-        m_Position: {x: 3635.505, y: -2709.9358}
+        m_Position: {x: 3575.1868, y: -2696.0366}
         m_Title: WaitNode
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
@@ -2176,7 +2170,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 67d1f587a3456246d09a2ceda732fa29
         m_Version: 2
-        m_Position: {x: 1722.5515, y: -3510.9175}
+        m_Position: {x: 1702.714, y: -3510.9175}
         m_Title: RunOnceNode
         m_Tooltip: Runs its child once, then returns the configured result on later
           visits.
@@ -2446,8 +2440,8 @@ MonoBehaviour:
           height: 781.5376
         m_Comment: 
         m_ElementColor:
-          m_Color: {r: 0.20784314, g: 0.22745098, b: 0.2784314, a: 1}
-          m_HasUserColor: 0
+          m_Color: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+          m_HasUserColor: 1
     - rid: 1402544137362473020
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -2659,7 +2653,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 9bd5f3b91b91e630c98bacef9e53774a
         m_Version: 2
-        m_Position: {x: 4211.8354, y: -2908.9192}
+        m_Position: {x: 4196.5176, y: -2904.02}
         m_Title: ShootPatternNode
         m_Tooltip: Spawns bullets in the selected pattern from the chosen source.
         m_NodePreviewModel:
@@ -2793,7 +2787,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 9f6164d98c44cdedc246e5852bfbd098
         m_Version: 2
-        m_Position: {x: 3585.1577, y: -2566.1846}
+        m_Position: {x: 3569.8396, y: -2561.2854}
         m_Title: BlackboardMathNode
         m_Tooltip: Sets or modifies a numeric value stored on the blackboard.
         m_NodePreviewModel:
@@ -2842,14 +2836,14 @@ MonoBehaviour:
         m_TitleAlignment: 0
         m_Position:
           serializedVersion: 2
-          x: 3281
-          y: -2944
-          width: 1185.7002
-          height: 627
+          x: 3265.682
+          y: -2915.1008
+          width: 1186
+          height: 577
         m_Comment: 
         m_ElementColor:
-          m_Color: {r: 0.20784314, g: 0.22745098, b: 0.2784314, a: 1}
-          m_HasUserColor: 0
+          m_Color: {r: 1, g: 0.50211763, b: 0, a: 1}
+          m_HasUserColor: 1
     - rid: 1402544137362473128
       type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -3153,8 +3147,8 @@ MonoBehaviour:
           height: 822
         m_Comment: 
         m_ElementColor:
-          m_Color: {r: 0.20784314, g: 0.22745098, b: 0.2784314, a: 1}
-          m_HasUserColor: 0
+          m_Color: {r: 1, g: 0.89299846, b: 0, a: 1}
+          m_HasUserColor: 1
     - rid: 1402544137362473165
       type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -3620,7 +3614,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: e6940506b3720eaa3d6ecdd3f90ae851
         m_Version: 2
-        m_Position: {x: 3894.4, y: -2802.3496}
+        m_Position: {x: 3874.0818, y: -2710.4504}
         m_Title: Carrot
         m_Tooltip: 
         m_NodePreviewModel:
@@ -3817,7 +3811,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: df82d45ac5c66489dcf8a617797492a3
         m_Version: 2
-        m_Position: {x: 2524.17, y: -1608.7518}
+        m_Position: {x: 2512.0332, y: -1657.2987}
         m_Title: 
         m_Tooltip: Changes the boss SpriteRenderer to the selected sprite.
         m_NodePreviewModel:
@@ -3869,7 +3863,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: f6043db78daf85970fc6e516c21d6600
         m_Version: 2
-        m_Position: {x: 2823.2158, y: -1669.2622}
+        m_Position: {x: 2811.079, y: -1717.8091}
         m_Title: WaitNode
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
@@ -3921,7 +3915,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: f5fd727179aac56c8f347bda63473c90
         m_Version: 2
-        m_Position: {x: 2522.4795, y: -1473.4513}
+        m_Position: {x: 2510.3428, y: -1521.9982}
         m_Title: WaitNode
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
@@ -4173,7 +4167,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 4f5ba8331f3d066cb1f62bc081ae2611
         m_Version: 2
-        m_Position: {x: 3893.5942, y: -2935.5266}
+        m_Position: {x: 3864.2761, y: -2876.6274}
         m_Title: SwapSpriteNode
         m_Tooltip: Changes the boss SpriteRenderer to the selected sprite.
         m_NodePreviewModel:
@@ -4644,7 +4638,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: b5b88a27675a33ebd63c53c5cbe90796
         m_Version: 2
-        m_Position: {x: 3305.544, y: -3700.5068}
+        m_Position: {x: 3298.6438, y: -3698.2068}
         m_Title: Homing Carrots phase 3 Amount
         m_Tooltip: 
         m_NodePreviewModel:
@@ -4702,7 +4696,7 @@ MonoBehaviour:
           m_UniqueId: IntThreshold
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Value
+          m_Title: Compare To
     - rid: 1402544159490834515
       type: {class: VariableDeclarationModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4740,7 +4734,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 75d405fdb7e197c367d3d884fb7280bb
         m_Version: 2
-        m_Position: {x: 3599.324, y: -3797.2168}
+        m_Position: {x: 3586.674, y: -3797.2168}
         m_Title: Illusion Bullets phase 3 Amount
         m_Tooltip: 
         m_NodePreviewModel:
@@ -4798,7 +4792,7 @@ MonoBehaviour:
           m_UniqueId: RepeatCount
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Repeat Count
+          m_Title: Loops
     - rid: 1402544159490834547
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4841,9 +4835,9 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 62d03f7c50e6b2d818f431680f575cba
         m_Version: 2
-        m_Position: {x: 3851.1794, y: -2497.1987}
+        m_Position: {x: 3810.5542, y: -2517.5884}
         m_Title: 
-        m_Tooltip: Outputs a random Vector2 inside the minimum and maximum range.
+        m_Tooltip: Outputs a random value between the minimum and maximum range.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -4851,9 +4845,11 @@ MonoBehaviour:
           m_KeyList:
           - Min
           - Max
+          - __option_ValueType
           m_ValueList:
-          - rid: 1402544159490834553
-          - rid: 1402544159490834554
+          - rid: 7926195760522854677
+          - rid: 7926195760522854678
+          - rid: 7926195760522854659
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -4869,14 +4865,6 @@ MonoBehaviour:
           m_HasUserColor: 0
         m_Node:
           rid: 1402544159490834555
-    - rid: 1402544159490834553
-      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: {x: 0.2, y: 0}
-    - rid: 1402544159490834554
-      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: {x: -0.2, y: 3}
     - rid: 1402544159490834555
       type: {class: RandomConstantNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data: 
@@ -4911,7 +4899,7 @@ MonoBehaviour:
           m_UniqueId: Offset
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Offset
+          m_Title: Spawn Offset
     - rid: 1402544159490834558
       type: {class: VariableDeclarationModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4949,7 +4937,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: c0a26ec3d0b426ed8a7fe4149d083b8d
         m_Version: 2
-        m_Position: {x: 3300.9673, y: -3651.3152}
+        m_Position: {x: 3311.3174, y: -3650.1653}
         m_Title: Illusion lasers phase 3 Amount
         m_Tooltip: 
         m_NodePreviewModel:
@@ -5007,7 +4995,7 @@ MonoBehaviour:
           m_UniqueId: RepeatCount
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Repeat Count
+          m_Title: Loops
     - rid: 1402544159490834569
       type: {class: VariableDeclarationModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -5045,7 +5033,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: e0d2ef82d9cdb2c3c725d03fe3ad7094
         m_Version: 2
-        m_Position: {x: 2104.3162, y: -393.51657}
+        m_Position: {x: 2229.2217, y: -395.82962}
         m_Title: Phase 2 Start %
         m_Tooltip: 
         m_NodePreviewModel:
@@ -5103,7 +5091,7 @@ MonoBehaviour:
           m_UniqueId: MinHealthPercent
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Above Health %
+          m_Title: Min Health %
     - rid: 1402544159490834582
       type: {class: VariableDeclarationModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -5162,7 +5150,7 @@ MonoBehaviour:
           m_UniqueId: MaxHealthPercent
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: At Or Below Health %
+          m_Title: Max Health %
     - rid: 1402544159490834586
       type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -5173,7 +5161,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 010036388aace4ca020036388aace4ca
         m_Version: 2
-        m_Position: {x: 2701.4282, y: -3402.2478}
+        m_Position: {x: 2698.7832, y: -3297.7703}
         m_Title: Phase 3 Start %
         m_Tooltip: 
         m_NodePreviewModel:
@@ -5306,8 +5294,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 965.1753
-          y: -183.1662
+          x: 856.73694
+          y: -202.40526
           width: 200
           height: 100
     - rid: 1402544301841317961
@@ -5326,8 +5314,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 1923.92
-          y: 284.6311
+          x: 2042.2129
+          y: 282.31805
           width: 200
           height: 100
     - rid: 1402544301841317963
@@ -5346,8 +5334,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 1953.3068
-          y: -101.37758
+          x: 2041.4121
+          y: -93.34063
           width: 200
           height: 100
     - rid: 1402544301841317964
@@ -5366,8 +5354,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 3145.0571
-          y: -286.47757
+          x: 3264.082
+          y: -297.05756
           width: 220
           height: 173
     - rid: 1402544301841317969
@@ -5380,7 +5368,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 894a2cdc62f82a3d46e44aa0375f2e83
         m_Version: 2
-        m_Position: {x: 1362.457, y: -148.97757}
+        m_Position: {x: 1487.3624, y: -151.29062}
         m_Title: SequenceNode
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -5566,8 +5554,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 2698.753
-          y: 86.43547
+          x: 2816.4504
+          y: 79.5598
           width: 200
           height: 100
     - rid: 1402544301841317978
@@ -5586,8 +5574,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 2510.379
-          y: -483.01913
+          x: 2663.0461
+          y: -488.30917
           width: 200
           height: 100
     - rid: 1402544301841317979
@@ -5600,7 +5588,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: e052e90c399bd927dbe4d4fc7affce46
         m_Version: 2
-        m_Position: {x: 1519.7206, y: -1105.7076}
+        m_Position: {x: 1519.7206, y: -1147.3428}
         m_Title: Phase 2 Start %
         m_Tooltip: 
         m_NodePreviewModel:
@@ -5658,7 +5646,7 @@ MonoBehaviour:
           m_UniqueId: MaxHealthPercent
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: At Or Below Health %
+          m_Title: Max Health %
     - rid: 1402544301841317981
       type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -5669,7 +5657,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 2132098abd6c669e45de6d701ad3ab68
         m_Version: 2
-        m_Position: {x: 1506.4275, y: -1931.7076}
+        m_Position: {x: 1494.2908, y: -1980.2545}
         m_Title: Phase 2 Start %
         m_Tooltip: 
         m_NodePreviewModel:
@@ -5727,7 +5715,7 @@ MonoBehaviour:
           m_UniqueId: MaxHealthPercent
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: At Or Below Health %
+          m_Title: Max Health %
     - rid: 1402544301841317984
       type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -5738,7 +5726,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 491a759380815e026040ee0d302c4cea
         m_Version: 2
-        m_Position: {x: 1524.0729, y: -1153.5453}
+        m_Position: {x: 1524.0729, y: -1195.1804}
         m_Title: Phase 3 Start %
         m_Tooltip: 
         m_NodePreviewModel:
@@ -5796,7 +5784,7 @@ MonoBehaviour:
           m_UniqueId: MinHealthPercent
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Above Health %
+          m_Title: Min Health %
     - rid: 1402544301841317986
       type: {class: StickyNoteModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -5813,8 +5801,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 2107.8062
-          y: -1132.9205
+          x: 2099.871
+          y: -1167.9431
           width: 200
           height: 100
     - rid: 1402544301841317987
@@ -5833,8 +5821,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 1507.6456
-          y: -698.9641
+          x: 1482.4282
+          y: -711.90356
           width: 200
           height: 100
     - rid: 1402544301841317988
@@ -5853,8 +5841,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 1802.8956
-          y: -1254.0184
+          x: 1807.8688
+          y: -1265.83
           width: 200
           height: 100
     - rid: 1402544301841317989
@@ -5867,7 +5855,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: f276d1b46911797342453e311291906f
         m_Version: 2
-        m_Position: {x: 1506.7064, y: -1981.4365}
+        m_Position: {x: 1494.5697, y: -2029.9834}
         m_Title: Phase 3 Start %
         m_Tooltip: 
         m_NodePreviewModel:
@@ -5925,7 +5913,7 @@ MonoBehaviour:
           m_UniqueId: MinHealthPercent
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: Above Health %
+          m_Title: Min Health %
     - rid: 1402544301841317992
       type: {class: StickyNoteModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -5943,8 +5931,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 1715.3615
-          y: -1696.1104
+          x: 1757.4471
+          y: -1751.2697
           width: 200
           height: 100
     - rid: 1402544301841317993
@@ -5957,7 +5945,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 8fd6f4b701b18af662de2211dc4f5029
         m_Version: 2
-        m_Position: {x: 2280.1978, y: -2078.9192}
+        m_Position: {x: 2268.061, y: -2127.466}
         m_Title: 
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -6073,7 +6061,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: a489c28dfaf44febcb259d9aa076500e
         m_Version: 2
-        m_Position: {x: 2568.024, y: -1805.0059}
+        m_Position: {x: 2555.8872, y: -1853.5527}
         m_Title: SequenceNode
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -6189,7 +6177,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 7f7f946109e2f46b14b9105b13bd49d8
         m_Version: 2
-        m_Position: {x: 2579.3281, y: -1945.0061}
+        m_Position: {x: 2638.6726, y: -1987.4695}
         m_Title: 
         m_Tooltip: Redirects flow wires to keep the graph layout tidy.
         m_NodePreviewModel:
@@ -6331,7 +6319,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 61345e5ca524fd83ca945a1e7e875ad1
         m_Version: 2
-        m_Position: {x: 2242.8062, y: -1479.7886}
+        m_Position: {x: 2230.6694, y: -1528.3354}
         m_Title: SequenceNode
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -6517,8 +6505,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 2277.8062
-          y: -2185.1365
+          x: 2553.0605
+          y: -2256.8416
           width: 200
           height: 100
     - rid: 1402544301841318027
@@ -6537,8 +6525,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 3001.8062
-          y: -1995.1364
+          x: 3036.8167
+          y: -1709.0907
           width: 200
           height: 100
     - rid: 1402544301841318029
@@ -6557,8 +6545,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 2313.8062
-          y: -1650.1364
+          x: 2300.347
+          y: -1652.3958
           width: 200
           height: 100
     - rid: 1402544301841318030
@@ -6577,8 +6565,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 2980.8062
-          y: -1394.1364
+          x: 3041.407
+          y: -1458.5532
           width: 200
           height: 100
     - rid: 1402544301841318034
@@ -6733,8 +6721,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 1485
-          y: -2117
+          x: 1472.8633
+          y: -2165.5469
           width: 417.65002
           height: 100
     - rid: 1402544301841318046
@@ -6921,7 +6909,7 @@ MonoBehaviour:
           m_UniqueId: MaxHealthPercent
           m_PortDirection: 1
           m_PortOrientation: 0
-          m_Title: At Or Below Health %
+          m_Title: Max Health %
     - rid: 1402544301841318056
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -7265,7 +7253,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 1c9c3c7fae779568310d845927bd9acb
         m_Version: 2
-        m_Position: {x: 2098.1895, y: -341.9499}
+        m_Position: {x: 2223.0947, y: -344.26294}
         m_Title: 
         m_Tooltip: Runs children in order and stops when one fails.
         m_NodePreviewModel:
@@ -7317,7 +7305,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 1696390c9e0ee30d591a1f0f0b6fbf8a
         m_Version: 2
-        m_Position: {x: 2891.2285, y: -366.24948}
+        m_Position: {x: 3016.1338, y: -368.56253}
         m_Title: 
         m_Tooltip: Spawns bullets in the selected pattern from the chosen source.
         m_NodePreviewModel:
@@ -7483,7 +7471,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 2217f7f925d7767937a48cbbcb5d5997
         m_Version: 2
-        m_Position: {x: 2466.9146, y: -101.625824}
+        m_Position: {x: 2570.6602, y: -103.93887}
         m_Title: 
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
@@ -7572,14 +7560,14 @@ MonoBehaviour:
         m_TitleAlignment: 0
         m_Position:
           serializedVersion: 2
-          x: 1331.0569
-          y: -420.47757
-          width: 1876
-          height: 925.81616
+          x: 1456
+          y: -423
+          width: 2049.2476
+          height: 926
         m_Comment: 
         m_ElementColor:
-          m_Color: {r: 0.20784314, g: 0.22745098, b: 0.2784314, a: 1}
-          m_HasUserColor: 0
+          m_Color: {r: 0.4811321, g: 0.24597101, b: 0.083971165, a: 1}
+          m_HasUserColor: 1
     - rid: 5194675843165585493
       type: {class: GraphModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -7766,6 +7754,8 @@ MonoBehaviour:
         - rid: 1402544301841318072
         - rid: 1402544301841318073
         - rid: 1402544301841318074
+        - rid: 7926195760522854684
+        - rid: 7926195760522854685
         m_GraphPlacematModels:
         - rid: 3553033763017195597
         - rid: 1402544071903281358
@@ -7791,10 +7781,10 @@ MonoBehaviour:
         m_LocalSubgraphs: []
         m_LastKnownBounds:
           serializedVersion: 2
-          x: 421
+          x: 406
           y: -3891
-          width: 4078
-          height: 4396
+          width: 4093
+          height: 4394
         m_GraphElementMetaData:
         - m_Guid:
             m_Value0: 12311913432550799293
@@ -9147,3 +9137,82 @@ MonoBehaviour:
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 0368bce4-4fda-4c57-b780-649e5e3ec352
         m_childGuids: []
+    - rid: 7926195760522854656
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+              Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 2
+        m_EnumType:
+          m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926195760522854659
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+              Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 2
+        m_EnumType:
+          m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926195760522854675
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: -14, y: 9}
+    - rid: 7926195760522854676
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 14, y: 9}
+    - rid: 7926195760522854677
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 0, y: 1}
+    - rid: 7926195760522854678
+      type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {x: 0, y: 3}
+    - rid: 7926195760522854684
+      type: {class: StickyNoteModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 16052112170431872514
+          m_Value1: 4922785326748398239
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 02fe50a5f88ec4de9ff257322c3f5144
+        m_Version: 2
+        m_Title: StartNode = Entrypoint
+        m_Contents: 
+        m_ThemeName: Classic
+        m_TextSizeName: Small
+        m_Position:
+          serializedVersion: 2
+          x: 406.23138
+          y: -1493.7673
+          width: 150.2497
+          height: 100
+    - rid: 7926195760522854685
+      type: {class: StickyNoteModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 10555985375852411532
+          m_Value1: 6738560862902367608
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 8cbae675c5647e927835a502672d845d
+        m_Version: 2
+        m_Title: SelectorNode here so that if a phase returns true it will be selected.
+          DONT USE SEQUENCES HERE!
+        m_Contents: 
+        m_ThemeName: Red
+        m_TextSizeName: Small
+        m_Position:
+          serializedVersion: 2
+          x: 606.546
+          y: -1420.9954
+          width: 224
+          height: 149.08698
