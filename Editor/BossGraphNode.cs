@@ -96,7 +96,7 @@ namespace TitanTool.Editor {
                     .Build();
             }
 
-            IReadOnlyList<string> outputPortNames = GetCompactedExecutionOutputPortNames();
+            IReadOnlyList<string> outputPortNames = GetExecutionOutputPortNames();
             if (hasOutput) {
                 foreach (string portName in outputPortNames) {
                     context.AddOutputPort<NodeFlow>(portName)
@@ -109,41 +109,13 @@ namespace TitanTool.Editor {
             return outputPortNames;
         }
 
-        protected IReadOnlyList<string> GetCompactedExecutionOutputPortNames() {
+        protected IReadOnlyList<string> GetExecutionOutputPortNames() {
             if (!hasOutput || outputCount <= 0)
                 return Array.Empty<string>();
 
-            INode node = this;
-            List<string> connectedNames = new();
-            List<string> emptyNames = new();
-
-            for (int i = 0; i < node.outputPortCount; i++) {
-                IPort port = node.GetOutputPort(i);
-                if (port == null || !IsExecutionOutputPortName(port.name))
-                    continue;
-
-                if (port.isConnected)
-                    connectedNames.Add(port.name);
-                else
-                    emptyNames.Add(port.name);
-            }
-
-            connectedNames.Sort(CompareExecutionPortNames);
-            emptyNames.Sort(CompareExecutionPortNames);
-
-            List<string> names = connectedNames
-                .Concat(emptyNames)
-                .Take(outputCount)
-                .ToList();
-
-            HashSet<string> usedNames = names.ToHashSet();
-            for (int index = 0; names.Count < outputCount; index++) {
-                string candidate = $"{EXECUTION_PORT_OUT}{index}";
-                if (usedNames.Add(candidate))
-                    names.Add(candidate);
-            }
-
-            return names;
+            return Enumerable.Range(0, outputCount)
+                .Select(index => $"{EXECUTION_PORT_OUT}{index}")
+                .ToArray();
         }
 
         protected static int GetExecutionOutputPortIndex(string portName) {
@@ -156,11 +128,6 @@ namespace TitanTool.Editor {
             return portName != null &&
                    portName.StartsWith(EXECUTION_PORT_OUT, StringComparison.Ordinal) &&
                    GetExecutionOutputPortIndexUnchecked(portName) >= 0;
-        }
-
-        private static int CompareExecutionPortNames(string left, string right) {
-            return GetExecutionOutputPortIndexUnchecked(left)
-                .CompareTo(GetExecutionOutputPortIndexUnchecked(right));
         }
 
         private static int GetExecutionOutputPortIndexUnchecked(string portName) {

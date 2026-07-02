@@ -45,7 +45,7 @@ namespace TitanTool.Editor.Nodes {
                 return;
 
             List<RuntimeFloatValue> weights = new();
-            foreach (string outputPortName in GetCompactedExecutionOutputPortNames()) {
+            foreach (string outputPortName in GetExecutionOutputPortNames()) {
                 int portIndex = GetExecutionOutputPortIndex(outputPortName);
                 weights.Add(GraphNodePortUtility.GetRuntimeFloatValue(this, GetWeightPortName(portIndex)));
             }
@@ -64,7 +64,7 @@ namespace TitanTool.Editor.Nodes {
             }
 
             bool anyPositiveWeight = false;
-            IReadOnlyList<string> outputPortNames = GetCompactedExecutionOutputPortNames();
+            IReadOnlyList<string> outputPortNames = GetExecutionOutputPortNames();
             for (int i = 0; i < outputPortNames.Count; i++) {
                 int portIndex = GetExecutionOutputPortIndex(outputPortNames[i]);
                 float weight = context.GetInputValue<float>(GetWeightPortName(portIndex));

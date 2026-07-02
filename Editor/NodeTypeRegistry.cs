@@ -88,5 +88,12 @@ namespace TitanTool.Editor {
         public static GraphNodeRegistration GetRegistrationForRuntime(Type runtimeType) {
             return s_runtimeRegistrations.GetValueOrDefault(runtimeType);
         }
+
+        public static IReadOnlyList<GraphNodeRegistration> GetRegistrations() {
+            return s_editorRegistrations.Values
+                .OrderBy(registration => registration.category)
+                .ThenBy(registration => registration.displayName)
+                .ToList();
+        }
     }
 }

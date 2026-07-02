@@ -206,14 +206,14 @@ namespace TitanTool.Editor {
 
             UpdateLastGraphPosition(graphView, evt.localMousePosition);
 
-            object wireAtMouse = FindWireAt(graphView, evt.localMousePosition);
-            if (wireAtMouse == null)
+            if (!TryGetSingleInsertableSelectedNode(graphView, null, out object nodeModel))
                 return;
 
-            if (!TryGetSingleInsertableSelectedNode(graphView, wireAtMouse, out object nodeModel))
+            object wireToSplit = FindDropWireForNode(graphView, nodeModel, evt.localMousePosition);
+            if (wireToSplit == null)
                 return;
 
-            if (TrySplitWireWithNode(graphView, wireAtMouse, nodeModel))
+            if (TrySplitWireWithNode(graphView, wireToSplit, nodeModel))
                 Consume(evt);
         }
 
@@ -298,18 +298,72 @@ namespace TitanTool.Editor {
                 return null;
 
             Vector2 worldPosition = graphView.LocalToWorld(localPosition);
+            return FindWireAtWorldPosition(graphView, worldPosition, null);
+        }
+
+        private static object FindDropWireForNode(VisualElement graphView, object nodeModel, Vector2 localMousePosition) {
+            object wireAtMouse = FindWireAt(graphView, localMousePosition);
+            if (wireAtMouse != null && !IsWireConnectedToNode(wireAtMouse, nodeModel))
+                return wireAtMouse;
+
+            VisualElement nodeView = FindViewForModel(graphView, nodeModel);
+            if (nodeView == null || graphView.panel == null)
+                return null;
+
+            foreach (Vector2 worldPosition in GetDropSamplePoints(nodeView.worldBound)) {
+                object wire = FindWireAtWorldPosition(graphView, worldPosition, nodeModel);
+                if (wire != null)
+                    return wire;
+            }
+
+            return null;
+        }
+
+        private static object FindWireAtWorldPosition(VisualElement graphView, Vector2 worldPosition, object ignoredNodeModel) {
             List<VisualElement> pickedElements = new List<VisualElement>();
             graphView.panel.PickAll(worldPosition, pickedElements);
 
             foreach (VisualElement pickedElement in pickedElements) {
                 for (VisualElement current = pickedElement; current != null && current != graphView.parent; current = current.parent) {
                     object model = GetProperty(current, "Model");
-                    if (IsWireModel(model))
+                    if (IsWireModel(model) && (ignoredNodeModel == null || !IsWireConnectedToNode(model, ignoredNodeModel)))
                         return model;
 
                     if (current == graphView)
                         break;
                 }
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<Vector2> GetDropSamplePoints(Rect worldBounds) {
+            Vector2 center = worldBounds.center;
+            yield return center;
+            yield return new Vector2(worldBounds.xMin + 10f, center.y);
+            yield return new Vector2(worldBounds.xMax - 10f, center.y);
+            yield return new Vector2(center.x, worldBounds.yMin + 10f);
+            yield return new Vector2(center.x, worldBounds.yMax - 10f);
+            yield return new Vector2(worldBounds.xMin + 10f, worldBounds.yMin + 10f);
+            yield return new Vector2(worldBounds.xMax - 10f, worldBounds.yMin + 10f);
+            yield return new Vector2(worldBounds.xMin + 10f, worldBounds.yMax - 10f);
+            yield return new Vector2(worldBounds.xMax - 10f, worldBounds.yMax - 10f);
+        }
+
+        private static VisualElement FindViewForModel(VisualElement root, object model) {
+            if (root == null || model == null)
+                return null;
+
+            Stack<VisualElement> stack = new Stack<VisualElement>();
+            stack.Push(root);
+
+            while (stack.Count > 0) {
+                VisualElement current = stack.Pop();
+                if (ReferenceEquals(GetProperty(current, "Model"), model))
+                    return current;
+
+                for (int index = current.childCount - 1; index >= 0; index--)
+                    stack.Push(current[index]);
             }
 
             return null;
