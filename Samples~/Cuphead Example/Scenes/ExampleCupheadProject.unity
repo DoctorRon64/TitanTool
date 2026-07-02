@@ -950,6 +950,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5560993291947378189, guid: 4f2aaef7eb161e74c874c43c3a9f766e, type: 3}
+      propertyPath: m_groundLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 9187689674866868288, guid: 4f2aaef7eb161e74c874c43c3a9f766e, type: 3}
       propertyPath: m_onDeath
       value: 

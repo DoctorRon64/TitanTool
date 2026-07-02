@@ -82,6 +82,13 @@ MonoBehaviour:
     m_Bits: 64
   m_spriteRenderer: {fileID: 2277904798636620997}
   m_anim: {fileID: 8031476304631712323}
+  m_crossFadeAnim: 0.25
+  m_idleState: bullet_idle
+  m_explodeState: bullet_explode
+  m_useHoming: 1
+  m_homingTurnSpeed: 120
+  m_homingTarget: {fileID: 0}
+  m_findPlayerAsHomingTarget: 1
 --- !u!114 &7648723627322486397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,12 +98,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8510899062165528262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8b8cdd7f9fc4b5f9e02f83318ab87f2, type: 3}
+  m_Script: {fileID: 11500000, guid: 21b8a1a287c6444bac079566818a058a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game::Game.CarrotBullet
   m_maxHealth: 3
-  m_speed: 1
-  m_turnSpeed: 120
   m_team: 1
 --- !u!61 &3300567445619429389
 BoxCollider2D:

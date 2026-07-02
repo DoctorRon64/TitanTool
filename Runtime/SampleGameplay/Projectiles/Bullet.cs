@@ -16,16 +16,31 @@ namespace Game {
         [SerializeField] private string m_idleState = "bullet_idle";
         [FormerlySerializedAs("explodeState")]
         [SerializeField] private string m_explodeState = "bullet_explode";
+        [SerializeField] private bool m_useHoming;
+        [SerializeField] private float m_homingTurnSpeed = 120f;
+        [SerializeField] private Transform m_homingTarget;
+        [SerializeField] private bool m_findPlayerAsHomingTarget = true;
 
         public bool active { get; set; }
         private Rigidbody2D m_rb;
         private ObjectPool<Bullet> m_objectPool;
         private bool m_isDestroying;
+        private Transform m_resolvedHomingTarget;
+        private float m_homingSpeed;
+        private bool m_capturedHomingSpeed;
 
         public bool isDestroying => m_isDestroying;
 
         private void Awake() {
             m_rb = GetComponent<Rigidbody2D>();
+        }
+
+        private void OnEnable() {
+            ResetHoming();
+        }
+
+        private void FixedUpdate() {
+            UpdateHoming();
         }
 
         public void SetupBullet(ObjectPool<Bullet> _pool) {
@@ -84,6 +99,7 @@ namespace Game {
 
         public void EnablePoolable() {
             m_isDestroying = false;
+            ResetHoming();
             gameObject.SetActive(true);
             if (m_spriteRenderer != null)
                 m_spriteRenderer.enabled = true;
@@ -103,6 +119,7 @@ namespace Game {
         public void DisablePoolable() {
             StopAllCoroutines();
             m_isDestroying = false;
+            ResetHoming();
             m_rb.linearVelocity = Vector2.zero;
             gameObject.SetActive(false);
             if (m_spriteRenderer != null)
@@ -147,6 +164,58 @@ namespace Game {
             }
 
             return m_anim;
+        }
+
+        private void UpdateHoming() {
+            if (!m_useHoming || m_isDestroying)
+                return;
+
+            CaptureHomingSpeed();
+            ResolveHomingTarget();
+
+            if (m_resolvedHomingTarget == null)
+                return;
+
+            Vector2 toTarget = m_resolvedHomingTarget.position - transform.position;
+            if (toTarget.sqrMagnitude < 0.0001f)
+                return;
+
+            Vector2 currentDirection = m_rb.linearVelocity.sqrMagnitude > 0.0001f
+                ? m_rb.linearVelocity.normalized
+                : (Vector2)transform.right;
+
+            Vector2 newDirection = Vector3.RotateTowards(
+                currentDirection,
+                toTarget.normalized,
+                m_homingTurnSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime,
+                0f
+            );
+
+            m_rb.linearVelocity = newDirection.normalized * m_homingSpeed;
+            SetRotation(newDirection);
+        }
+
+        private void CaptureHomingSpeed() {
+            if (m_capturedHomingSpeed)
+                return;
+
+            m_capturedHomingSpeed = true;
+            m_homingSpeed = m_rb.linearVelocity.magnitude;
+        }
+
+        private void ResolveHomingTarget() {
+            if (m_resolvedHomingTarget != null || !m_findPlayerAsHomingTarget)
+                return;
+
+            Player.Player player = FindFirstObjectByType<Player.Player>();
+            if (player != null)
+                m_resolvedHomingTarget = player.transform;
+        }
+
+        private void ResetHoming() {
+            m_resolvedHomingTarget = m_homingTarget;
+            m_homingSpeed = 0f;
+            m_capturedHomingSpeed = false;
         }
 
         private static bool HasUsableAnimator(Animator animator) {
