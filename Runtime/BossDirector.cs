@@ -43,6 +43,7 @@ namespace TitanTool.Runtime {
                 return;
             }
 
+            graph.EnsureValid();
             if (graph.root == null) {
                 Debug.LogError("Graph has no root node.", this);
                 enabled = false;

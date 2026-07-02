@@ -63,17 +63,19 @@ namespace Game {
             }
         }
 
-        private IEnumerator WaitUntilAnimationFinished() {
-            if (m_anim == null || m_anim.runtimeAnimatorController == null) {
+        private IEnumerator WaitUntilAnimationFinished(Animator animator) {
+            if (!HasUsableAnimator(animator)) {
                 CleanupBullet();
                 yield break;
             }
 
             yield return null;
-            while (m_anim != null && m_anim.runtimeAnimatorController != null) {
-                AnimatorStateInfo state = m_anim.GetCurrentAnimatorStateInfo(0);
-                if (!state.IsName(m_explodeState) || state.normalizedTime >= 1f)
+
+            while (HasUsableAnimator(animator)) {
+                AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+                if (state.IsName(m_explodeState) && state.normalizedTime >= 1f && !animator.IsInTransition(0))
                     break;
+
                 yield return null;
             }
 
@@ -85,12 +87,17 @@ namespace Game {
             gameObject.SetActive(true);
             if (m_spriteRenderer != null)
                 m_spriteRenderer.enabled = true;
-            if (m_anim == null || m_anim.runtimeAnimatorController == null) return;
-            m_anim.enabled = true;
-            m_anim.Rebind();
-            m_anim.Update(0f);
-            if (m_anim.HasState(0, Animator.StringToHash(m_idleState)))
-                m_anim.Play(m_idleState, 0, 0f);
+
+            Animator animator = ResolveAnimator();
+            if (!HasUsableAnimator(animator)) return;
+
+            animator.enabled = true;
+            animator.Rebind();
+            animator.Update(0f);
+
+            int idleStateHash = Animator.StringToHash(m_idleState);
+            if (animator.HasState(0, idleStateHash))
+                animator.Play(idleStateHash, 0, 0f);
         }
 
         public void DisablePoolable() {
@@ -110,19 +117,40 @@ namespace Game {
             if (m_isDestroying) return;
             m_isDestroying = true;
             m_rb.linearVelocity = Vector2.zero;
-            if (m_anim == null || m_anim.runtimeAnimatorController == null) {
+
+            Animator animator = ResolveAnimator();
+            if (!HasUsableAnimator(animator)) {
                 CleanupBullet();
                 return;
             }
 
             int explodeStateHash = Animator.StringToHash(m_explodeState);
-            if (!m_anim.HasState(0, explodeStateHash)) {
+            if (!animator.HasState(0, explodeStateHash)) {
                 CleanupBullet();
                 return;
             }
 
-            m_anim.CrossFade(explodeStateHash, m_crossFadeAnim, 0);
-            StartCoroutine(WaitUntilAnimationFinished());
+            animator.CrossFade(explodeStateHash, m_crossFadeAnim, 0);
+            StartCoroutine(WaitUntilAnimationFinished(animator));
+        }
+
+        private Animator ResolveAnimator() {
+            if (HasUsableAnimator(m_anim))
+                return m_anim;
+
+            foreach (Animator animator in GetComponentsInChildren<Animator>(true)) {
+                if (!HasUsableAnimator(animator))
+                    continue;
+
+                m_anim = animator;
+                return m_anim;
+            }
+
+            return m_anim;
+        }
+
+        private static bool HasUsableAnimator(Animator animator) {
+            return animator != null && animator.runtimeAnimatorController != null;
         }
 
         private void CleanupBullet() {

@@ -24,6 +24,12 @@ public class Bomb : MonoBehaviour {
         m_rb = GetComponent<Rigidbody2D>();
     }
 
+    private void OnEnable() {
+        m_isDestroying = false;
+        m_lifeTimer = 0f;
+        PlayAnimation(m_idleAnim, 0f);
+    }
+
     private void Update() {
         if (m_isDestroying)
             return;
@@ -72,27 +78,47 @@ public class Bomb : MonoBehaviour {
 
         DamageTargetsInRadius();
 
-        if (m_animator == null) {
+        if (!PlayAnimation(m_explodeAnim, m_animTransition)) {
             Destroy(gameObject);
+            return;
         }
 
-        m_animator.CrossFade(m_explodeAnim, m_animTransition, 0);
         StartCoroutine(WaitForExplosionAnimation());
     }
 
     private IEnumerator WaitForExplosionAnimation() {
         yield return null;
 
-        while (true) {
+        while (HasUsableAnimator(m_animator)) {
             AnimatorStateInfo state = m_animator.GetCurrentAnimatorStateInfo(0);
 
-            if (state.IsName(m_explodeAnim) && state.normalizedTime >= 1f)
+            if (state.IsName(m_explodeAnim) && state.normalizedTime >= 1f && !m_animator.IsInTransition(0))
                 break;
 
             yield return null;
         }
 
         Destroy(gameObject);
+    }
+
+    private bool PlayAnimation(string stateName, float transitionDuration) {
+        if (!HasUsableAnimator(m_animator))
+            return false;
+
+        int stateHash = Animator.StringToHash(stateName);
+        if (!m_animator.HasState(0, stateHash))
+            return false;
+
+        if (transitionDuration > 0f)
+            m_animator.CrossFade(stateHash, transitionDuration, 0);
+        else
+            m_animator.Play(stateHash, 0, 0f);
+
+        return true;
+    }
+
+    private static bool HasUsableAnimator(Animator animator) {
+        return animator != null && animator.runtimeAnimatorController != null;
     }
 
     private void DamageTargetsInRadius() {
