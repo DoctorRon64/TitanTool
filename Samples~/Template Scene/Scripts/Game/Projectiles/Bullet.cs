@@ -1,5 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utility;
 
 namespace Game {
@@ -10,9 +11,11 @@ namespace Game {
         [SerializeField] private LayerMask m_enviourmentMask;
         [SerializeField] private SpriteRenderer m_spriteRenderer;
         [SerializeField] private Animator m_anim;
-        
-        [SerializeField] private string idleState = "bullet_idle";
-        [SerializeField] private string explodeState = "bullet_explode";
+        [SerializeField] private float m_crossFadeAnim = 0.5f;
+        [FormerlySerializedAs("idleState")]
+        [SerializeField] private string m_idleState = "bullet_idle";
+        [FormerlySerializedAs("explodeState")]
+        [SerializeField] private string m_explodeState = "bullet_explode";
 
         public bool active { get; set; }
         private Rigidbody2D m_rb;
@@ -61,15 +64,15 @@ namespace Game {
         }
 
         private IEnumerator WaitUntilAnimationFinished() {
-            if (m_anim == null) {
+            if (m_anim == null || m_anim.runtimeAnimatorController == null) {
                 CleanupBullet();
                 yield break;
             }
 
             yield return null;
-            while (m_anim != null) {
+            while (m_anim != null && m_anim.runtimeAnimatorController != null) {
                 AnimatorStateInfo state = m_anim.GetCurrentAnimatorStateInfo(0);
-                if (!state.IsName(explodeState) || state.normalizedTime >= 1f)
+                if (!state.IsName(m_explodeState) || state.normalizedTime >= 1f)
                     break;
                 yield return null;
             }
@@ -82,12 +85,12 @@ namespace Game {
             gameObject.SetActive(true);
             if (m_spriteRenderer != null)
                 m_spriteRenderer.enabled = true;
-            if (m_anim == null) return;
+            if (m_anim == null || m_anim.runtimeAnimatorController == null) return;
             m_anim.enabled = true;
             m_anim.Rebind();
             m_anim.Update(0f);
-            if (m_anim.HasState(0, Animator.StringToHash(idleState)))
-                m_anim.Play(idleState, 0, 0f);
+            if (m_anim.HasState(0, Animator.StringToHash(m_idleState)))
+                m_anim.Play(m_idleState, 0, 0f);
         }
 
         public void DisablePoolable() {
@@ -107,12 +110,18 @@ namespace Game {
             if (m_isDestroying) return;
             m_isDestroying = true;
             m_rb.linearVelocity = Vector2.zero;
-            if (m_anim == null) {
+            if (m_anim == null || m_anim.runtimeAnimatorController == null) {
                 CleanupBullet();
                 return;
             }
 
-            m_anim.Play(explodeState, 0, 0f);
+            int explodeStateHash = Animator.StringToHash(m_explodeState);
+            if (!m_anim.HasState(0, explodeStateHash)) {
+                CleanupBullet();
+                return;
+            }
+
+            m_anim.CrossFade(explodeStateHash, m_crossFadeAnim, 0);
             StartCoroutine(WaitUntilAnimationFinished());
         }
 

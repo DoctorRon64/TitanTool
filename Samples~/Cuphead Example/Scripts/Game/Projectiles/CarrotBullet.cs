@@ -9,6 +9,7 @@ namespace Game {
         [SerializeField] private float m_speed = 3f;
         [SerializeField] private float m_turnSpeed = 90f;
         [SerializeField] private DamagableTeam m_team = DamagableTeam.Opponent;
+        [SerializeField] private Transform m_targetOverride;
 
         private Bullet m_bullet;
         private Rigidbody2D m_rb;
@@ -87,9 +88,17 @@ namespace Game {
             if (m_target != null)
                 return;
 
-            Player.Player player = FindFirstObjectByType<Player.Player>();
-            if (player != null)
-                m_target = player.transform;
+            if (m_targetOverride != null) {
+                m_target = m_targetOverride;
+                return;
+            }
+
+            GameObject playerObject = GameObject.FindWithTag("Player");
+            if (playerObject == null)
+                playerObject = GameObject.Find("Player");
+
+            if (playerObject != null)
+                m_target = playerObject.transform;
         }
 
         private void SetRotation(Vector2 direction) {

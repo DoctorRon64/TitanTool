@@ -83,7 +83,6 @@ namespace Game.Player {
             rawInput = Mathf.Abs(rawInput) < 0.01f ? 0f : Mathf.Clamp(rawInput, -1f, 1f);
             m_moveInput = rawInput;
             bool isWalking = Mathf.Abs(m_moveInput) > 0.01f;
-            Debug.Log($"MoveInput: {m_moveInput}, Walking: {isWalking}");
             m_isWalking?.Invoke(isWalking);
         }
 

@@ -1,0 +1,17 @@
+{
+    "name": "TitanTool.Sample.Cuphead",
+    "rootNamespace": "",
+    "references": [
+        "TitanTool.Runtime",
+        "Utility"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
