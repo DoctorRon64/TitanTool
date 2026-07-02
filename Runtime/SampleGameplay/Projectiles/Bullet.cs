@@ -8,7 +8,8 @@ namespace Game {
     public class Bullet : MonoBehaviour, IPoolable, IDamagable {
         [SerializeField] private int m_damageValue = 1;
         [SerializeField] private DamagableTeam m_ownerTeam = DamagableTeam.Opponent;
-        [SerializeField] private bool m_canTakeDamage;
+        [FormerlySerializedAs("m_canTakeDamage")]
+        [SerializeField] private bool m_canBeShotDown;
         [SerializeField] private int m_maxHealth = 1;
         [SerializeField] private LayerMask m_enviourmentMask;
         [SerializeField] private SpriteRenderer m_spriteRenderer;
@@ -23,6 +24,7 @@ namespace Game {
         [SerializeField] private bool m_findPlayerAsHomingTarget = true;
 
         public DamagableTeam team => m_ownerTeam;
+        public bool canBeShotDown => m_canBeShotDown;
         public int health { get; set; }
         public bool active { get; set; }
         private Rigidbody2D m_rb;
@@ -71,7 +73,7 @@ namespace Game {
                 if (damagable.team == m_ownerTeam)
                     return;
 
-                if (damagable is Bullet bullet && !bullet.m_canTakeDamage)
+                if (damagable is Bullet bullet && !bullet.canBeShotDown)
                     return;
 
                 damagable.TakeDamage(m_damageValue);
@@ -135,7 +137,7 @@ namespace Game {
         }
 
         public void TakeDamage(int damageAmount) {
-            if (!m_canTakeDamage || m_isDestroying)
+            if (!m_canBeShotDown || m_isDestroying)
                 return;
 
             health -= damageAmount;

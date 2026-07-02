@@ -59,6 +59,9 @@ public class Bomb : MonoBehaviour {
             if (damagable.team == m_ownerTeam)
                 return;
 
+            if (damagable is Game.Bullet bullet && !bullet.canBeShotDown)
+                return;
+
             Explode();
             return;
         }

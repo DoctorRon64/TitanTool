@@ -237,6 +237,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.Bullet
   m_damageValue: 1
   m_ownerTeam: 1
+  m_canBeShotDown: 0
+  m_maxHealth: 1
   m_enviourmentMask:
     serializedVersion: 2
     m_Bits: 64

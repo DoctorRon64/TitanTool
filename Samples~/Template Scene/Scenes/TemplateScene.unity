@@ -1040,7 +1040,7 @@ GameObject:
   - component: {fileID: 760685070}
   - component: {fileID: 760685069}
   m_Layer: 0
-  m_Name: GameOver
+  m_Name: GameOverManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1060,7 +1060,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::GameOver
   m_onBossDied: {fileID: 11400000, guid: 9291090d8f42c7343a33f2df72f2cebd, type: 2}
   m_onPlayerDied: {fileID: 11400000, guid: a5851be6a0cc7fa4aaa6e07552b63915, type: 2}
-  m_boss: {fileID: 0}
+  m_boss: {fileID: 1739993845}
 --- !u!4 &760685070
 Transform:
   m_ObjectHideFlags: 0
@@ -1616,7 +1616,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1739993836}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
