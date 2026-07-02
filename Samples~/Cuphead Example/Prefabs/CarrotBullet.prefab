@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5326141842693879221}
   - component: {fileID: 8633631743853408321}
   - component: {fileID: 88613868967268486}
-  - component: {fileID: 7648723627322486397}
   - component: {fileID: 3300567445619429389}
   m_Layer: 10
   m_Name: CarrotBullet
@@ -77,6 +76,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.Bullet
   m_damageValue: 1
   m_ownerTeam: 1
+  m_canTakeDamage: 1
+  m_maxHealth: 3
   m_enviourmentMask:
     serializedVersion: 2
     m_Bits: 64
@@ -87,22 +88,7 @@ MonoBehaviour:
   m_explodeState: bullet_explode
   m_useHoming: 1
   m_homingTurnSpeed: 120
-  m_homingTarget: {fileID: 0}
   m_findPlayerAsHomingTarget: 1
---- !u!114 &7648723627322486397
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8510899062165528262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21b8a1a287c6444bac079566818a058a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game::Game.CarrotBullet
-  m_maxHealth: 3
-  m_team: 1
 --- !u!61 &3300567445619429389
 BoxCollider2D:
   m_ObjectHideFlags: 0

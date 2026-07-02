@@ -5,9 +5,11 @@ using Utility;
 
 namespace Game {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class Bullet : MonoBehaviour, IPoolable {
+    public class Bullet : MonoBehaviour, IPoolable, IDamagable {
         [SerializeField] private int m_damageValue = 1;
         [SerializeField] private DamagableTeam m_ownerTeam = DamagableTeam.Opponent;
+        [SerializeField] private bool m_canTakeDamage;
+        [SerializeField] private int m_maxHealth = 1;
         [SerializeField] private LayerMask m_enviourmentMask;
         [SerializeField] private SpriteRenderer m_spriteRenderer;
         [SerializeField] private Animator m_anim;
@@ -18,9 +20,10 @@ namespace Game {
         [SerializeField] private string m_explodeState = "bullet_explode";
         [SerializeField] private bool m_useHoming;
         [SerializeField] private float m_homingTurnSpeed = 120f;
-        [SerializeField] private Transform m_homingTarget;
         [SerializeField] private bool m_findPlayerAsHomingTarget = true;
 
+        public DamagableTeam team => m_ownerTeam;
+        public int health { get; set; }
         public bool active { get; set; }
         private Rigidbody2D m_rb;
         private ObjectPool<Bullet> m_objectPool;
@@ -37,6 +40,7 @@ namespace Game {
 
         private void OnEnable() {
             ResetHoming();
+            ResetHealth();
         }
 
         private void FixedUpdate() {
@@ -65,6 +69,9 @@ namespace Game {
 
             if (_other.TryGetComponent(out IDamagable damagable)) {
                 if (damagable.team == m_ownerTeam)
+                    return;
+
+                if (damagable is Bullet bullet && !bullet.m_canTakeDamage)
                     return;
 
                 damagable.TakeDamage(m_damageValue);
@@ -100,6 +107,7 @@ namespace Game {
         public void EnablePoolable() {
             m_isDestroying = false;
             ResetHoming();
+            ResetHealth();
             gameObject.SetActive(true);
             if (m_spriteRenderer != null)
                 m_spriteRenderer.enabled = true;
@@ -124,6 +132,15 @@ namespace Game {
             gameObject.SetActive(false);
             if (m_spriteRenderer != null)
                 m_spriteRenderer.enabled = true;
+        }
+
+        public void TakeDamage(int damageAmount) {
+            if (!m_canTakeDamage || m_isDestroying)
+                return;
+
+            health -= damageAmount;
+            if (health <= 0)
+                BreakBullet();
         }
 
         public void SetPosition(Vector2 _position) {
@@ -213,9 +230,13 @@ namespace Game {
         }
 
         private void ResetHoming() {
-            m_resolvedHomingTarget = m_homingTarget;
+            m_resolvedHomingTarget = null;
             m_homingSpeed = 0f;
             m_capturedHomingSpeed = false;
+        }
+
+        private void ResetHealth() {
+            health = m_maxHealth;
         }
 
         private static bool HasUsableAnimator(Animator animator) {
