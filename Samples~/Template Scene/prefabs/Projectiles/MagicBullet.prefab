@@ -128,6 +128,7 @@ MonoBehaviour:
     m_Bits: 64
   m_spriteRenderer: {fileID: 737703571832416183}
   m_anim: {fileID: 2914908254645910171}
+  m_crossFadeAnim: 0.25
   idleState: Projetil
   explodeState: Hit
 --- !u!114 &3730363005436238485

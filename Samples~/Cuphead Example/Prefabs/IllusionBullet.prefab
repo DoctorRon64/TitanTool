@@ -118,6 +118,9 @@ MonoBehaviour:
     m_Bits: 64
   m_spriteRenderer: {fileID: 7326817721752682397}
   m_anim: {fileID: 4854217225203601002}
+  m_crossFadeAnim: 0.25
+  m_idleState: bullet_idle
+  m_explodeState: bullet_explode
 --- !u!114 &3730363005436238485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9174931963809697154, guid: faea461581254402a9d6d185c6249bce, type: 3}
       propertyPath: m_Name
-      value: illusion_bullet
+      value: illusion_bullet_visual
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

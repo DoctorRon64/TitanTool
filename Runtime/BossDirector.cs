@@ -3,6 +3,9 @@ using UnityEngine;
 using TitanTool.Runtime.Data;
 using TitanTool.Runtime.Nodes.Base;
 using Utility;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace TitanTool.Runtime {
     public class BossDirector : MonoBehaviour {
@@ -43,6 +46,9 @@ namespace TitanTool.Runtime {
                 return;
             }
 
+#if UNITY_EDITOR
+            RefreshGraphImportIfRuntimeDataIsMissing();
+#endif
             graph.EnsureValid();
             if (graph.root == null) {
                 Debug.LogError("Graph has no root node.", this);
@@ -92,6 +98,21 @@ namespace TitanTool.Runtime {
                 context.blackboard.Set(BKeys.PlayerTransform, m_player);
             }
         }
+
+#if UNITY_EDITOR
+        private void RefreshGraphImportIfRuntimeDataIsMissing() {
+            if (graph == null || graph.root != null || graph.nodes.Count > 0)
+                return;
+
+            string graphPath = AssetDatabase.GetAssetPath(graph);
+            if (string.IsNullOrEmpty(graphPath))
+                return;
+
+            AssetDatabase.ImportAsset(graphPath, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
+            if (AssetDatabase.LoadMainAssetAtPath(graphPath) is BossGraphAsset refreshedGraph)
+                m_graph = refreshedGraph;
+        }
+#endif
 
         private List<Transform> BuildSpawnPointList() {
             List<Transform> spawnPoints = new();

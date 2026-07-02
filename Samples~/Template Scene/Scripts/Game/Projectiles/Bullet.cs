@@ -11,7 +11,7 @@ namespace Game {
         [SerializeField] private LayerMask m_enviourmentMask;
         [SerializeField] private SpriteRenderer m_spriteRenderer;
         [SerializeField] private Animator m_anim;
-        [SerializeField] private float m_crossFadeAnim = 0.5f;
+        [SerializeField] private float m_crossFadeAnim = 0.25f;
         [FormerlySerializedAs("idleState")]
         [SerializeField] private string m_idleState = "bullet_idle";
         [FormerlySerializedAs("explodeState")]

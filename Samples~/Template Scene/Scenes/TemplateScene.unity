@@ -794,7 +794,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6298144400185679421, guid: 99a4e23571f30aa468caf23b1c6e4894, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1620,7 +1620,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 99999
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -2041,22 +2041,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4652855463868540508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7293925550734722928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2f10db9eb7f455ebc37ec8252245b3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game::Game.Player.PlayerDamageShake
-  m_impulseSource: {fileID: 4316709047962169021}
-  m_shakeForce: 3
-  m_onHealthChanged: {fileID: 11400000, guid: 6fcfe4e7b90541d4a937ac7505f48e90, type: 2}
-  m_hurtSound: {fileID: 11400000, guid: 74e372af0e4884e4dbe10210514ba8f9, type: 2}
 --- !u!114 &4316709047962169021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2110,6 +2094,22 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: -1, y: -1, z: 0}
+--- !u!114 &4652855463868540508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7293925550734722928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f10db9eb7f455ebc37ec8252245b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.Player.PlayerDamageShake
+  m_impulseSource: {fileID: 4316709047962169021}
+  m_shakeForce: 3
+  m_onHealthChanged: {fileID: 11400000, guid: 6fcfe4e7b90541d4a937ac7505f48e90, type: 2}
+  m_hurtSound: {fileID: 11400000, guid: 74e372af0e4884e4dbe10210514ba8f9, type: 2}
 --- !u!114 &5394891257243845192
 MonoBehaviour:
   m_ObjectHideFlags: 0
