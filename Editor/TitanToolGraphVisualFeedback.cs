@@ -370,7 +370,7 @@ namespace TitanTool.Editor {
                 ? "Remove the last empty child slot."
                 : "Cannot remove because the last child slot is still connected.";
 
-            countLabel.text = childCount.ToString();
+            countLabel.text = $"Children {childCount}";
             countLabel.tooltip = $"{childCount} child slots";
 
             removeButton.userData = new ChildControlBinding(graphNode, -1);
@@ -384,9 +384,9 @@ namespace TitanTool.Editor {
 
             controls = new VisualElement { name = CHILD_CONTROLS_NAME };
             controls.style.position = Position.Absolute;
-            controls.style.right = 6f;
-            controls.style.bottom = 5f;
-            controls.style.height = 20f;
+            controls.style.left = 10f;
+            controls.style.top = 26f;
+            controls.style.height = 22f;
             controls.style.flexDirection = FlexDirection.Row;
             controls.style.alignItems = Align.Center;
             controls.style.borderTopLeftRadius = 4f;
@@ -398,7 +398,10 @@ namespace TitanTool.Editor {
 
             Button removeButton = CreateChildControlButton("child-remove", "-");
             Label countLabel = new Label { name = "child-count" };
-            countLabel.style.minWidth = 18f;
+            countLabel.style.minWidth = 72f;
+            countLabel.style.height = 18f;
+            countLabel.style.marginLeft = 3f;
+            countLabel.style.marginRight = 3f;
             countLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             countLabel.style.fontSize = 9f;
             countLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
