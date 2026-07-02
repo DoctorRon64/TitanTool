@@ -21,9 +21,13 @@ namespace TitanTool.Editor {
         private const string STATUS_BADGE_NAME = "titantool-status-badge";
         private const string QUICK_ADD_BAR_NAME = "titantool-quick-add-bar";
         private const string QUICK_ADD_FIELD_NAME = "titantool-quick-add-field";
+        private const string SEARCH_POPUP_NAME = "titantool-space-search";
+        private const string SEARCH_RESULTS_NAME = "titantool-space-search-results";
 
         private static double s_nextUpdateTime;
         private static readonly Dictionary<VisualElement, Vector2> s_lastGraphPositions = new();
+        private static readonly Dictionary<VisualElement, Vector2> s_lastLocalPositions = new();
+        private static readonly Dictionary<VisualElement, SearchPopupState> s_searchPopups = new();
         private static readonly HashSet<VisualElement> s_quickAddAttached = new();
 
         static TitanToolGraphVisualFeedback() {
@@ -120,16 +124,19 @@ namespace TitanTool.Editor {
         }
 
         private static void ApplyNodeColor(VisualElement nodeView, BossGraphNode graphNode, RuntimeViewState runtimeState) {
-            Color categoryColor = graphNode.categoryColor;
-            EnsureCategoryStrip(nodeView).style.backgroundColor = categoryColor;
-            EnsureCategoryGlow(nodeView).style.backgroundColor = new Color(categoryColor.r, categoryColor.g, categoryColor.b, 0.14f);
-            SetIconBadge(nodeView, GetIconBadgeText(graphNode), categoryColor, graphNode.tooltip);
-            SetCategoryBadge(nodeView, graphNode.category.ToString(), categoryColor);
+            Color baseColor = TryGetUserNodeColor(nodeView, out Color userColor)
+                ? userColor
+                : graphNode.categoryColor;
+
+            EnsureCategoryStrip(nodeView).style.backgroundColor = baseColor;
+            EnsureCategoryGlow(nodeView).style.backgroundColor = new Color(baseColor.r, baseColor.g, baseColor.b, 0.18f);
+            SetIconBadge(nodeView, GetIconBadgeText(graphNode), baseColor, graphNode.tooltip);
+            SetCategoryBadge(nodeView, graphNode.category.ToString(), baseColor);
 
             nodeView.style.backgroundColor = new Color(
-                Mathf.Lerp(0.10f, categoryColor.r, 0.16f),
-                Mathf.Lerp(0.10f, categoryColor.g, 0.16f),
-                Mathf.Lerp(0.12f, categoryColor.b, 0.16f),
+                Mathf.Lerp(0.10f, baseColor.r, 0.30f),
+                Mathf.Lerp(0.10f, baseColor.g, 0.30f),
+                Mathf.Lerp(0.12f, baseColor.b, 0.30f),
                 0.94f);
 
             nodeView.style.borderTopLeftRadius = 7f;
@@ -144,7 +151,7 @@ namespace TitanTool.Editor {
                 return;
             }
 
-            ApplyBorder(nodeView, new Color(categoryColor.r, categoryColor.g, categoryColor.b, 0.82f), 1.5f);
+            ApplyBorder(nodeView, new Color(baseColor.r, baseColor.g, baseColor.b, 0.82f), 1.5f);
             HideStatusBadge(nodeView);
         }
 
@@ -249,7 +256,18 @@ namespace TitanTool.Editor {
         }
 
         private static string GetIconBadgeText(BossGraphNode graphNode) {
-            string displayName = graphNode.displayName?.ToLowerInvariant() ?? string.Empty;
+            return GetIconBadgeText(graphNode.displayName, graphNode.category);
+        }
+
+        private static string GetIconBadgeText(GraphNodeRegistration registration) {
+            if (registration == null)
+                return "ND";
+
+            return GetIconBadgeText(registration.displayName, registration.category);
+        }
+
+        private static string GetIconBadgeText(string rawDisplayName, BossGraphNodeCategory category) {
+            string displayName = rawDisplayName?.ToLowerInvariant() ?? string.Empty;
             if (displayName.Contains("move"))
                 return "MV";
             if (displayName.Contains("shoot"))
@@ -279,7 +297,7 @@ namespace TitanTool.Editor {
             if (displayName.Contains("reroute"))
                 return "RT";
 
-            return graphNode.category switch {
+            return category switch {
                 BossGraphNodeCategory.Flow => "FL",
                 BossGraphNodeCategory.Composite => "CP",
                 BossGraphNodeCategory.Action => "AC",
@@ -340,6 +358,69 @@ namespace TitanTool.Editor {
             nodeView.style.borderLeftWidth = width;
         }
 
+        private static bool TryGetUserNodeColor(VisualElement nodeView, out Color color) {
+            color = default;
+            object model = GetProperty(nodeView, "Model");
+            if (TryGetUserElementColor(model, out color))
+                return true;
+
+            object node = model != null ? GetProperty(model, "Node") : null;
+            return TryGetUserElementColor(node, out color);
+        }
+
+        private static bool TryGetUserElementColor(object target, out Color color) {
+            color = default;
+            if (target == null)
+                return false;
+
+            if (TryReadElementColor(target, out color))
+                return true;
+
+            object elementColor = GetMemberValue(target, "ElementColor") ?? GetMemberValue(target, "m_ElementColor");
+            return TryReadElementColor(elementColor, out color);
+        }
+
+        private static bool TryReadElementColor(object elementColor, out Color color) {
+            color = default;
+            if (elementColor == null)
+                return false;
+
+            if (!TryReadBool(elementColor, out bool hasUserColor, "HasUserColor", "hasUserColor", "m_HasUserColor") || !hasUserColor)
+                return false;
+
+            if (!TryReadColor(elementColor, out color, "Color", "color", "m_Color", "ElementColor", "CustomColor"))
+                return false;
+
+            color.a = 1f;
+            return true;
+        }
+
+        private static bool TryReadBool(object target, out bool value, params string[] memberNames) {
+            value = false;
+            foreach (string memberName in memberNames) {
+                object rawValue = GetMemberValue(target, memberName);
+                if (rawValue is bool boolValue) {
+                    value = boolValue;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TryReadColor(object target, out Color value, params string[] memberNames) {
+            value = default;
+            foreach (string memberName in memberNames) {
+                object rawValue = GetMemberValue(target, memberName);
+                if (rawValue is Color colorValue) {
+                    value = colorValue;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static bool TryGetRuntimeStatus(BossGraphNode graphNode, RuntimeViewState runtimeState, out NodeStatus status, out bool visitedThisTick) {
             status = NodeStatus.Failure;
             visitedThisTick = false;
@@ -380,6 +461,19 @@ namespace TitanTool.Editor {
 
         private static object GetProperty(object target, string propertyName) {
             return target?.GetType().GetProperty(propertyName, FLAGS)?.GetValue(target);
+        }
+
+        private static object GetMemberValue(object target, string memberName) {
+            if (target == null || string.IsNullOrEmpty(memberName))
+                return null;
+
+            Type type = target.GetType();
+            PropertyInfo property = type.GetProperty(memberName, FLAGS);
+            if (property != null && property.GetIndexParameters().Length == 0)
+                return property.GetValue(target);
+
+            FieldInfo field = type.GetField(memberName, FLAGS);
+            return field?.GetValue(target);
         }
 
         private static void EnsureQuickAddBar(VisualElement graphView) {
@@ -448,12 +542,201 @@ namespace TitanTool.Editor {
             graphView.Add(bar);
 
             if (s_quickAddAttached.Add(graphView)) {
-                graphView.RegisterCallback<MouseMoveEvent>(evt => s_lastGraphPositions[graphView] = GetGraphPosition(graphView, evt.localMousePosition), TrickleDown.TrickleDown);
+                graphView.RegisterCallback<MouseMoveEvent>(evt => {
+                    s_lastLocalPositions[graphView] = evt.localMousePosition;
+                    s_lastGraphPositions[graphView] = GetGraphPosition(graphView, evt.localMousePosition);
+                }, TrickleDown.TrickleDown);
+                graphView.RegisterCallback<KeyDownEvent>(evt => OnGraphKeyDown(graphView, evt), TrickleDown.TrickleDown);
                 graphView.RegisterCallback<DetachFromPanelEvent>(_ => {
+                    HideSearchPopup(graphView);
                     s_quickAddAttached.Remove(graphView);
                     s_lastGraphPositions.Remove(graphView);
+                    s_lastLocalPositions.Remove(graphView);
                 });
             }
+        }
+
+        private static void OnGraphKeyDown(VisualElement graphView, KeyDownEvent evt) {
+            if (evt.keyCode != KeyCode.Space)
+                return;
+
+            if (IsTextInputFocused(graphView))
+                return;
+
+            ShowSearchPopup(graphView);
+            evt.StopImmediatePropagation();
+        }
+
+        private static void ShowSearchPopup(VisualElement graphView) {
+            HideSearchPopup(graphView);
+
+            Vector2 localPosition = s_lastLocalPositions.TryGetValue(graphView, out Vector2 lastLocalPosition)
+                ? lastLocalPosition
+                : graphView.layout.center;
+            Vector2 graphPosition = s_lastGraphPositions.TryGetValue(graphView, out Vector2 lastGraphPosition)
+                ? lastGraphPosition
+                : GetGraphPosition(graphView, localPosition);
+
+            VisualElement popup = new VisualElement { name = SEARCH_POPUP_NAME };
+            popup.style.position = Position.Absolute;
+            popup.style.left = Mathf.Clamp(localPosition.x, 12f, Mathf.Max(12f, graphView.layout.width - 390f));
+            popup.style.top = Mathf.Clamp(localPosition.y, 50f, Mathf.Max(50f, graphView.layout.height - 340f));
+            popup.style.width = 370f;
+            popup.style.maxHeight = 330f;
+            popup.style.paddingLeft = 8f;
+            popup.style.paddingRight = 8f;
+            popup.style.paddingTop = 8f;
+            popup.style.paddingBottom = 8f;
+            popup.style.borderTopLeftRadius = 7f;
+            popup.style.borderTopRightRadius = 7f;
+            popup.style.borderBottomLeftRadius = 7f;
+            popup.style.borderBottomRightRadius = 7f;
+            popup.style.backgroundColor = new Color(0.07f, 0.075f, 0.085f, 0.97f);
+            popup.style.borderTopColor = new Color(1f, 1f, 1f, 0.18f);
+            popup.style.borderRightColor = new Color(1f, 1f, 1f, 0.18f);
+            popup.style.borderBottomColor = new Color(1f, 1f, 1f, 0.18f);
+            popup.style.borderLeftColor = new Color(1f, 1f, 1f, 0.18f);
+            popup.style.borderTopWidth = 1f;
+            popup.style.borderRightWidth = 1f;
+            popup.style.borderBottomWidth = 1f;
+            popup.style.borderLeftWidth = 1f;
+
+            TextField field = new TextField();
+            field.style.height = 24f;
+            field.style.marginBottom = 7f;
+            field.tooltip = "Type a node name, category, or alias.";
+            popup.Add(field);
+
+            ScrollView results = new ScrollView(ScrollViewMode.Vertical) { name = SEARCH_RESULTS_NAME };
+            results.style.maxHeight = 260f;
+            popup.Add(results);
+
+            SearchPopupState state = new SearchPopupState(popup, field, results, graphPosition);
+            s_searchPopups[graphView] = state;
+
+            field.RegisterValueChangedCallback(_ => RefreshSearchResults(graphView, state));
+            field.RegisterCallback<KeyDownEvent>(evt => OnSearchFieldKeyDown(graphView, state, evt), TrickleDown.TrickleDown);
+            popup.RegisterCallback<KeyDownEvent>(evt => {
+                if (evt.keyCode == KeyCode.Escape) {
+                    HideSearchPopup(graphView);
+                    evt.StopImmediatePropagation();
+                }
+            }, TrickleDown.TrickleDown);
+
+            graphView.Add(popup);
+            RefreshSearchResults(graphView, state);
+            field.schedule.Execute(() => field.Focus());
+        }
+
+        private static void HideSearchPopup(VisualElement graphView) {
+            if (!s_searchPopups.TryGetValue(graphView, out SearchPopupState state))
+                return;
+
+            state.root.RemoveFromHierarchy();
+            s_searchPopups.Remove(graphView);
+        }
+
+        private static void OnSearchFieldKeyDown(VisualElement graphView, SearchPopupState state, KeyDownEvent evt) {
+            if (evt.keyCode == KeyCode.Escape) {
+                HideSearchPopup(graphView);
+                evt.StopImmediatePropagation();
+                return;
+            }
+
+            if (evt.keyCode == KeyCode.DownArrow) {
+                state.selectedIndex = Mathf.Min(state.selectedIndex + 1, Mathf.Max(0, state.matches.Count - 1));
+                UpdateSearchSelection(state);
+                evt.StopImmediatePropagation();
+                return;
+            }
+
+            if (evt.keyCode == KeyCode.UpArrow) {
+                state.selectedIndex = Mathf.Max(0, state.selectedIndex - 1);
+                UpdateSearchSelection(state);
+                evt.StopImmediatePropagation();
+                return;
+            }
+
+            if (evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter) {
+                if (state.matches.Count > 0) {
+                    CreateNodeFromSearch(graphView, state, state.matches[state.selectedIndex]);
+                    evt.StopImmediatePropagation();
+                }
+            }
+        }
+
+        private static void RefreshSearchResults(VisualElement graphView, SearchPopupState state) {
+            state.matches = GetSearchMatches(state.field.value).Take(9).ToList();
+            state.selectedIndex = Mathf.Clamp(state.selectedIndex, 0, Mathf.Max(0, state.matches.Count - 1));
+            state.resultButtons.Clear();
+            state.results.Clear();
+
+            if (state.matches.Count == 0) {
+                Label empty = new Label("No nodes found");
+                empty.style.height = 24f;
+                empty.style.color = new Color(0.72f, 0.74f, 0.78f);
+                empty.style.unityTextAlign = TextAnchor.MiddleCenter;
+                state.results.Add(empty);
+                return;
+            }
+
+            for (int index = 0; index < state.matches.Count; index++) {
+                GraphNodeRegistration registration = state.matches[index];
+                Button row = CreateSearchResultButton(registration, () => CreateNodeFromSearch(graphView, state, registration));
+                state.resultButtons.Add(row);
+                state.results.Add(row);
+            }
+
+            UpdateSearchSelection(state);
+        }
+
+        private static Button CreateSearchResultButton(GraphNodeRegistration registration, Action clicked) {
+            Color color = registration?.color ?? new Color(0.38f, 0.42f, 0.48f);
+            string icon = GetIconBadgeText(registration);
+            string category = registration?.category.ToString().ToUpperInvariant() ?? "NODE";
+            Button button = new Button(clicked) {
+                text = $"{icon}  {registration?.displayName ?? "Node"}    {category}"
+            };
+
+            button.style.height = 28f;
+            button.style.marginBottom = 3f;
+            button.style.unityTextAlign = TextAnchor.MiddleLeft;
+            button.style.paddingLeft = 8f;
+            button.style.paddingRight = 8f;
+            button.style.borderTopLeftRadius = 4f;
+            button.style.borderTopRightRadius = 4f;
+            button.style.borderBottomLeftRadius = 4f;
+            button.style.borderBottomRightRadius = 4f;
+            button.style.backgroundColor = new Color(color.r, color.g, color.b, 0.24f);
+            button.style.color = new Color(0.92f, 0.94f, 0.97f);
+            button.tooltip = registration?.tooltip;
+            return button;
+        }
+
+        private static void UpdateSearchSelection(SearchPopupState state) {
+            for (int index = 0; index < state.resultButtons.Count; index++) {
+                Button button = state.resultButtons[index];
+                GraphNodeRegistration registration = state.matches[index];
+                Color color = registration?.color ?? new Color(0.38f, 0.42f, 0.48f);
+                bool selected = index == state.selectedIndex;
+                button.style.backgroundColor = selected
+                    ? new Color(color.r, color.g, color.b, 0.62f)
+                    : new Color(color.r, color.g, color.b, 0.24f);
+                button.style.borderTopColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
+                button.style.borderRightColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
+                button.style.borderBottomColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
+                button.style.borderLeftColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
+                button.style.borderTopWidth = selected ? 1f : 0f;
+                button.style.borderRightWidth = selected ? 1f : 0f;
+                button.style.borderBottomWidth = selected ? 1f : 0f;
+                button.style.borderLeftWidth = selected ? 1f : 0f;
+            }
+        }
+
+        private static void CreateNodeFromSearch(VisualElement graphView, SearchPopupState state, GraphNodeRegistration registration) {
+            s_lastGraphPositions[graphView] = state.graphPosition;
+            if (TryCreateNode(graphView, registration?.editorType))
+                HideSearchPopup(graphView);
         }
 
         private static void AddShortcutButton(VisualElement bar, VisualElement graphView, string label, string query) {
@@ -485,19 +768,118 @@ namespace TitanTool.Editor {
         }
 
         private static GraphNodeRegistration FindRegistration(string query) {
+            return GetSearchMatches(query).FirstOrDefault();
+        }
+
+        private static IReadOnlyList<GraphNodeRegistration> GetSearchMatches(string query) {
             IReadOnlyList<GraphNodeRegistration> registrations = NodeTypeRegistry.GetRegistrations();
             if (registrations.Count == 0)
-                return null;
+                return Array.Empty<GraphNodeRegistration>();
 
             if (string.IsNullOrWhiteSpace(query))
-                return registrations.FirstOrDefault(registration => registration.displayName == "Sequence") ?? registrations[0];
+                return registrations
+                    .OrderBy(GetDefaultSearchPriority)
+                    .ThenBy(registration => registration.displayName)
+                    .ToList();
 
             string normalized = query.Trim().ToLowerInvariant();
-            return registrations.FirstOrDefault(registration => registration.displayName.ToLowerInvariant().StartsWith(normalized))
-                   ?? registrations.FirstOrDefault(registration => registration.editorType.Name.ToLowerInvariant().StartsWith(normalized))
-                   ?? registrations.FirstOrDefault(registration => registration.menuPath.ToLowerInvariant().Contains(normalized))
-                   ?? registrations.FirstOrDefault(registration => registration.displayName.ToLowerInvariant().Contains(normalized))
-                   ?? registrations.FirstOrDefault(registration => registration.editorType.Name.ToLowerInvariant().Contains(normalized));
+            string[] terms = normalized.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            return registrations
+                .Where(registration => terms.All(term => GetSearchBlob(registration).Contains(term)))
+                .OrderBy(registration => GetSearchScore(registration, normalized, terms))
+                .ThenBy(registration => registration.displayName)
+                .ToList();
+        }
+
+        private static int GetSearchScore(GraphNodeRegistration registration, string normalizedQuery, IReadOnlyList<string> terms) {
+            string displayName = registration.displayName.ToLowerInvariant();
+            string editorName = registration.editorType.Name.ToLowerInvariant();
+            string aliases = GetSearchAliases(registration);
+
+            if (displayName == normalizedQuery || editorName == normalizedQuery)
+                return 0;
+            if (displayName.StartsWith(normalizedQuery) || editorName.StartsWith(normalizedQuery))
+                return 1;
+            if (aliases.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Any(alias => alias.StartsWith(normalizedQuery)))
+                return 2;
+            if (terms.All(term => displayName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Any(part => part.StartsWith(term))))
+                return 3;
+            return 4;
+        }
+
+        private static int GetDefaultSearchPriority(GraphNodeRegistration registration) {
+            string displayName = registration.displayName.ToLowerInvariant();
+            if (displayName.Contains("sequence"))
+                return 0;
+            if (displayName.Contains("selector"))
+                return 1;
+            if (displayName.Contains("wait"))
+                return 2;
+            if (displayName.Contains("move"))
+                return 3;
+            if (displayName.Contains("shoot"))
+                return 4;
+            if (displayName.Contains("spawn"))
+                return 5;
+            if (displayName.Contains("parallel"))
+                return 6;
+            if (displayName.Contains("cooldown"))
+                return 7;
+            if (displayName.Contains("once"))
+                return 8;
+            return 50 + (int)registration.category;
+        }
+
+        private static string GetSearchBlob(GraphNodeRegistration registration) {
+            return string.Join(" ", new[] {
+                registration.displayName,
+                registration.editorType.Name,
+                registration.runtimeType.Name,
+                registration.menuPath,
+                registration.category.ToString(),
+                registration.tooltip,
+                registration.icon,
+                GetIconBadgeText(registration),
+                GetSearchAliases(registration)
+            }).ToLowerInvariant();
+        }
+
+        private static string GetSearchAliases(GraphNodeRegistration registration) {
+            string displayName = registration.displayName.ToLowerInvariant();
+            List<string> aliases = new List<string>();
+
+            if (displayName.Contains("sequence"))
+                aliases.Add("seq then chain flow");
+            if (displayName.Contains("selector"))
+                aliases.Add("branch if choose condition fallback");
+            if (displayName.Contains("wait"))
+                aliases.Add("delay pause timer");
+            if (displayName.Contains("move"))
+                aliases.Add("movement travel go towards away");
+            if (displayName.Contains("shoot"))
+                aliases.Add("fire bullet projectile pattern attack");
+            if (displayName.Contains("spawn"))
+                aliases.Add("create instantiate summon prefab");
+            if (displayName.Contains("cooldown"))
+                aliases.Add("cd gate limit");
+            if (displayName.Contains("repeater"))
+                aliases.Add("repeat loop for each for");
+            if (displayName.Contains("once"))
+                aliases.Add("do once single 1x");
+            if (displayName.Contains("random"))
+                aliases.Add("rng pick multi gate weighted");
+            if (displayName.Contains("parallel"))
+                aliases.Add("par together simultaneous");
+            if (displayName.Contains("blackboard"))
+                aliases.Add("variable var key memory value");
+            if (displayName.Contains("animation"))
+                aliases.Add("anim animator play trigger");
+            if (displayName.Contains("health"))
+                aliases.Add("hp life damage");
+            if (displayName.Contains("reroute"))
+                aliases.Add("redirect knot cleanup line wire");
+
+            return string.Join(" ", aliases);
         }
 
         private static bool TryCreateNode(VisualElement graphView, Type editorType) {
@@ -562,6 +944,37 @@ namespace TitanTool.Editor {
             }
 
             return localPosition;
+        }
+
+        private static bool IsTextInputFocused(VisualElement graphView) {
+            VisualElement focusedElement = graphView.panel?.focusController?.focusedElement as VisualElement;
+            for (VisualElement current = focusedElement; current != null; current = current.parent) {
+                if (current is TextField || current is IMGUIContainer)
+                    return true;
+
+                string typeName = current.GetType().Name;
+                if (typeName.Contains("TextInput") || typeName.Contains("SearchField"))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private sealed class SearchPopupState {
+            public readonly VisualElement root;
+            public readonly TextField field;
+            public readonly ScrollView results;
+            public readonly Vector2 graphPosition;
+            public readonly List<Button> resultButtons = new();
+            public List<GraphNodeRegistration> matches = new();
+            public int selectedIndex;
+
+            public SearchPopupState(VisualElement root, TextField field, ScrollView results, Vector2 graphPosition) {
+                this.root = root;
+                this.field = field;
+                this.results = results;
+                this.graphPosition = graphPosition;
+            }
         }
 
         private readonly struct RuntimeViewState {
