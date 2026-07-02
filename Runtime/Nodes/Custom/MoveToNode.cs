@@ -4,18 +4,25 @@ using TitanTool.Runtime.Values;
 using UnityEngine;
 
 namespace TitanTool.Runtime.Nodes.Custom {
+    public enum MoveToMode {
+        TowardTarget,
+        AwayFromTarget
+    }
+
     public class MoveToState {
         public float elapsed;
         public float speed;
         public float stopDistance;
         public float timeout;
+        public MoveToMode moveMode;
         public Vector2 targetPosition;
         public Vector2 offset;
         public TargetPointKey spawnPointKey;
     }
 
-    [NodeView("Move To Target", "Action/Movement/")]
+    [NodeView("Move", "Action/Movement/")]
     public class MoveToNode : ActionNode {
+        [SerializeField] private MoveToMode m_moveMode = MoveToMode.TowardTarget;
         [SerializeField] private SpawnPositionSource m_targetSource = SpawnPositionSource.Player;
         [SerializeField] private RuntimeVector2Value m_targetPosition = RuntimeVector2Value.Fixed(Vector2.zero);
         [SerializeField] private RuntimeVector2Value m_offset = RuntimeVector2Value.Fixed(Vector2.zero);
@@ -25,6 +32,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private RuntimeFloatValue m_timeout = RuntimeFloatValue.Fixed(0f);
         [SerializeField] private bool m_stopOnArrival = true;
 
+        public void SetMoveMode(MoveToMode moveMode) => m_moveMode = moveMode;
         public void SetTargetSource(SpawnPositionSource targetSource) => m_targetSource = targetSource;
         public void SetTargetPosition(Vector2 targetPosition) => m_targetPosition = RuntimeVector2Value.Fixed(targetPosition);
         public void SetTargetPosition(RuntimeVector2Value targetPosition) => m_targetPosition = targetPosition;
@@ -51,6 +59,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
                 state.speed = Mathf.Max(0f, m_speed.Evaluate());
                 state.stopDistance = Mathf.Max(0f, m_stopDistance.Evaluate());
                 state.timeout = Mathf.Max(0f, m_timeout.Evaluate());
+                state.moveMode = m_moveMode;
                 state.targetPosition = m_targetPosition.Evaluate();
                 state.offset = m_offset.Evaluate();
                 state.spawnPointKey = m_spawnPointKey;
@@ -67,9 +76,13 @@ namespace TitanTool.Runtime.Nodes.Custom {
 
             Vector2 current = rb.position;
             Vector2 toTarget = target - current;
-            if (toTarget.magnitude <= state.stopDistance) {
+            float distanceToTarget = toTarget.magnitude;
+
+            if (HasReachedDestination(state, distanceToTarget)) {
                 if (m_stopOnArrival) {
-                    rb.position = target;
+                    if (state.moveMode == MoveToMode.TowardTarget)
+                        rb.position = target;
+
                     Stop(rb);
                 }
 
@@ -87,8 +100,12 @@ namespace TitanTool.Runtime.Nodes.Custom {
                 return NodeStatus.Failure;
             }
 
-            float maxSpeedThisTick = toTarget.magnitude / Mathf.Max(ctx.deltaTime, Time.fixedDeltaTime);
-            rb.linearVelocity = toTarget.normalized * Mathf.Min(state.speed, maxSpeedThisTick);
+            Vector2 moveDirection = GetMoveDirection(state, rb, toTarget);
+            float speed = state.moveMode == MoveToMode.TowardTarget
+                ? Mathf.Min(state.speed, distanceToTarget / Mathf.Max(ctx.deltaTime, Time.fixedDeltaTime))
+                : state.speed;
+
+            rb.linearVelocity = moveDirection * speed;
             ctx.SetStatus(this, NodeStatus.Running);
             return NodeStatus.Running;
         }
@@ -136,6 +153,27 @@ namespace TitanTool.Runtime.Nodes.Custom {
 
             target += state.offset;
             return true;
+        }
+
+        private static bool HasReachedDestination(MoveToState state, float distanceToTarget) {
+            return state.moveMode == MoveToMode.AwayFromTarget
+                ? state.stopDistance > 0f && distanceToTarget >= state.stopDistance
+                : distanceToTarget <= state.stopDistance;
+        }
+
+        private static Vector2 GetMoveDirection(MoveToState state, Rigidbody2D rb, Vector2 toTarget) {
+            Vector2 direction = state.moveMode == MoveToMode.AwayFromTarget
+                ? -toTarget
+                : toTarget;
+
+            if (direction.sqrMagnitude > 0.0001f)
+                return direction.normalized;
+
+            if (rb.linearVelocity.sqrMagnitude > 0.0001f)
+                return rb.linearVelocity.normalized;
+
+            Vector2 right = rb.transform.right;
+            return right.sqrMagnitude > 0.0001f ? right.normalized : Vector2.right;
         }
 
         private static void Stop(Rigidbody2D rb) {

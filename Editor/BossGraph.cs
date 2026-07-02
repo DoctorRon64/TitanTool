@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
@@ -17,6 +19,8 @@ namespace TitanTool.Editor {
         public const string ASSET_EXTENSION = "titan";
         [SerializeField] private bool m_rebuildQueued;
         [SerializeField] private string m_assetPath;
+        [SerializeField] private int m_lastNodeCount = -1;
+        [SerializeField] private int m_lastWireCount = -1;
         public string assetPath => m_assetPath;
         public void SetAssetPath(string path) => m_assetPath = path;
 
@@ -37,6 +41,7 @@ namespace TitanTool.Editor {
         public override void OnGraphChanged(GraphLogger logger) {
             base.OnGraphChanged(logger);
 
+            PlaySoundForGraphDelta();
             BossGraphRuntimeGuidUtility.EnsureUniqueRuntimeGuids(GetNodes().OfType<BossGraphNode>());
             CheckGraphErrors(logger);
 
@@ -61,5 +66,47 @@ namespace TitanTool.Editor {
                 return;
             BossGraphSyncer.RebuildRuntime(this);
         }
+
+        private void PlaySoundForGraphDelta() {
+            int nodeCount = GetNodes().Count();
+            int wireCount = CountWireModels();
+
+            if (m_lastNodeCount >= 0 && m_lastWireCount >= 0) {
+                if (nodeCount > m_lastNodeCount)
+                    TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.NodeCreated);
+                else if (nodeCount < m_lastNodeCount)
+                    TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.NodeRemoved);
+                else if (wireCount > m_lastWireCount)
+                    TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.WireConnected);
+                else if (wireCount < m_lastWireCount)
+                    TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.WireRemoved);
+            }
+
+            m_lastNodeCount = nodeCount;
+            m_lastWireCount = wireCount;
+        }
+
+        private int CountWireModels() {
+            object implementation = BossGraphReflection.graphImplementationField?.GetValue(this);
+            object wireModels = implementation?.GetType()
+                .GetProperty("WireModels", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                ?.GetValue(implementation);
+
+            if (wireModels is ICollection collection)
+                return collection.Count;
+
+            int count = 0;
+            if (wireModels is IEnumerable enumerable) {
+                foreach (object _ in enumerable)
+                    count++;
+            }
+
+            return count;
+        }
+    }
+
+    internal static class BossGraphReflection {
+        public static readonly FieldInfo graphImplementationField = typeof(Graph)
+            .GetField("m_Implementation", BindingFlags.Instance | BindingFlags.NonPublic);
     }
 }

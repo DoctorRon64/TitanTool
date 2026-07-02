@@ -924,7 +924,7 @@ MonoBehaviour:
     - rid: 1402544186550911067
       type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: 0
+        m_Value: 1
     - rid: 1402544186550911068
       type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data: 
@@ -1199,7 +1199,7 @@ MonoBehaviour:
     - rid: 1402544186550911110
       type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: 0
+        m_Value: 1
     - rid: 1402544186550911111
       type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data: 
@@ -1294,7 +1294,7 @@ MonoBehaviour:
     - rid: 1402544186550911134
       type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: 0
+        m_Value: 1
     - rid: 1402544186550911135
       type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data: 
@@ -1389,7 +1389,7 @@ MonoBehaviour:
     - rid: 1402544186550911153
       type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: 0
+        m_Value: 1
     - rid: 1402544186550911154
       type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data: 

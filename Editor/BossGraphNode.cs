@@ -25,6 +25,10 @@ namespace TitanTool.Editor {
         public Color categoryColor => registration?.color ?? BossGraphNodeCategoryColors.GetColor(category);
         public string icon => registration?.icon ?? BossGraphNodeIcons.GetDefaultIcon(category);
         public string tooltip => registration?.tooltip ?? displayName;
+        public string metadataTooltip => string.IsNullOrWhiteSpace(behaviorBadge)
+            ? tooltip
+            : $"{tooltip}\n\nBadge: {behaviorBadge}";
+        protected virtual string behaviorBadge => null;
 
         [SerializeField] private List<string> m_childGuids = new();
         public IReadOnlyList<string> childGuids => m_childGuids;
@@ -32,12 +36,12 @@ namespace TitanTool.Editor {
         public void Initialize(Type runtime) {
             m_runtimeTypeName = runtime.AssemblyQualifiedName;
             m_runtimeGuid = Guid.NewGuid().ToString();
-            BossGraphNodeMetadataUtility.Apply(this, icon, tooltip);
+            BossGraphNodeMetadataUtility.Apply(this, icon, metadataTooltip);
             //title = runtime.Name;
         }
 
         public void InitializeNode(Type runtimeType) {
-            BossGraphNodeMetadataUtility.Apply(this, icon, tooltip);
+            BossGraphNodeMetadataUtility.Apply(this, icon, metadataTooltip);
 
             if (!string.IsNullOrEmpty(m_runtimeGuid))
                 return;
