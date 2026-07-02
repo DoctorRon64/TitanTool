@@ -30,12 +30,12 @@
                     },
                     {
                         "displayName":  "Cuphead Example",
-                        "description":  "A Cuphead-style sample graph, all-nodes reference graph, scene data, sprites, and prefabs.",
+                        "description":  "A Cuphead-style sample graph, scene data, sprites, and prefabs using TitanTool's shared sample gameplay scripts.",
                         "path":  "Samples~/Cuphead Example"
                     },
                     {
                         "displayName":  "Template Scene",
-                        "description":  "Playable TitanTool template boss scene with sample game scripts, prefabs, UI, visuals, audio, and default graph wiring.",
+                        "description":  "Playable TitanTool template boss scene with shared sample gameplay scripts, prefabs, UI, visuals, audio, and default graph wiring.",
                         "path":  "Samples~/Template Scene"
                     }
                 ]
