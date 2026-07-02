@@ -13,6 +13,7 @@ namespace TitanTool.Editor.Nodes {
         protected override int outputCount => 1;
         protected override bool hasInput => true;
         protected override bool hasOutput => true;
+        protected override string behaviorBadge => "CD";
 
         public override void OnEnable() {
             base.OnEnable();
