@@ -25,6 +25,7 @@ namespace TitanTool.Editor {
         private sealed class ShortcutState {
             public KeyCode pendingNodeKey = KeyCode.None;
             public object hoveredWire;
+            public Vector2 lastGraphPosition;
         }
 
         private static readonly Dictionary<KeyCode, NodeShortcut> s_nodeShortcuts = new Dictionary<KeyCode, NodeShortcut> {
@@ -98,6 +99,12 @@ namespace TitanTool.Editor {
             if (evt.ctrlKey || evt.commandKey || evt.altKey || evt.shiftKey)
                 return;
 
+            if (evt.keyCode == KeyCode.C) {
+                if (TryCreateCommentPlacemat(graphView))
+                    Consume(evt);
+                return;
+            }
+
             if (evt.keyCode == KeyCode.Delete || evt.keyCode == KeyCode.Backspace) {
                 object hoveredWire = s_states.TryGetValue(graphView, out ShortcutState shortcutState) ? shortcutState.hoveredWire : null;
                 if (TryDeleteSelectedOrHoveredWires(graphView, hoveredWire))
@@ -143,10 +150,27 @@ namespace TitanTool.Editor {
             if (!(evt.currentTarget is VisualElement graphView))
                 return;
 
+            UpdateLastGraphPosition(graphView, evt.localMousePosition);
+
+            object portAtMouse = FindPortAt(graphView, evt.localMousePosition);
+            if (evt.altKey && portAtMouse != null) {
+                if (TryDeletePortWires(graphView, portAtMouse))
+                    Consume(evt);
+                return;
+            }
+
             object wireAtMouse = FindWireAt(graphView, evt.localMousePosition);
             if (evt.altKey && wireAtMouse != null) {
                 if (TryDeleteWires(graphView, new[] { wireAtMouse }))
                     Consume(evt);
+                return;
+            }
+
+            if (evt.clickCount == 2 && wireAtMouse != null) {
+                if (TryCreateNode(graphView, new NodeShortcut(typeof(RerouteNode), "Reroute"), evt.localMousePosition, out object rerouteNodeModel)) {
+                    TrySplitWireWithNode(graphView, wireAtMouse, rerouteNodeModel);
+                    Consume(evt);
+                }
                 return;
             }
 
@@ -170,6 +194,7 @@ namespace TitanTool.Editor {
                 return;
 
             state.hoveredWire = FindWireAt(graphView, evt.localMousePosition);
+            state.lastGraphPosition = GetGraphPosition(graphView, evt.localMousePosition);
         }
 
         private static void OnMouseUp(MouseUpEvent evt) {
@@ -178,6 +203,8 @@ namespace TitanTool.Editor {
 
             if (!(evt.currentTarget is VisualElement graphView))
                 return;
+
+            UpdateLastGraphPosition(graphView, evt.localMousePosition);
 
             object wireAtMouse = FindWireAt(graphView, evt.localMousePosition);
             if (wireAtMouse == null)
@@ -259,6 +286,13 @@ namespace TitanTool.Editor {
             return mousePosition;
         }
 
+        private static void UpdateLastGraphPosition(VisualElement graphView, Vector2 localPosition) {
+            if (!s_states.TryGetValue(graphView, out ShortcutState state))
+                return;
+
+            state.lastGraphPosition = GetGraphPosition(graphView, localPosition);
+        }
+
         private static object FindWireAt(VisualElement graphView, Vector2 localPosition) {
             if (graphView.panel == null)
                 return null;
@@ -281,12 +315,53 @@ namespace TitanTool.Editor {
             return null;
         }
 
+        private static object FindPortAt(VisualElement graphView, Vector2 localPosition) {
+            if (graphView.panel == null)
+                return null;
+
+            Vector2 worldPosition = graphView.LocalToWorld(localPosition);
+            List<VisualElement> pickedElements = new List<VisualElement>();
+            graphView.panel.PickAll(worldPosition, pickedElements);
+
+            foreach (VisualElement pickedElement in pickedElements) {
+                for (VisualElement current = pickedElement; current != null && current != graphView.parent; current = current.parent) {
+                    object model = GetProperty(current, "Model");
+                    if (IsPortModel(model))
+                        return model;
+
+                    if (current == graphView)
+                        break;
+                }
+            }
+
+            return null;
+        }
+
         private static bool TryDeleteSelectedOrHoveredWires(VisualElement graphView, object hoveredWire) {
             List<object> wires = GetSelectedWireModels(graphView);
             if (wires.Count == 0 && hoveredWire != null)
                 wires.Add(hoveredWire);
 
             return TryDeleteWires(graphView, wires);
+        }
+
+        private static bool TryDeletePortWires(VisualElement graphView, object portModel) {
+            List<object> wires = GetConnectedWires(portModel);
+            return TryDeleteWires(graphView, wires);
+        }
+
+        private static List<object> GetConnectedWires(object portModel) {
+            List<object> wires = new List<object>();
+            object rawWires = portModel?.GetType().GetMethod("GetConnectedWires", FLAGS, null, Type.EmptyTypes, null)?.Invoke(portModel, null);
+            if (!(rawWires is IEnumerable enumerable))
+                return wires;
+
+            foreach (object wire in enumerable) {
+                if (IsWireModel(wire))
+                    wires.Add(wire);
+            }
+
+            return wires;
         }
 
         private static List<object> GetSelectedWireModels(VisualElement graphView) {
@@ -413,6 +488,10 @@ namespace TitanTool.Editor {
             return model != null && FindType("Unity.GraphToolkit.Editor.WireModel")?.IsInstanceOfType(model) == true;
         }
 
+        private static bool IsPortModel(object model) {
+            return model != null && FindType("Unity.GraphToolkit.Editor.PortModel")?.IsInstanceOfType(model) == true;
+        }
+
         private static bool IsWireConnectedToNode(object wireModel, object nodeModel) {
             object nodeGuid = GetProperty(nodeModel, "Guid");
             if (nodeGuid == null)
@@ -437,6 +516,94 @@ namespace TitanTool.Editor {
                 return false;
 
             return TryDispatchCommand(graphView, command);
+        }
+
+        private static bool TryCreateCommentPlacemat(VisualElement graphView) {
+            Rect bounds = GetCommentBounds(graphView);
+            Type commandType = FindType("Unity.GraphToolkit.Editor.CreatePlacematCommand");
+            if (commandType == null)
+                return false;
+
+            object command = CreatePlacematCommand(commandType, bounds, "Comment");
+            if (command == null)
+                return false;
+
+            return TryDispatchCommand(graphView, command);
+        }
+
+        private static Rect GetCommentBounds(VisualElement graphView) {
+            const float margin = 60f;
+            Rect? bounds = null;
+            object selection = graphView.GetType().GetMethod("GetSelection", FLAGS, null, Type.EmptyTypes, null)?.Invoke(graphView, null);
+
+            if (selection is IEnumerable enumerable) {
+                foreach (object model in enumerable) {
+                    if (model == null || IsWireModel(model) || IsPortModel(model))
+                        continue;
+
+                    if (!TryGetModelRect(model, out Rect modelRect))
+                        continue;
+
+                    bounds = bounds.HasValue ? Union(bounds.Value, modelRect) : modelRect;
+                }
+            }
+
+            if (!bounds.HasValue) {
+                Vector2 position = s_states.TryGetValue(graphView, out ShortcutState state) ? state.lastGraphPosition : Vector2.zero;
+                bounds = new Rect(position - new Vector2(175f, 100f), new Vector2(350f, 200f));
+            }
+
+            Rect expanded = bounds.Value;
+            expanded.xMin -= margin;
+            expanded.yMin -= margin;
+            expanded.xMax += margin;
+            expanded.yMax += margin;
+            return expanded;
+        }
+
+        private static bool TryGetModelRect(object model, out Rect rect) {
+            rect = default;
+
+            object positionAndSize = GetProperty(model, "PositionAndSize");
+            if (positionAndSize is Rect sizedRect) {
+                rect = sizedRect;
+                return true;
+            }
+
+            object position = GetProperty(model, "Position");
+            if (position is Vector2 vectorPosition) {
+                rect = new Rect(vectorPosition, new Vector2(260f, 140f));
+                return true;
+            }
+
+            return false;
+        }
+
+        private static Rect Union(Rect a, Rect b) {
+            return Rect.MinMaxRect(
+                Mathf.Min(a.xMin, b.xMin),
+                Mathf.Min(a.yMin, b.yMin),
+                Mathf.Max(a.xMax, b.xMax),
+                Mathf.Max(a.yMax, b.yMax));
+        }
+
+        private static object CreatePlacematCommand(Type commandType, Rect bounds, string title) {
+            foreach (ConstructorInfo constructor in commandType.GetConstructors(FLAGS)) {
+                ParameterInfo[] parameters = constructor.GetParameters();
+                if (parameters.Length < 1 || parameters.Length > 2)
+                    continue;
+
+                if (parameters[0].ParameterType != typeof(Rect))
+                    continue;
+
+                if (parameters.Length == 1)
+                    return constructor.Invoke(new object[] { bounds });
+
+                if (parameters[1].ParameterType == typeof(string))
+                    return constructor.Invoke(new object[] { bounds, title });
+            }
+
+            return null;
         }
 
         private static object CreateAlignCommand(Type commandType, VisualElement graphView, object selection) {
