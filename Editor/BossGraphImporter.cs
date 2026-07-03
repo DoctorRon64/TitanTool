@@ -1,6 +1,5 @@
 using Unity.GraphToolkit.Editor;
 using UnityEditor.AssetImporters;
-using UnityEngine;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor {
@@ -9,7 +8,7 @@ namespace TitanTool.Editor {
         public override void OnImportAsset(AssetImportContext ctx) {
             BossGraph graph = GraphDatabase.LoadGraphForImporter<BossGraph>(ctx.assetPath);
             if (graph == null) {
-                Debug.LogError($"Failed to load BossGraph: {ctx.assetPath}");
+                ctx.LogImportError($"Failed to load BossGraph: {ctx.assetPath}");
                 return;
             }
 
@@ -29,9 +28,9 @@ namespace TitanTool.Editor {
                 string message = $"{ctx.assetPath}: {issue.message}";
 
                 if (issue.severity == BossGraphValidationSeverity.Error)
-                    Debug.LogError(message);
+                    ctx.LogImportError(message);
                 else
-                    Debug.LogWarning(message);
+                    ctx.LogImportWarning(message);
             }
         }
     }
