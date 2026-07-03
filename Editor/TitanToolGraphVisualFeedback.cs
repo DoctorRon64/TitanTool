@@ -94,10 +94,12 @@ namespace TitanTool.Editor {
         private static void ApplyVisuals(VisualElement graphView, RuntimeViewState runtimeState) {
             foreach (VisualElement element in Traverse(graphView)) {
                 BossGraphNode graphNode = GetGraphNodeFromView(element);
-                if (graphNode == null)
+                if (graphNode != null) {
+                    ApplyNodeColor(element, graphNode, runtimeState);
                     continue;
+                }
 
-                ApplyNodeColor(element, graphNode, runtimeState);
+                ApplyWireColor(element, runtimeState);
             }
         }
 
@@ -122,6 +124,75 @@ namespace TitanTool.Editor {
             object model = GetProperty(element, "Model");
             object node = model != null ? GetProperty(model, "Node") : null;
             return node as BossGraphNode;
+        }
+
+        private static void ApplyWireColor(VisualElement wireView, RuntimeViewState runtimeState) {
+            object wireModel = GetProperty(wireView, "Model");
+            if (!IsWireModel(wireModel))
+                return;
+
+            if (!runtimeState.isValid ||
+                !TryGetWireEndpointNodes(wireModel, out BossGraphNode fromNode, out BossGraphNode toNode) ||
+                fromNode == null ||
+                !TryGetRuntimeStatus(fromNode, runtimeState, out NodeStatus status, out bool fromVisitedThisTick)) {
+                ResetWireVisual(wireView);
+                return;
+            }
+
+            RuntimeNode fromRuntimeNode = runtimeState.graph.GetNode(fromNode.runtimeGuid);
+            RuntimeNode toRuntimeNode = toNode != null ? runtimeState.graph.GetNode(toNode.runtimeGuid) : null;
+            bool toVisitedThisTick = toRuntimeNode != null && runtimeState.lastTickPath.Contains(toRuntimeNode);
+            bool activePath = fromVisitedThisTick && toVisitedThisTick;
+
+            Color color = GetStatusColor(activePath ? NodeStatus.Running : status);
+            color.a = activePath ? 1f : 0.78f;
+            SetWireVisual(wireView, color, activePath ? 4.2f : 2.4f);
+        }
+
+        private static bool IsWireModel(object model) {
+            return model != null && model.GetType().Name.Contains("WireModel", StringComparison.Ordinal);
+        }
+
+        private static bool TryGetWireEndpointNodes(object wireModel, out BossGraphNode fromNode, out BossGraphNode toNode) {
+            fromNode = GetBossGraphNodeFromPort(GetProperty(wireModel, "FromPort"));
+            toNode = GetBossGraphNodeFromPort(GetProperty(wireModel, "ToPort"));
+            return fromNode != null || toNode != null;
+        }
+
+        private static BossGraphNode GetBossGraphNodeFromPort(object portModel) {
+            object nodeModel = GetProperty(portModel, "NodeModel");
+            object node = GetProperty(nodeModel, "Node");
+            return node as BossGraphNode;
+        }
+
+        private static void SetWireVisual(VisualElement wireView, Color color, float width) {
+            object wireControl = GetProperty(wireView, "WireControl");
+            if (wireControl == null)
+                return;
+
+            Type controlType = wireControl.GetType();
+            controlType.GetMethod("SetColor", FLAGS, null, new[] { typeof(Color), typeof(Color) }, null)
+                ?.Invoke(wireControl, new object[] { color, color });
+
+            PropertyInfo lineWidthProperty = controlType.GetProperty("LineWidth", FLAGS);
+            if (lineWidthProperty?.CanWrite == true)
+                lineWidthProperty.SetValue(wireControl, width);
+
+            if (wireControl is VisualElement visualElement)
+                visualElement.MarkDirtyRepaint();
+        }
+
+        private static void ResetWireVisual(VisualElement wireView) {
+            object wireControl = GetProperty(wireView, "WireControl");
+            if (wireControl == null)
+                return;
+
+            Type controlType = wireControl.GetType();
+            controlType.GetMethod("ResetColor", FLAGS, null, Type.EmptyTypes, null)?.Invoke(wireControl, null);
+            controlType.GetMethod("ResetLineWidth", FLAGS, null, Type.EmptyTypes, null)?.Invoke(wireControl, null);
+
+            if (wireControl is VisualElement visualElement)
+                visualElement.MarkDirtyRepaint();
         }
 
         private static void ApplyNodeColor(VisualElement nodeView, BossGraphNode graphNode, RuntimeViewState runtimeState) {
