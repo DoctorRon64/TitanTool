@@ -24,6 +24,7 @@ namespace TitanTool.Editor {
         private const string CHILD_COUNT_OPTION_NAME = "ChildCount";
         private const string QUICK_ADD_BAR_NAME = "titantool-quick-add-bar";
         private const string QUICK_ADD_FIELD_NAME = "titantool-quick-add-field";
+        private const string QUICK_ADD_RESULTS_NAME = "titantool-quick-add-results";
 
         private static double s_nextUpdateTime;
         private static readonly Dictionary<VisualElement, Vector2> s_lastGraphPositions = new();
@@ -759,9 +760,8 @@ namespace TitanTool.Editor {
             bar.style.position = Position.Absolute;
             bar.style.left = 12f;
             bar.style.top = 10f;
-            bar.style.height = 34f;
-            bar.style.flexDirection = FlexDirection.Row;
-            bar.style.alignItems = Align.Center;
+            bar.style.width = 540f;
+            bar.style.flexDirection = FlexDirection.Column;
             bar.style.paddingLeft = 8f;
             bar.style.paddingRight = 8f;
             bar.style.paddingTop = 4f;
@@ -780,40 +780,53 @@ namespace TitanTool.Editor {
             bar.style.borderBottomWidth = 1f;
             bar.style.borderLeftWidth = 1f;
 
+            VisualElement row = new VisualElement();
+            row.style.height = 24f;
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            bar.Add(row);
+
             Label label = new Label("Add");
             label.style.unityFontStyleAndWeight = FontStyle.Bold;
             label.style.color = new Color(0.80f, 0.84f, 0.90f);
             label.style.marginRight = 6f;
-            bar.Add(label);
+            row.Add(label);
 
             TextField field = new TextField { name = QUICK_ADD_FIELD_NAME };
-            field.tooltip = "Type a node name and press Enter. Space or right-click focuses this search.";
-            field.style.width = 150f;
+            field.tooltip = "Type a node name and press Enter. Space focuses this search.";
+            field.style.width = 210f;
             field.style.height = 22f;
             field.style.marginRight = 6f;
-            field.RegisterCallback<KeyDownEvent>(evt => {
-                if (evt.keyCode != KeyCode.Return && evt.keyCode != KeyCode.KeypadEnter)
-                    return;
-
-                if (TryCreateNodeFromQuery(graphView, field.value))
-                    field.value = string.Empty;
-
-                evt.StopImmediatePropagation();
-            });
-            bar.Add(field);
+            row.Add(field);
 
             Button addButton = CreateQuickAddButton("+", new Color(0.30f, 0.58f, 0.95f), () => {
-                if (TryCreateNodeFromQuery(graphView, field.value))
+                if (TryCreateSelectedQuickAddResult(graphView, bar))
                     field.value = string.Empty;
             });
             addButton.style.width = 26f;
-            bar.Add(addButton);
+            row.Add(addButton);
 
-            AddShortcutButton(bar, graphView, "Seq", "Sequence");
-            AddShortcutButton(bar, graphView, "Wait", "Wait");
-            AddShortcutButton(bar, graphView, "Move", "Move");
-            AddShortcutButton(bar, graphView, "Shoot", "Shoot");
-            AddShortcutButton(bar, graphView, "Spawn", "Spawn");
+            AddShortcutButton(row, graphView, "Seq", "Sequence");
+            AddShortcutButton(row, graphView, "Wait", "Wait");
+            AddShortcutButton(row, graphView, "Move", "Move");
+            AddShortcutButton(row, graphView, "Shoot", "Shoot");
+            AddShortcutButton(row, graphView, "Spawn", "Spawn");
+
+            ScrollView results = new ScrollView(ScrollViewMode.Vertical) { name = QUICK_ADD_RESULTS_NAME };
+            results.style.display = DisplayStyle.None;
+            results.style.maxHeight = 260f;
+            results.style.marginTop = 6f;
+            results.RegisterCallback<WheelEvent>(evt => evt.StopPropagation());
+            bar.Add(results);
+
+            QuickAddState state = new QuickAddState(field, results);
+            bar.userData = state;
+            field.RegisterValueChangedCallback(_ => {
+                state.selectedIndex = 0;
+                RefreshQuickAddResults(graphView, bar);
+            });
+            field.RegisterCallback<FocusInEvent>(_ => RefreshQuickAddResults(graphView, bar));
+            field.RegisterCallback<KeyDownEvent>(evt => OnQuickAddKeyDown(graphView, bar, evt), TrickleDown.TrickleDown);
 
             graphView.Add(bar);
 
@@ -822,43 +835,13 @@ namespace TitanTool.Editor {
                     s_lastLocalPositions[graphView] = evt.localMousePosition;
                     s_lastGraphPositions[graphView] = GetGraphPosition(graphView, evt.localMousePosition);
                 }, TrickleDown.TrickleDown);
-                graphView.RegisterCallback<MouseDownEvent>(evt => OnGraphMouseDown(graphView, evt), TrickleDown.TrickleDown);
                 graphView.RegisterCallback<KeyDownEvent>(evt => OnGraphKeyDown(graphView, evt), TrickleDown.TrickleDown);
-                graphView.RegisterCallback<ContextualMenuPopulateEvent>(evt => OnGraphContextualMenu(graphView, evt), TrickleDown.TrickleDown);
                 graphView.RegisterCallback<DetachFromPanelEvent>(_ => {
                     s_quickAddAttached.Remove(graphView);
                     s_lastGraphPositions.Remove(graphView);
                     s_lastLocalPositions.Remove(graphView);
                 });
             }
-        }
-
-        private static void OnGraphMouseDown(VisualElement graphView, MouseDownEvent evt) {
-            if (evt.button != 1)
-                return;
-
-            if (IsTextInputFocused(graphView))
-                return;
-
-            if (IsGraphElementAt(graphView, evt.localMousePosition))
-                return;
-
-            s_lastLocalPositions[graphView] = evt.localMousePosition;
-            s_lastGraphPositions[graphView] = GetGraphPosition(graphView, evt.localMousePosition);
-            FocusQuickAddField(graphView, true);
-            evt.StopImmediatePropagation();
-        }
-
-        private static void OnGraphContextualMenu(VisualElement graphView, ContextualMenuPopulateEvent evt) {
-            Vector2 localPosition = graphView.WorldToLocal(evt.mousePosition);
-            if (IsGraphElementAt(graphView, localPosition))
-                return;
-
-            s_lastLocalPositions[graphView] = localPosition;
-            s_lastGraphPositions[graphView] = GetGraphPosition(graphView, localPosition);
-            FocusQuickAddField(graphView, true);
-            evt.menu.ClearItems();
-            evt.StopImmediatePropagation();
         }
 
         private static void OnGraphKeyDown(VisualElement graphView, KeyDownEvent evt) {
@@ -880,6 +863,143 @@ namespace TitanTool.Editor {
             field.Focus();
             if (selectText)
                 field.SelectAll();
+
+            VisualElement bar = graphView.Q<VisualElement>(QUICK_ADD_BAR_NAME);
+            if (bar != null)
+                RefreshQuickAddResults(graphView, bar);
+        }
+
+        private static void OnQuickAddKeyDown(VisualElement graphView, VisualElement bar, KeyDownEvent evt) {
+            if (bar.userData is not QuickAddState state)
+                return;
+
+            if (evt.keyCode == KeyCode.Escape) {
+                HideQuickAddResults(bar);
+                evt.StopImmediatePropagation();
+                return;
+            }
+
+            if (evt.keyCode == KeyCode.DownArrow) {
+                state.selectedIndex = Mathf.Min(state.selectedIndex + 1, Mathf.Max(0, state.matches.Count - 1));
+                UpdateQuickAddSelection(state);
+                evt.StopImmediatePropagation();
+                return;
+            }
+
+            if (evt.keyCode == KeyCode.UpArrow) {
+                state.selectedIndex = Mathf.Max(0, state.selectedIndex - 1);
+                UpdateQuickAddSelection(state);
+                evt.StopImmediatePropagation();
+                return;
+            }
+
+            if (evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter) {
+                if (TryCreateSelectedQuickAddResult(graphView, bar))
+                    state.field.value = string.Empty;
+
+                evt.StopImmediatePropagation();
+            }
+        }
+
+        private static void RefreshQuickAddResults(VisualElement graphView, VisualElement bar) {
+            if (bar.userData is not QuickAddState state)
+                return;
+
+            state.matches = GetSearchMatches(graphView, state.field.value).ToList();
+            state.selectedIndex = Mathf.Clamp(state.selectedIndex, 0, Mathf.Max(0, state.matches.Count - 1));
+            state.resultButtons.Clear();
+            state.results.Clear();
+            state.results.style.display = DisplayStyle.Flex;
+
+            if (state.matches.Count == 0) {
+                Label empty = new Label("No nodes or variables found");
+                empty.style.height = 24f;
+                empty.style.color = new Color(0.72f, 0.74f, 0.78f);
+                empty.style.unityTextAlign = TextAnchor.MiddleCenter;
+                state.results.Add(empty);
+                return;
+            }
+
+            foreach (SearchResult match in state.matches) {
+                Button row = CreateSearchResultButton(match, () => {
+                    if (TryCreateSearchResult(graphView, match)) {
+                        state.field.value = string.Empty;
+                        HideQuickAddResults(bar);
+                    }
+                });
+                state.resultButtons.Add(row);
+                state.results.Add(row);
+            }
+
+            UpdateQuickAddSelection(state);
+        }
+
+        private static bool TryCreateSelectedQuickAddResult(VisualElement graphView, VisualElement bar) {
+            if (bar.userData is not QuickAddState state) {
+                SearchResult fallback = GetSearchMatches(graphView, string.Empty).FirstOrDefault();
+                return TryCreateSearchResult(graphView, fallback);
+            }
+
+            if (state.matches.Count == 0)
+                RefreshQuickAddResults(graphView, bar);
+
+            if (state.matches.Count == 0)
+                return false;
+
+            SearchResult result = state.matches[Mathf.Clamp(state.selectedIndex, 0, state.matches.Count - 1)];
+            if (!TryCreateSearchResult(graphView, result))
+                return false;
+
+            HideQuickAddResults(bar);
+            return true;
+        }
+
+        private static void HideQuickAddResults(VisualElement bar) {
+            if (bar.userData is not QuickAddState state)
+                return;
+
+            state.results.style.display = DisplayStyle.None;
+        }
+
+        private static Button CreateSearchResultButton(SearchResult result, Action clicked) {
+            Color color = result.color;
+            Button button = new Button(clicked) {
+                text = $"{result.icon}  {result.displayName}    {result.categoryLabel}"
+            };
+
+            button.style.height = 28f;
+            button.style.marginBottom = 3f;
+            button.style.unityTextAlign = TextAnchor.MiddleLeft;
+            button.style.paddingLeft = 8f;
+            button.style.paddingRight = 8f;
+            button.style.borderTopLeftRadius = 4f;
+            button.style.borderTopRightRadius = 4f;
+            button.style.borderBottomLeftRadius = 4f;
+            button.style.borderBottomRightRadius = 4f;
+            button.style.backgroundColor = new Color(color.r, color.g, color.b, 0.24f);
+            button.style.color = new Color(0.92f, 0.94f, 0.97f);
+            button.tooltip = result.tooltip;
+            return button;
+        }
+
+        private static void UpdateQuickAddSelection(QuickAddState state) {
+            for (int index = 0; index < state.resultButtons.Count; index++) {
+                Button button = state.resultButtons[index];
+                SearchResult match = state.matches[index];
+                Color color = match.color;
+                bool selected = index == state.selectedIndex;
+                button.style.backgroundColor = selected
+                    ? new Color(color.r, color.g, color.b, 0.62f)
+                    : new Color(color.r, color.g, color.b, 0.24f);
+                button.style.borderTopColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
+                button.style.borderRightColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
+                button.style.borderBottomColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
+                button.style.borderLeftColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
+                button.style.borderTopWidth = selected ? 1f : 0f;
+                button.style.borderRightWidth = selected ? 1f : 0f;
+                button.style.borderBottomWidth = selected ? 1f : 0f;
+                button.style.borderLeftWidth = selected ? 1f : 0f;
+            }
         }
 
         private static void AddShortcutButton(VisualElement bar, VisualElement graphView, string label, string query) {
@@ -903,11 +1023,6 @@ namespace TitanTool.Editor {
             button.style.color = Color.white;
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
             return button;
-        }
-
-        private static bool TryCreateNodeFromQuery(VisualElement graphView, string query) {
-            SearchResult result = GetSearchMatches(graphView, query).FirstOrDefault();
-            return TryCreateSearchResult(graphView, result);
         }
 
         private static GraphNodeRegistration FindRegistration(string query) {
@@ -1241,48 +1356,6 @@ namespace TitanTool.Editor {
             return target?.GetType().GetMethod(methodName, FLAGS, null, Type.EmptyTypes, null)?.Invoke(target, null) as string;
         }
 
-        private static bool IsGraphElementAt(VisualElement graphView, Vector2 localPosition) {
-            if (graphView.panel == null)
-                return false;
-
-            Vector2 worldPosition = graphView.LocalToWorld(localPosition);
-            List<VisualElement> pickedElements = new List<VisualElement>();
-            graphView.panel.PickAll(worldPosition, pickedElements);
-
-            foreach (VisualElement pickedElement in pickedElements) {
-                for (VisualElement current = pickedElement; current != null && current != graphView.parent; current = current.parent) {
-                    if (current == graphView)
-                        break;
-
-                    string elementName = current.name ?? string.Empty;
-                    if (elementName == QUICK_ADD_BAR_NAME)
-                        return true;
-
-                    object model = GetProperty(current, "Model");
-                    if (IsInteractiveGraphElementModel(model))
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool IsInteractiveGraphElementModel(object model) {
-            if (model == null)
-                return false;
-
-            string typeName = model.GetType().Name;
-            if (typeName.Contains("GraphModel") || typeName.Contains("GraphViewModel") || typeName == nameof(BossGraph))
-                return false;
-
-            return typeName.Contains("NodeModel") ||
-                   typeName.Contains("WireModel") ||
-                   typeName.Contains("PortModel") ||
-                   typeName.Contains("Placemat") ||
-                   typeName.Contains("Sticky") ||
-                   typeName.Contains("VariableDeclaration");
-        }
-
         private static bool IsTextInputFocused(VisualElement graphView) {
             VisualElement focusedElement = graphView.panel?.focusController?.focusedElement as VisualElement;
             for (VisualElement current = focusedElement; current != null; current = current.parent) {
@@ -1309,6 +1382,19 @@ namespace TitanTool.Editor {
             public ChildControlBinding(BossGraphNode node, int delta) {
                 this.node = node;
                 this.delta = delta;
+            }
+        }
+
+        private sealed class QuickAddState {
+            public readonly TextField field;
+            public readonly ScrollView results;
+            public readonly List<Button> resultButtons = new();
+            public List<SearchResult> matches = new();
+            public int selectedIndex;
+
+            public QuickAddState(TextField field, ScrollView results) {
+                this.field = field;
+                this.results = results;
             }
         }
 
