@@ -310,6 +310,10 @@ namespace TitanTool.Editor {
             if (nodeView == null || graphView.panel == null)
                 return null;
 
+            object intersectingWire = FindWireIntersectingNode(graphView, nodeView, nodeModel);
+            if (intersectingWire != null)
+                return intersectingWire;
+
             foreach (Vector2 worldPosition in GetDropSamplePoints(nodeView.worldBound)) {
                 object wire = FindWireAtWorldPosition(graphView, worldPosition, nodeModel);
                 if (wire != null)
@@ -317,6 +321,41 @@ namespace TitanTool.Editor {
             }
 
             return null;
+        }
+
+        private static object FindWireIntersectingNode(VisualElement graphView, VisualElement nodeView, object ignoredNodeModel) {
+            Rect bounds = nodeView.worldBound;
+            if (bounds.width <= 0f || bounds.height <= 0f)
+                return null;
+
+            foreach (VisualElement wireView in GetWireViews(graphView)) {
+                object wireModel = GetProperty(wireView, "Model");
+                if (ignoredNodeModel != null && IsWireConnectedToNode(wireModel, ignoredNodeModel))
+                    continue;
+
+                VisualElement wireControl = GetProperty(wireView, "WireControl") as VisualElement ?? wireView;
+                foreach (Vector2 worldPoint in GetDropProbePoints(bounds)) {
+                    Vector2 localPoint = wireControl.WorldToLocal(worldPoint);
+                    if (wireControl.ContainsPoint(localPoint))
+                        return wireModel;
+                }
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<VisualElement> GetWireViews(VisualElement root) {
+            Stack<VisualElement> stack = new Stack<VisualElement>();
+            stack.Push(root);
+
+            while (stack.Count > 0) {
+                VisualElement current = stack.Pop();
+                if (IsWireModel(GetProperty(current, "Model")))
+                    yield return current;
+
+                for (int index = current.childCount - 1; index >= 0; index--)
+                    stack.Push(current[index]);
+            }
         }
 
         private static object FindWireAtWorldPosition(VisualElement graphView, Vector2 worldPosition, object ignoredNodeModel) {
@@ -335,6 +374,27 @@ namespace TitanTool.Editor {
             }
 
             return null;
+        }
+
+        private static IEnumerable<Vector2> GetDropProbePoints(Rect worldBounds) {
+            foreach (Vector2 point in GetDropSamplePoints(worldBounds))
+                yield return point;
+
+            const float spacing = 24f;
+            float left = worldBounds.xMin + 8f;
+            float right = worldBounds.xMax - 8f;
+            float top = worldBounds.yMin + 8f;
+            float bottom = worldBounds.yMax - 8f;
+
+            if (right < left || bottom < top)
+                yield break;
+
+            for (float y = top; y <= bottom; y += spacing) {
+                for (float x = left; x <= right; x += spacing)
+                    yield return new Vector2(x, y);
+            }
+
+            yield return new Vector2(right, bottom);
         }
 
         private static IEnumerable<Vector2> GetDropSamplePoints(Rect worldBounds) {
@@ -482,6 +542,9 @@ namespace TitanTool.Editor {
             if (wireModel == null || nodeModel == null)
                 return false;
 
+            if (!HasCompatiblePortsForWire(wireModel, nodeModel))
+                return false;
+
             Type commandType = FindType("Unity.GraphToolkit.Editor.SplitWireAndInsertExistingNodeCommand");
             if (commandType == null)
                 return false;
@@ -491,6 +554,31 @@ namespace TitanTool.Editor {
                 return false;
 
             return TryDispatchCommand(graphView, command);
+        }
+
+        private static bool HasCompatiblePortsForWire(object wireModel, object nodeModel) {
+            object wireInput = GetProperty(wireModel, "ToPort");
+            object wireOutput = GetProperty(wireModel, "FromPort");
+            object wireInputType = GetProperty(wireInput, "PortType");
+            object wireOutputType = GetProperty(wireOutput, "PortType");
+            if (wireInputType == null || wireOutputType == null)
+                return false;
+
+            return HasPortWithType(GetProperty(nodeModel, "OutputsByDisplayOrder"), wireInputType) &&
+                   HasPortWithType(GetProperty(nodeModel, "InputsByDisplayOrder"), wireOutputType);
+        }
+
+        private static bool HasPortWithType(object rawPorts, object portType) {
+            if (!(rawPorts is IEnumerable ports))
+                return false;
+
+            foreach (object port in ports) {
+                object candidateType = GetProperty(port, "PortType");
+                if (candidateType != null && candidateType.Equals(portType))
+                    return true;
+            }
+
+            return false;
         }
 
         private static object CreateSplitWireCommand(Type commandType, object wireModel, object nodeModel) {
