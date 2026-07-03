@@ -24,13 +24,10 @@ namespace TitanTool.Editor {
         private const string CHILD_COUNT_OPTION_NAME = "ChildCount";
         private const string QUICK_ADD_BAR_NAME = "titantool-quick-add-bar";
         private const string QUICK_ADD_FIELD_NAME = "titantool-quick-add-field";
-        private const string SEARCH_POPUP_NAME = "titantool-space-search";
-        private const string SEARCH_RESULTS_NAME = "titantool-space-search-results";
 
         private static double s_nextUpdateTime;
         private static readonly Dictionary<VisualElement, Vector2> s_lastGraphPositions = new();
         private static readonly Dictionary<VisualElement, Vector2> s_lastLocalPositions = new();
-        private static readonly Dictionary<VisualElement, SearchPopupState> s_searchPopups = new();
         private static readonly HashSet<VisualElement> s_quickAddAttached = new();
 
         static TitanToolGraphVisualFeedback() {
@@ -790,6 +787,7 @@ namespace TitanTool.Editor {
             bar.Add(label);
 
             TextField field = new TextField { name = QUICK_ADD_FIELD_NAME };
+            field.tooltip = "Type a node name and press Enter. Space or right-click focuses this search.";
             field.style.width = 150f;
             field.style.height = 22f;
             field.style.marginRight = 6f;
@@ -828,7 +826,6 @@ namespace TitanTool.Editor {
                 graphView.RegisterCallback<KeyDownEvent>(evt => OnGraphKeyDown(graphView, evt), TrickleDown.TrickleDown);
                 graphView.RegisterCallback<ContextualMenuPopulateEvent>(evt => OnGraphContextualMenu(graphView, evt), TrickleDown.TrickleDown);
                 graphView.RegisterCallback<DetachFromPanelEvent>(_ => {
-                    HideSearchPopup(graphView);
                     s_quickAddAttached.Remove(graphView);
                     s_lastGraphPositions.Remove(graphView);
                     s_lastLocalPositions.Remove(graphView);
@@ -848,7 +845,7 @@ namespace TitanTool.Editor {
 
             s_lastLocalPositions[graphView] = evt.localMousePosition;
             s_lastGraphPositions[graphView] = GetGraphPosition(graphView, evt.localMousePosition);
-            ShowSearchPopup(graphView);
+            FocusQuickAddField(graphView, true);
             evt.StopImmediatePropagation();
         }
 
@@ -859,7 +856,7 @@ namespace TitanTool.Editor {
 
             s_lastLocalPositions[graphView] = localPosition;
             s_lastGraphPositions[graphView] = GetGraphPosition(graphView, localPosition);
-            ShowSearchPopup(graphView);
+            FocusQuickAddField(graphView, true);
             evt.menu.ClearItems();
             evt.StopImmediatePropagation();
         }
@@ -871,179 +868,18 @@ namespace TitanTool.Editor {
             if (IsTextInputFocused(graphView))
                 return;
 
-            ShowSearchPopup(graphView);
+            FocusQuickAddField(graphView, true);
             evt.StopImmediatePropagation();
         }
 
-        private static void ShowSearchPopup(VisualElement graphView) {
-            HideSearchPopup(graphView);
-
-            Vector2 localPosition = s_lastLocalPositions.TryGetValue(graphView, out Vector2 lastLocalPosition)
-                ? lastLocalPosition
-                : graphView.layout.center;
-            Vector2 graphPosition = s_lastGraphPositions.TryGetValue(graphView, out Vector2 lastGraphPosition)
-                ? lastGraphPosition
-                : GetGraphPosition(graphView, localPosition);
-
-            VisualElement popup = new VisualElement { name = SEARCH_POPUP_NAME };
-            popup.style.position = Position.Absolute;
-            popup.style.left = Mathf.Clamp(localPosition.x, 12f, Mathf.Max(12f, graphView.layout.width - 390f));
-            popup.style.top = Mathf.Clamp(localPosition.y, 50f, Mathf.Max(50f, graphView.layout.height - 340f));
-            popup.style.width = 370f;
-            popup.style.maxHeight = 330f;
-            popup.style.paddingLeft = 8f;
-            popup.style.paddingRight = 8f;
-            popup.style.paddingTop = 8f;
-            popup.style.paddingBottom = 8f;
-            popup.style.borderTopLeftRadius = 7f;
-            popup.style.borderTopRightRadius = 7f;
-            popup.style.borderBottomLeftRadius = 7f;
-            popup.style.borderBottomRightRadius = 7f;
-            popup.style.backgroundColor = new Color(0.07f, 0.075f, 0.085f, 0.97f);
-            popup.style.borderTopColor = new Color(1f, 1f, 1f, 0.18f);
-            popup.style.borderRightColor = new Color(1f, 1f, 1f, 0.18f);
-            popup.style.borderBottomColor = new Color(1f, 1f, 1f, 0.18f);
-            popup.style.borderLeftColor = new Color(1f, 1f, 1f, 0.18f);
-            popup.style.borderTopWidth = 1f;
-            popup.style.borderRightWidth = 1f;
-            popup.style.borderBottomWidth = 1f;
-            popup.style.borderLeftWidth = 1f;
-
-            TextField field = new TextField();
-            field.style.height = 24f;
-            field.style.marginBottom = 7f;
-            field.tooltip = "Type a node name, category, or alias.";
-            popup.Add(field);
-
-            ScrollView results = new ScrollView(ScrollViewMode.Vertical) { name = SEARCH_RESULTS_NAME };
-            results.style.maxHeight = 260f;
-            results.RegisterCallback<WheelEvent>(evt => evt.StopPropagation());
-            popup.Add(results);
-
-            SearchPopupState state = new SearchPopupState(popup, field, results, graphPosition);
-            s_searchPopups[graphView] = state;
-
-            field.RegisterValueChangedCallback(_ => RefreshSearchResults(graphView, state));
-            field.RegisterCallback<KeyDownEvent>(evt => OnSearchFieldKeyDown(graphView, state, evt), TrickleDown.TrickleDown);
-            popup.RegisterCallback<KeyDownEvent>(evt => {
-                if (evt.keyCode == KeyCode.Escape) {
-                    HideSearchPopup(graphView);
-                    evt.StopImmediatePropagation();
-                }
-            }, TrickleDown.TrickleDown);
-
-            graphView.Add(popup);
-            RefreshSearchResults(graphView, state);
-            field.schedule.Execute(() => field.Focus());
-        }
-
-        private static void HideSearchPopup(VisualElement graphView) {
-            if (!s_searchPopups.TryGetValue(graphView, out SearchPopupState state))
+        private static void FocusQuickAddField(VisualElement graphView, bool selectText) {
+            TextField field = graphView.Q<TextField>(QUICK_ADD_FIELD_NAME);
+            if (field == null)
                 return;
 
-            state.root.RemoveFromHierarchy();
-            s_searchPopups.Remove(graphView);
-        }
-
-        private static void OnSearchFieldKeyDown(VisualElement graphView, SearchPopupState state, KeyDownEvent evt) {
-            if (evt.keyCode == KeyCode.Escape) {
-                HideSearchPopup(graphView);
-                evt.StopImmediatePropagation();
-                return;
-            }
-
-            if (evt.keyCode == KeyCode.DownArrow) {
-                state.selectedIndex = Mathf.Min(state.selectedIndex + 1, Mathf.Max(0, state.matches.Count - 1));
-                UpdateSearchSelection(state);
-                evt.StopImmediatePropagation();
-                return;
-            }
-
-            if (evt.keyCode == KeyCode.UpArrow) {
-                state.selectedIndex = Mathf.Max(0, state.selectedIndex - 1);
-                UpdateSearchSelection(state);
-                evt.StopImmediatePropagation();
-                return;
-            }
-
-            if (evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter) {
-                if (state.matches.Count > 0) {
-                    CreateNodeFromSearch(graphView, state, state.matches[state.selectedIndex]);
-                    evt.StopImmediatePropagation();
-                }
-            }
-        }
-
-        private static void RefreshSearchResults(VisualElement graphView, SearchPopupState state) {
-            state.matches = GetSearchMatches(graphView, state.field.value).ToList();
-            state.selectedIndex = Mathf.Clamp(state.selectedIndex, 0, Mathf.Max(0, state.matches.Count - 1));
-            state.resultButtons.Clear();
-            state.results.Clear();
-
-            if (state.matches.Count == 0) {
-                Label empty = new Label("No nodes found");
-                empty.style.height = 24f;
-                empty.style.color = new Color(0.72f, 0.74f, 0.78f);
-                empty.style.unityTextAlign = TextAnchor.MiddleCenter;
-                state.results.Add(empty);
-                return;
-            }
-
-            for (int index = 0; index < state.matches.Count; index++) {
-                SearchResult match = state.matches[index];
-                Button row = CreateSearchResultButton(match, () => CreateNodeFromSearch(graphView, state, match));
-                state.resultButtons.Add(row);
-                state.results.Add(row);
-            }
-
-            UpdateSearchSelection(state);
-        }
-
-        private static Button CreateSearchResultButton(SearchResult result, Action clicked) {
-            Color color = result.color;
-            Button button = new Button(clicked) {
-                text = $"{result.icon}  {result.displayName}    {result.categoryLabel}"
-            };
-
-            button.style.height = 28f;
-            button.style.marginBottom = 3f;
-            button.style.unityTextAlign = TextAnchor.MiddleLeft;
-            button.style.paddingLeft = 8f;
-            button.style.paddingRight = 8f;
-            button.style.borderTopLeftRadius = 4f;
-            button.style.borderTopRightRadius = 4f;
-            button.style.borderBottomLeftRadius = 4f;
-            button.style.borderBottomRightRadius = 4f;
-            button.style.backgroundColor = new Color(color.r, color.g, color.b, 0.24f);
-            button.style.color = new Color(0.92f, 0.94f, 0.97f);
-            button.tooltip = result.tooltip;
-            return button;
-        }
-
-        private static void UpdateSearchSelection(SearchPopupState state) {
-            for (int index = 0; index < state.resultButtons.Count; index++) {
-                Button button = state.resultButtons[index];
-                SearchResult match = state.matches[index];
-                Color color = match.color;
-                bool selected = index == state.selectedIndex;
-                button.style.backgroundColor = selected
-                    ? new Color(color.r, color.g, color.b, 0.62f)
-                    : new Color(color.r, color.g, color.b, 0.24f);
-                button.style.borderTopColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
-                button.style.borderRightColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
-                button.style.borderBottomColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
-                button.style.borderLeftColor = selected ? new Color(1f, 1f, 1f, 0.42f) : Color.clear;
-                button.style.borderTopWidth = selected ? 1f : 0f;
-                button.style.borderRightWidth = selected ? 1f : 0f;
-                button.style.borderBottomWidth = selected ? 1f : 0f;
-                button.style.borderLeftWidth = selected ? 1f : 0f;
-            }
-        }
-
-        private static void CreateNodeFromSearch(VisualElement graphView, SearchPopupState state, SearchResult result) {
-            s_lastGraphPositions[graphView] = state.graphPosition;
-            if (TryCreateSearchResult(graphView, result))
-                HideSearchPopup(graphView);
+            field.Focus();
+            if (selectText)
+                field.SelectAll();
         }
 
         private static void AddShortcutButton(VisualElement bar, VisualElement graphView, string label, string query) {
@@ -1419,7 +1255,7 @@ namespace TitanTool.Editor {
                         break;
 
                     string elementName = current.name ?? string.Empty;
-                    if (elementName == QUICK_ADD_BAR_NAME || elementName == SEARCH_POPUP_NAME)
+                    if (elementName == QUICK_ADD_BAR_NAME)
                         return true;
 
                     object model = GetProperty(current, "Model");
@@ -1549,23 +1385,6 @@ namespace TitanTool.Editor {
                     $"{title} ({typeName})",
                     "variable var get set graph value data",
                     new Color(0.42f, 0.62f, 0.95f));
-            }
-        }
-
-        private sealed class SearchPopupState {
-            public readonly VisualElement root;
-            public readonly TextField field;
-            public readonly ScrollView results;
-            public readonly Vector2 graphPosition;
-            public readonly List<Button> resultButtons = new();
-            public List<SearchResult> matches = new();
-            public int selectedIndex;
-
-            public SearchPopupState(VisualElement root, TextField field, ScrollView results, Vector2 graphPosition) {
-                this.root = root;
-                this.field = field;
-                this.results = results;
-                this.graphPosition = graphPosition;
             }
         }
 
