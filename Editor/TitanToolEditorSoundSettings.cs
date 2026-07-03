@@ -8,7 +8,9 @@ namespace TitanTool.Editor {
         NodeCreated,
         NodeRemoved,
         WireConnected,
-        WireRemoved
+        WireRemoved,
+        ChildIncreased,
+        ChildDecreased
     }
 
     public class TitanToolEditorSoundSettings : ScriptableObject {
@@ -22,6 +24,8 @@ namespace TitanTool.Editor {
         [SerializeField] private AudioClip m_nodeRemovedClip;
         [SerializeField] private AudioClip m_wireConnectedClip;
         [SerializeField] private AudioClip m_wireRemovedClip;
+        [SerializeField] private AudioClip m_childIncreasedClip;
+        [SerializeField] private AudioClip m_childDecreasedClip;
 
         public bool enabled => m_enabled;
         public bool useGeneratedFallbacks => m_useGeneratedFallbacks;
@@ -45,6 +49,8 @@ namespace TitanTool.Editor {
                 TitanToolEditorSoundEvent.NodeRemoved => m_nodeRemovedClip,
                 TitanToolEditorSoundEvent.WireConnected => m_wireConnectedClip,
                 TitanToolEditorSoundEvent.WireRemoved => m_wireRemovedClip,
+                TitanToolEditorSoundEvent.ChildIncreased => m_childIncreasedClip,
+                TitanToolEditorSoundEvent.ChildDecreased => m_childDecreasedClip,
                 _ => null
             };
         }
@@ -67,7 +73,7 @@ namespace TitanTool.Editor {
         private static readonly Type s_audioUtilType = typeof(AudioImporter).Assembly.GetType("UnityEditor.AudioUtil");
         private static readonly MethodInfo s_setPreviewVolumeMethod = s_audioUtilType?.GetMethod("SetPreviewClipVolume", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
         private static readonly MethodInfo s_playPreviewMethod = FindPlayPreviewMethod();
-        private static readonly AudioClip[] s_generatedClips = new AudioClip[4];
+        private static readonly AudioClip[] s_generatedClips = new AudioClip[Enum.GetValues(typeof(TitanToolEditorSoundEvent)).Length];
         private static double s_lastPlayTime;
 
         public static void Play(TitanToolEditorSoundSettings settings, TitanToolEditorSoundEvent soundEvent) {
@@ -151,6 +157,8 @@ namespace TitanTool.Editor {
                 TitanToolEditorSoundEvent.NodeRemoved => 330f,
                 TitanToolEditorSoundEvent.WireConnected => 880f,
                 TitanToolEditorSoundEvent.WireRemoved => 440f,
+                TitanToolEditorSoundEvent.ChildIncreased => 740f,
+                TitanToolEditorSoundEvent.ChildDecreased => 370f,
                 _ => 550f
             };
 

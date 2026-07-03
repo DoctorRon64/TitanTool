@@ -627,8 +627,12 @@ namespace TitanTool.Editor {
 
             try {
                 registerUndo?.Invoke(graphModel, new object[] { delta > 0 ? "Add Child Slot" : "Remove Child Slot" });
-                if (TrySetChildCount(graphNode, nextCount))
+                if (TrySetChildCount(graphNode, nextCount)) {
                     RedefineNode(graphNode);
+                    TitanToolEditorSoundSettings.Play(delta > 0
+                        ? TitanToolEditorSoundEvent.ChildIncreased
+                        : TitanToolEditorSoundEvent.ChildDecreased);
+                }
             } catch (TargetInvocationException exception) {
                 Debug.LogException(exception.InnerException ?? exception);
             } catch (Exception exception) {
