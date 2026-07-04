@@ -15,6 +15,7 @@ namespace TitanTool.Editor {
 
     public class TitanToolEditorSoundSettings : ScriptableObject {
         private const string DEFAULT_ASSET_PATH = AssetPath.ASSET_PATH + "/EditorSoundSettings.asset";
+        private const string PACKAGE_SOUND_PATH = "Packages/com.drron.titantool/Editor/Sounds";
 
         [SerializeField] private bool m_enabled = true;
         [SerializeField] private bool m_useGeneratedFallbacks = true;
@@ -32,6 +33,8 @@ namespace TitanTool.Editor {
         public float volume => Mathf.Clamp01(m_volume);
         public float minInterval => Mathf.Max(0f, m_minInterval);
 
+        private static readonly AudioClip[] s_packageDefaultClips = new AudioClip[Enum.GetValues(typeof(TitanToolEditorSoundEvent)).Length];
+
         [MenuItem("Tools/TitanTool/Editor Sound Settings")]
         private static void SelectSettingsAsset() {
             TitanToolEditorSoundSettings settings = GetOrCreate();
@@ -44,7 +47,7 @@ namespace TitanTool.Editor {
         }
 
         internal AudioClip GetClip(TitanToolEditorSoundEvent soundEvent) {
-            return soundEvent switch {
+            AudioClip overrideClip = soundEvent switch {
                 TitanToolEditorSoundEvent.NodeCreated => m_nodeCreatedClip,
                 TitanToolEditorSoundEvent.NodeRemoved => m_nodeRemovedClip,
                 TitanToolEditorSoundEvent.WireConnected => m_wireConnectedClip,
@@ -53,6 +56,33 @@ namespace TitanTool.Editor {
                 TitanToolEditorSoundEvent.ChildDecreased => m_childDecreasedClip,
                 _ => null
             };
+
+            return overrideClip != null ? overrideClip : GetPackageDefaultClip(soundEvent);
+        }
+
+        private static AudioClip GetPackageDefaultClip(TitanToolEditorSoundEvent soundEvent) {
+            int index = (int)soundEvent;
+            if (index < 0 || index >= s_packageDefaultClips.Length)
+                return null;
+
+            if (s_packageDefaultClips[index] != null)
+                return s_packageDefaultClips[index];
+
+            string fileName = soundEvent switch {
+                TitanToolEditorSoundEvent.NodeCreated => "note_add.mp3",
+                TitanToolEditorSoundEvent.NodeRemoved => "note_delete.mp3",
+                TitanToolEditorSoundEvent.WireConnected => "wire_add.mp3",
+                TitanToolEditorSoundEvent.WireRemoved => "wire_delete.mp3",
+                TitanToolEditorSoundEvent.ChildIncreased => "child_increase.mp3",
+                TitanToolEditorSoundEvent.ChildDecreased => "child_decrease.mp3",
+                _ => null
+            };
+
+            if (string.IsNullOrEmpty(fileName))
+                return null;
+
+            s_packageDefaultClips[index] = AssetDatabase.LoadAssetAtPath<AudioClip>($"{PACKAGE_SOUND_PATH}/{fileName}");
+            return s_packageDefaultClips[index];
         }
 
         private static TitanToolEditorSoundSettings GetOrCreate() {
