@@ -72,10 +72,14 @@ namespace TitanTool.Editor {
             int wireCount = CountWireModels();
 
             if (m_lastNodeCount >= 0 && m_lastWireCount >= 0) {
-                if (nodeCount > m_lastNodeCount)
+                if (nodeCount > m_lastNodeCount) {
                     TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.NodeCreated);
-                else if (nodeCount < m_lastNodeCount)
+                    TitanToolUsageLogger.LogNodePlaced(this, nodeCount - m_lastNodeCount, nodeCount);
+                }
+                else if (nodeCount < m_lastNodeCount) {
                     TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.NodeRemoved);
+                    TitanToolUsageLogger.LogNodeRemoved(this, m_lastNodeCount - nodeCount, nodeCount);
+                }
                 else if (wireCount > m_lastWireCount)
                     TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.WireConnected);
                 else if (wireCount < m_lastWireCount)

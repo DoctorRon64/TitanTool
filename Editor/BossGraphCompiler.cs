@@ -9,12 +9,15 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 namespace TitanTool.Editor {
     public static class BossGraphCompiler {
         public static BossGraphCompileResult Compile(BossGraph graph) {
+            TitanToolUsageLogger.LogGraphCompileAttempt(graph);
+
             BossGraphAsset runtime = ScriptableObject.CreateInstance<BossGraphAsset>();
             List<BossGraphValidationIssue> issues = new();
             List<RuntimeNode> runtimeNodes = new();
 
             if (graph == null) {
                 issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Error, "Boss graph could not be loaded."));
+                TitanToolUsageLogger.LogGraphCompileErrors(null, issues);
                 return new BossGraphCompileResult(runtime, runtimeNodes, issues);
             }
 
@@ -22,8 +25,14 @@ namespace TitanTool.Editor {
             BossGraphRuntimeGuidUtility.EnsureUniqueRuntimeGuids(graphNodes);
             issues.AddRange(BossGraphValidator.Validate(graphNodes));
 
-            if (issues.Any(issue => issue.severity == BossGraphValidationSeverity.Error))
+            List<BossGraphValidationIssue> errors = issues
+                .Where(issue => issue.severity == BossGraphValidationSeverity.Error)
+                .ToList();
+
+            if (errors.Count > 0) {
+                TitanToolUsageLogger.LogGraphCompileErrors(graph, errors);
                 return new BossGraphCompileResult(runtime, runtimeNodes, issues);
+            }
 
             Dictionary<string, RuntimeNode> runtimeByGuid = new();
 
@@ -50,6 +59,12 @@ namespace TitanTool.Editor {
             }
 
             runtime.SetNodes(runtimeNodes);
+
+            errors = issues
+                .Where(issue => issue.severity == BossGraphValidationSeverity.Error)
+                .ToList();
+            TitanToolUsageLogger.LogGraphCompileErrors(graph, errors);
+
             return new BossGraphCompileResult(runtime, runtimeNodes, issues);
         }
 

@@ -8,6 +8,7 @@ namespace TitanTool.Editor {
         public override void OnImportAsset(AssetImportContext ctx) {
             BossGraph graph = GraphDatabase.LoadGraphForImporter<BossGraph>(ctx.assetPath);
             if (graph == null) {
+                TitanToolUsageLogger.LogGraphCompileError(ctx.assetPath, $"Failed to load BossGraph: {ctx.assetPath}");
                 ctx.LogImportError($"Failed to load BossGraph: {ctx.assetPath}");
                 return;
             }
