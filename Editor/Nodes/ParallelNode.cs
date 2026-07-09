@@ -5,7 +5,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.ParallelNode), "Run In Parallel", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs all child branches at the same time and returns based on the success and failure rules.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.ParallelNode), "Run In Parallel", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs child branches at the same time. Direct Sequence children advance in lockstep.")]
     public class ParallelNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";
         private const string OPTION_SUCCESS_RULE = "SuccessRule";

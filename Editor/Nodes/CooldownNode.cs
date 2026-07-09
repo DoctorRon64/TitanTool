@@ -5,7 +5,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.CooldownNode), "Cooldown Gate", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Lets its child run only after the cooldown has finished.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.CooldownNode), "Cooldown Gate", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Runs its child, then keeps the branch running until the cooldown finishes.")]
     public class CooldownNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_DURATION = "Duration";
         private const string OPTION_START_READY = "StartReady";

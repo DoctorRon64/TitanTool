@@ -4,6 +4,7 @@ using UnityEngine;
 namespace TitanTool.Runtime.Nodes.Base {
     public class CooldownState {
         public bool initialized;
+        public bool childCompleted;
         public float remaining;
         public float duration;
     }
@@ -32,15 +33,31 @@ namespace TitanTool.Runtime.Nodes.Base {
 
             if (state.remaining > 0f) {
                 state.remaining = Mathf.Max(0f, state.remaining - ctx.deltaTime);
-                ctx.SetStatus(this, NodeStatus.Failure);
-                return NodeStatus.Failure;
+                if (state.remaining > 0f) {
+                    ctx.SetStatus(this, NodeStatus.Running);
+                    return NodeStatus.Running;
+                }
+
+                if (state.childCompleted) {
+                    ctx.ResetNode(this);
+                    ctx.SetStatus(this, NodeStatus.Success);
+                    return NodeStatus.Success;
+                }
             }
 
             NodeStatus result = ctx.ExecuteNode(child);
             if (result == NodeStatus.Success) {
                 state.duration = Mathf.Max(0f, m_duration.Evaluate());
                 state.remaining = state.duration;
+                state.childCompleted = true;
                 ctx.ResetBranch(child);
+
+                if (state.remaining > 0f) {
+                    ctx.SetStatus(this, NodeStatus.Running);
+                    return NodeStatus.Running;
+                }
+
+                ctx.ResetNode(this);
             }
 
             ctx.SetStatus(this, result);
