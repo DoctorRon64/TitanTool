@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
+using PackageManagerInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace TitanTool.Editor {
     public sealed class TitanToolDocumentationWindow : EditorWindow {
@@ -204,7 +204,7 @@ namespace TitanTool.Editor {
         }
 
         private static string GetDocumentationFolderPath() {
-            PackageInfo package = PackageInfo.FindForAssembly(typeof(TitanToolDocumentationWindow).Assembly);
+            PackageManagerInfo package = PackageManagerInfo.FindForAssembly(typeof(TitanToolDocumentationWindow).Assembly);
             string packagePath = package != null ? package.resolvedPath : Application.dataPath;
             return Path.Combine(packagePath, "Documentation~");
         }
