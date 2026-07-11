@@ -11,7 +11,7 @@ namespace TitanTool.Editor {
             EditorApplication.delayCall += EnsureSampleLayers;
         }
 
-        [MenuItem("Tools/TitanTool/Setup Sample Layers")]
+        [MenuItem("Window/TitanTool/Setup Sample Layers")]
         private static void EnsureSampleLayers() {
             Object[] tagManagers = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset");
             if (tagManagers == null || tagManagers.Length == 0)

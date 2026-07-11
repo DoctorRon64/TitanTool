@@ -19,7 +19,7 @@ namespace TitanTool.Editor {
         private const string EnabledKey = "TitanTool.UsageLogger.Enabled";
         private const string LogFolder = "Library/TitanTool/UsageLogs";
         private const string LogFileName = "titantool-usage-log.jsonl";
-        private const string MenuRoot = "Window/TitanTool/Internal/Usage Log";
+        private const string MenuRoot = "Window/TitanTool/Log";
         private const string LoggingEnabledMenu = MenuRoot + "/Logging Enabled";
         private const BindingFlags ShortcutFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 

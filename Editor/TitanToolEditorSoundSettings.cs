@@ -35,7 +35,7 @@ namespace TitanTool.Editor {
 
         private static readonly AudioClip[] s_packageDefaultClips = new AudioClip[Enum.GetValues(typeof(TitanToolEditorSoundEvent)).Length];
 
-        [MenuItem("Tools/TitanTool/Editor Sound Settings")]
+        [MenuItem("Window/TitanTool/Editor Sound Settings")]
         private static void SelectSettingsAsset() {
             TitanToolEditorSoundSettings settings = GetOrCreate();
             Selection.activeObject = settings;
