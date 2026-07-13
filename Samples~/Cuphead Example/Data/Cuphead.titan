@@ -690,7 +690,7 @@ MonoBehaviour:
         m_Node:
           rid: 1402544071903281406
     - rid: 1402544071903281406
-      type: {class: RandomConstantNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: RandomVariableNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data: 
     - rid: 1402544071903281407
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
@@ -1502,9 +1502,9 @@ MonoBehaviour:
       data:
         m_Value: 1
     - rid: 1402544071903281609
-      type: {class: BlackboardMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: RuntimeMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.BlackboardMathNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.RuntimeMathNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 23c19e0a-2b02-4713-ac3f-6a663bb305d8
         m_childGuids: []
@@ -1618,9 +1618,9 @@ MonoBehaviour:
       data:
         m_Value: 3
     - rid: 1402544071903281617
-      type: {class: BlackboardCompareNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: RuntimeCompareNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.BlackboardCompareNode,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.RuntimeCompareNode,
           TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 48ac1a8f-439b-4d60-a471-00d27c4fdd5d
         m_childGuids: []
@@ -1751,7 +1751,7 @@ MonoBehaviour:
           Hash: bcb9e6472475b08c19cf4d13807c0175
         m_Version: 2
         m_Position: {x: 1790.5668, y: 221.37257}
-        m_Title: BlackboardMathNode
+        m_Title: RuntimeMathNode
         m_Tooltip: Sets or modifies a numeric value stored on the blackboard.
         m_NodePreviewModel:
           rid: -2
@@ -1818,9 +1818,9 @@ MonoBehaviour:
       data:
         m_Value: 0
     - rid: 1402544071903281640
-      type: {class: BlackboardMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: RuntimeMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.BlackboardMathNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.RuntimeMathNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 5432e8f1-3069-4482-8f00-af59e2f93af4
         m_childGuids: []
@@ -2654,7 +2654,7 @@ MonoBehaviour:
           Hash: 9bd5f3b91b91e630c98bacef9e53774a
         m_Version: 2
         m_Position: {x: 4196.5176, y: -2904.02}
-        m_Title: ShootPatternNode
+        m_Title: ShootNode
         m_Tooltip: Spawns bullets in the selected pattern from the chosen source.
         m_NodePreviewModel:
           rid: -2
@@ -2771,9 +2771,9 @@ MonoBehaviour:
       data:
         m_Value: 3
     - rid: 1402544137362473097
-      type: {class: ShootPatternNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: ShootNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.ShootPatternNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.ShootNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 38cc2c3d-ed75-4510-acc7-815fbfeb3339
         m_childGuids: []
@@ -2788,7 +2788,7 @@ MonoBehaviour:
           Hash: 9f6164d98c44cdedc246e5852bfbd098
         m_Version: 2
         m_Position: {x: 3569.8396, y: -2561.2854}
-        m_Title: BlackboardMathNode
+        m_Title: RuntimeMathNode
         m_Tooltip: Sets or modifies a numeric value stored on the blackboard.
         m_NodePreviewModel:
           rid: -2
@@ -2878,9 +2878,9 @@ MonoBehaviour:
       data:
         m_Value: 1
     - rid: 1402544137362473133
-      type: {class: BlackboardMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: RuntimeMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.BlackboardMathNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.RuntimeMathNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 2ee2a40f-b5c5-4095-9cf9-a9bda3438130
         m_childGuids: []
@@ -3011,7 +3011,7 @@ MonoBehaviour:
           Hash: 8c9d246434997afc1667637427a21234
         m_Version: 2
         m_Position: {x: 3641.3518, y: -3235.0964}
-        m_Title: BlackboardMathNode
+        m_Title: RuntimeMathNode
         m_Tooltip: Sets or modifies a numeric value stored on the blackboard.
         m_NodePreviewModel:
           rid: -2
@@ -3093,7 +3093,7 @@ MonoBehaviour:
           Hash: 0978d9273fbd6cab6bb04091f33fba54
         m_Version: 2
         m_Position: {x: 3640.1992, y: -3735.3306}
-        m_Title: BlackboardCompareNode
+        m_Title: RuntimeCompareNode
         m_Tooltip: Passes when a blackboard number matches the selected comparison.
         m_NodePreviewModel:
           rid: -2
@@ -3183,9 +3183,9 @@ MonoBehaviour:
       data:
         m_Value: 0
     - rid: 1402544137362473170
-      type: {class: BlackboardMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: RuntimeMathNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.BlackboardMathNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.RuntimeMathNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 63646c3e-aa4d-41ac-aed7-cb8209eb4616
         m_childGuids: []
@@ -3237,9 +3237,9 @@ MonoBehaviour:
       data:
         m_Value: 5
     - rid: 1402544137362473179
-      type: {class: BlackboardCompareNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: RuntimeCompareNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.BlackboardCompareNode,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.RuntimeCompareNode,
           TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: afd0c1b6-c55c-45ed-863a-f1b33943ce83
         m_childGuids: []
@@ -3338,7 +3338,7 @@ MonoBehaviour:
           Hash: 739911cc661308cd475e57670d033b0b
         m_Version: 2
         m_Position: {x: 4169.93, y: -3569.7764}
-        m_Title: ShootPatternNode
+        m_Title: ShootNode
         m_Tooltip: Spawns bullets in the selected pattern from the chosen source.
         m_NodePreviewModel:
           rid: -2
@@ -3449,9 +3449,9 @@ MonoBehaviour:
       data:
         m_Value: 8
     - rid: 1402544137362473224
-      type: {class: ShootPatternNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: ShootNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.ShootPatternNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.ShootNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 8355becd-82db-4b9a-b9a9-00719d64ce0c
         m_childGuids: []
@@ -3473,11 +3473,9 @@ MonoBehaviour:
         m_State: 0
         m_InputConstantsById:
           m_KeyList:
-          - __option_ChildCount
           - In
           - RepeatCount
           m_ValueList:
-          - rid: 1402544137362473297
           - rid: 1402544137362473298
           - rid: 1402544137362473299
         m_InputPortInfos:
@@ -3495,10 +3493,6 @@ MonoBehaviour:
           m_HasUserColor: 0
         m_Node:
           rid: 1402544137362473300
-    - rid: 1402544137362473297
-      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 1
     - rid: 1402544137362473298
       type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data: 
@@ -4241,38 +4235,6 @@ MonoBehaviour:
           m_PortDirection: 1
           m_PortOrientation: 0
           m_Title: 
-    - rid: 1402544137362473642
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Guid:
-          m_Value0: 3432775993614127081
-          m_Value1: 1071280378408103513
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: e9cfdb1c94aba32f596edc09d4f3dd0e
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 14600000000000000001
-            m_Value1: 14600000000000000002
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 0100b458a59e9dca0200b458a59e9dca
-          m_UniqueId: Out1
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: 
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 9002289817981457512
-            m_Value1: 11675855120237502387
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 6894e6ade48eee7cb39faeda5ef808a2
-          m_UniqueId: In
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: 
     - rid: 1402544137362473643
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4834,7 +4796,7 @@ MonoBehaviour:
         m_Node:
           rid: 1402544159490834555
     - rid: 1402544159490834555
-      type: {class: RandomConstantNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: RandomVariableNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data: 
     - rid: 1402544159490834556
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
@@ -5174,11 +5136,9 @@ MonoBehaviour:
         m_State: 0
         m_InputConstantsById:
           m_KeyList:
-          - __option_ChildCount
           - In
           - RepeatCount
           m_ValueList:
-          - rid: 1402544160000000002
           - rid: 1402544160000000003
           - rid: 1402544160000000004
         m_InputPortInfos:
@@ -5196,10 +5156,6 @@ MonoBehaviour:
           m_HasUserColor: 0
         m_Node:
           rid: 1402544160000000005
-    - rid: 1402544160000000002
-      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 2
     - rid: 1402544160000000003
       type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data: 
@@ -5783,7 +5739,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 882666d345fcffe4673f44ffad6d3050
         m_Version: 2
-        m_Title: RandomConstant
+        m_Title: RandomVariable
         m_Contents: Randomizes the location between 2 vectors
         m_ThemeName: Classic
         m_TextSizeName: Small
@@ -7423,9 +7379,9 @@ MonoBehaviour:
       data:
         m_Value: 8
     - rid: 3553033762030747672
-      type: {class: ShootPatternNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: ShootNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.ShootPatternNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.ShootNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 5a9dbab7-5b1f-4a6e-884b-dd247daad1c1
         m_childGuids: []
@@ -7656,7 +7612,6 @@ MonoBehaviour:
         - rid: 1402544137362473623
         - rid: 1402544137362473639
         - rid: 1402544137362473641
-        - rid: 1402544137362473642
         - rid: 1402544137362473643
         - rid: 1402544137362473651
         - rid: 1402544137362473704
@@ -9110,22 +9065,22 @@ MonoBehaviour:
       data:
         m_Value:
           m_EnumType:
-            m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+            m_Identification: TitanTool.Editor.Nodes.RandomVariableValueType, TitanTool.Editor,
               Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
           m_Value: 2
         m_EnumType:
-          m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+          m_Identification: TitanTool.Editor.Nodes.RandomVariableValueType, TitanTool.Editor,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     - rid: 7926195760522854659
       type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Value:
           m_EnumType:
-            m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+            m_Identification: TitanTool.Editor.Nodes.RandomVariableValueType, TitanTool.Editor,
               Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
           m_Value: 2
         m_EnumType:
-          m_Identification: TitanTool.Editor.Nodes.RandomConstantValueType, TitanTool.Editor,
+          m_Identification: TitanTool.Editor.Nodes.RandomVariableValueType, TitanTool.Editor,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     - rid: 7926195760522854675
       type: {class: 'Constant`1[[UnityEngine.Vector2, UnityEngine.CoreModule]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}

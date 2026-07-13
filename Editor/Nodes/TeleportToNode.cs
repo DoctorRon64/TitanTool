@@ -8,7 +8,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.TeleportToNode), "Teleport To Target", "Action/Movement/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Movement, "Instantly moves the boss to a player, point, or fixed position.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.TeleportToNode), "Teleport To Target", "Action/Movement/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Movement, "Instantly places the boss at the player, a TargetPointKey, or a fixed world position.")]
     public class TeleportToNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_TARGET_POSITION = "TargetPosition";
         private const string IN_PORT_OFFSET = "Offset";

@@ -1,72 +1,64 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace TitanTool.Runtime.Nodes.Base {
     public class RandomSelectorState {
-        public readonly List<int> order = new();
-        public int currentIndex;
-        public int childCount;
+        public int selectedIndex = -1;
     }
 
     [NodeView("Pick Random Child", "Composite/")]
     public class RandomSelectorNode : Node {
         public override NodeStatus Tick(NodeContext ctx) {
+            if (children.Count == 0) {
+                ctx.SetStatus(this, NodeStatus.Failure);
+                return NodeStatus.Failure;
+            }
+
             RandomSelectorState state = ctx.GetState<RandomSelectorState>(this);
-            EnsureOrder(state);
+            if (state.selectedIndex < 0 ||
+                state.selectedIndex >= children.Count ||
+                children[state.selectedIndex] == null)
+                state.selectedIndex = PickChildIndex();
 
-            while (state.currentIndex < state.order.Count) {
-                Node child = children[state.order[state.currentIndex]];
-                if (child == null) {
-                    state.currentIndex++;
-                    continue;
-                }
-
-                NodeStatus result = ctx.ExecuteNode(child);
-
-                switch (result) {
-                    case NodeStatus.Running:
-                        ctx.SetStatus(this, NodeStatus.Running);
-                        return NodeStatus.Running;
-
-                    case NodeStatus.Success:
-                        ResetChildren(ctx);
-                        ctx.ResetNode(this);
-                        ctx.SetStatus(this, NodeStatus.Success);
-                        return NodeStatus.Success;
-
-                    case NodeStatus.Failure:
-                        ctx.ResetBranch(child);
-                        state.currentIndex++;
-                        break;
-                }
+            if (state.selectedIndex < 0) {
+                ctx.ResetNode(this);
+                ctx.SetStatus(this, NodeStatus.Failure);
+                return NodeStatus.Failure;
             }
 
-            ResetChildren(ctx);
-            ctx.ResetNode(this);
-            ctx.SetStatus(this, NodeStatus.Failure);
-            return NodeStatus.Failure;
-        }
+            Node child = children[state.selectedIndex];
+            NodeStatus result = ctx.ExecuteNode(child);
 
-        private void EnsureOrder(RandomSelectorState state) {
-            if (state.childCount == children.Count && state.order.Count == children.Count)
-                return;
-
-            state.order.Clear();
-            state.childCount = children.Count;
-            state.currentIndex = 0;
-
-            for (int i = 0; i < children.Count; i++)
-                state.order.Add(i);
-
-            for (int i = state.order.Count - 1; i > 0; i--) {
-                int swapIndex = Random.Range(0, i + 1);
-                (state.order[i], state.order[swapIndex]) = (state.order[swapIndex], state.order[i]);
-            }
-        }
-
-        private void ResetChildren(NodeContext ctx) {
-            foreach (Node child in children)
+            if (result != NodeStatus.Running) {
                 ctx.ResetBranch(child);
+                ctx.ResetNode(this);
+            }
+
+            ctx.SetStatus(this, result);
+            return result;
+        }
+
+        private int PickChildIndex() {
+            int availableCount = 0;
+            for (int i = 0; i < children.Count; i++) {
+                if (children[i] != null)
+                    availableCount++;
+            }
+
+            if (availableCount == 0)
+                return -1;
+
+            int selectedAvailableIndex = Random.Range(0, availableCount);
+            for (int i = 0; i < children.Count; i++) {
+                if (children[i] == null)
+                    continue;
+
+                if (selectedAvailableIndex == 0)
+                    return i;
+
+                selectedAvailableIndex--;
+            }
+
+            return -1;
         }
     }
 }

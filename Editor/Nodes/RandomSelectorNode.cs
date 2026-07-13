@@ -6,12 +6,13 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RandomSelectorNode), "Pick Random Child", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Chooses one child at random and runs it.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RandomSelectorNode), "Pick Random Child", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Chooses one connected child at random, runs only that branch, then rolls again the next time this node starts.")]
     public class RandomSelectorNode : BossGraphNode, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";
         protected override int outputCount => GetChildCount();
         protected override bool hasInput => true;
         protected override bool hasOutput => true;
+        public override int minimumChildCount => 2;
 
         public override void OnEnable() {
             base.OnEnable();
@@ -33,8 +34,8 @@ namespace TitanTool.Editor.Nodes {
             int connectedChildren = BossGraphValidator.GetConnectedChildren(this).Count();
             int childCount = GetChildCount();
 
-            if (connectedChildren == 0) {
-                context.Error("Random Selector must have at least one connected child.");
+            if (connectedChildren < minimumChildCount) {
+                context.Error("Random Selector must have at least two connected children.");
             } else if (connectedChildren < childCount) {
                 context.Warning($"Random Selector has {childCount} child slots but only {connectedChildren} connected.");
             }
@@ -42,7 +43,7 @@ namespace TitanTool.Editor.Nodes {
 
         private int GetChildCount() {
             if (GetNodeOptionByName(OPTION_CHILD_COUNT)?.TryGetValue(out int childCount) == true)
-                return Math.Max(1, childCount);
+                return Math.Max(minimumChildCount, childCount);
 
             return 2;
         }

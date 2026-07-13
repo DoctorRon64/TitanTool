@@ -20,17 +20,17 @@ namespace TitanTool.Editor {
 
         private static readonly DocLine[] QuickStartLines = {
             new("1", "Create Graph", "Add a BossDirector to the boss object, then use Make New Graph or assign an existing .titan graph."),
-            new("2", "Scene References", "Assign player, animator, sprite renderer, and a TargetPointProvider for scene locations."),
-            new("3", "Edit Flow", "Open Graph, connect Start to a branch, then add composite, condition, decorator, and action nodes."),
-            new("4", "Play And Debug", "Enter Play Mode. Active nodes and followed wires highlight; Window/TitanTool/Runtime Debugger shows live values.")
+            new("2", "Scene References", "Assign the player, animator, sprite renderer, and TargetPointProvider before testing the graph."),
+            new("3", "Build Flow", "Connect Start to one main branch. Use composites to choose order, decorators to gate behavior, and actions to do gameplay work."),
+            new("4", "Play And Debug", "Enter Play Mode. Active nodes and followed wires highlight in the graph; the Runtime Debugger shows live values.")
         };
 
         private static readonly DocLine[] ExecutionLines = {
             new("Start", "Entry Point", "Every graph has exactly one Start node. It is created automatically and cannot be added or deleted manually."),
-            new("Tick", "BossDirector", "The BossDirector ticks the root at the configured tick rate. Each tick walks the connected flow wires."),
-            new("Composite", "Branch Control", "Sequence-style nodes run children in order; selector-style nodes try alternatives; parallel nodes tick multiple branches."),
-            new("Decorator", "Gate Or Modify", "Decorators wrap one child and decide whether, when, or how often that child may run."),
-            new("Action", "Gameplay Result", "Actions move, shoot, spawn, throw, animate, wait, or write blackboard data.")
+            new("Tick", "BossDirector", "The BossDirector ticks the compiled graph. Nodes that return Running are visited again on later ticks."),
+            new("Wire", "Connected Only", "Only nodes reachable from Start are part of execution. Disconnected nodes are ignored and shown as inactive graph clutter."),
+            new("Parent", "Status Rules", "Composite and decorator nodes decide what to do with child Success, Failure, or Running results."),
+            new("Action", "Gameplay Result", "Actions move, shoot, spawn, throw, animate, wait, or write runtime data.")
         };
 
         private static readonly DocLine[] StatusLines = {
@@ -39,18 +39,32 @@ namespace TitanTool.Editor {
             new("Failure", "Blocked Or False", "The node could not run or a condition was false. Sequences usually stop; selectors may try another child.")
         };
 
+        private static readonly DocLine[] NodeChoiceLines = {
+            new("Order", "Run In Order", "Use Sequence when several steps must all finish in order, such as move, wait, then shoot."),
+            new("Choice", "Try Children", "Use Selector when the first valid branch should win, such as phase behavior with a fallback."),
+            new("Together", "Run In Parallel", "Use Parallel when branches must happen at the same time, such as moving while shooting."),
+            new("Random", "Random Nodes", "Use Pick Random Child for one random branch, Shuffle Bag for no-repeat variety, and RandomVariable for random values.")
+        };
+
         private static readonly DocLine[] TargetLines = {
             new("Provider", "Scene Locations", "Use a TargetPointProvider scene object to collect or create TargetPoint objects."),
             new("Keys", "Stable Link", "Graphs still store TargetPointKey assets because .titan assets should not depend directly on scene object references."),
-            new("Rename", "Keep Clean", "Use Rename Keys From Objects to sync key asset names with scene object names."),
-            new("Warnings", "Missing Scene Key", "The graph warns when a node uses a TargetPointKey that is not used by any TargetPoint in the current scene.")
+            new("Rename", "Keep Clean", "Use Rename Keys From Objects to sync key asset names with the matching scene object names."),
+            new("Warnings", "Missing Scene Key", "The graph warns when a node uses a TargetPointKey that is not present in the current TargetPointProvider.")
         };
 
         private static readonly DocLine[] BlackboardLines = {
             new("Memory", "Shared Runtime Data", "The blackboard stores boss references, health, target data, counters, and temporary decisions."),
-            new("Write", "BlackboardMathNode", "Writes or modifies numeric values."),
-            new("Read", "BlackboardCompareNode", "Checks numeric values to decide whether a branch can continue."),
-            new("Random", "RandomConstantNode", "Feeds random int, float, or Vector2 values into compatible ports.")
+            new("Write", "RuntimeMathNode", "Writes or modifies numeric runtime variables."),
+            new("Read", "RuntimeCompareNode", "Checks numeric runtime variables to decide whether a branch can continue."),
+            new("Random", "RandomVariableNode", "Feeds random int, float, or Vector2 values into compatible ports."),
+            new("Target", "RandomTargetPointKeyNode", "Picks one assigned TargetPointKey at random for target point inputs.")
+        };
+
+        private static readonly DocLine[] SearchLines = {
+            new("Name", "Search By Node", "Search accepts visible names, runtime class names, categories, tooltips, and keywords."),
+            new("Alias", "Search By Intent", "Common words are supported where useful: bullet and projectile find Shoot, bomb finds Throw."),
+            new("Docs", "Same Source", "Hover text and this node reference use the same node registry, so documentation stays aligned with the add-node menu.")
         };
 
         [MenuItem("Window/TitanTool/Documentation")]
@@ -133,6 +147,7 @@ namespace TitanTool.Editor {
             return Contains(GetDocumentationNodeName(registration), filter) ||
                    Contains(registration.displayName, filter) ||
                    Contains(registration.tooltip, filter) ||
+                   Contains(registration.searchKeywords, filter) ||
                    Contains(registration.menuPath, filter) ||
                    Contains(registration.runtimeType.Name, filter) ||
                    Contains(registration.editorType.Name, filter);
@@ -146,7 +161,7 @@ namespace TitanTool.Editor {
         private void DrawHero() {
             using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
                 EditorGUILayout.LabelField("TitanTool Documentation", m_titleStyle);
-                EditorGUILayout.LabelField("Boss graph setup, execution flow, node statuses, target points, and node reference.", m_wrapStyle);
+                EditorGUILayout.LabelField("Compact reference for boss graph setup, execution flow, statuses, scene target points, value nodes, and every available node.", m_wrapStyle);
             }
         }
 
@@ -154,8 +169,10 @@ namespace TitanTool.Editor {
             DrawTextSection("Quick Start", QuickStartLines);
             DrawTextSection("Execution Flow", ExecutionLines);
             DrawTextSection("Success / Failure / Running", StatusLines);
+            DrawTextSection("Choosing Nodes", NodeChoiceLines);
             DrawTextSection("Target Points", TargetLines);
             DrawTextSection("Blackboard And Values", BlackboardLines);
+            DrawTextSection("Search And Hover Text", SearchLines);
         }
 
         private void DrawTextSection(string title, IReadOnlyList<DocLine> lines) {
@@ -218,17 +235,25 @@ namespace TitanTool.Editor {
                 return;
 
             if (!string.IsNullOrWhiteSpace(m_filter) &&
-                !Contains("RandomConstantNode", m_filter) &&
-                !Contains("Random Constant", m_filter) &&
-                !Contains("random value int float vector2", m_filter))
+                !Contains("RandomVariableNode", m_filter) &&
+                !Contains("Random Variable", m_filter) &&
+                !Contains("RandomTargetPointKeyNode", m_filter) &&
+                !Contains("Random Target Point Key", m_filter) &&
+                !Contains("random variable value int float vector2 target point key position", m_filter))
                 return;
 
             using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
                 EditorGUILayout.LabelField("Value Nodes", m_headerStyle);
                 using (new EditorGUILayout.HorizontalScope()) {
-                    EditorGUILayout.LabelField("RandomConstantNode", m_nodeTitleStyle, GUILayout.Width(168));
+                    EditorGUILayout.LabelField("RandomVariableNode", m_nodeTitleStyle, GUILayout.Width(168));
                     DrawSmallBadge(BossGraphNodeCategory.Utility.ToString(), 76f);
-                    EditorGUILayout.LabelField("Outputs a random float, int, or Vector2 between a minimum and maximum range.", m_wrapStyle);
+                    EditorGUILayout.LabelField("Outputs a random float, int, or Vector2 between Min and Max. Connect it to compatible value ports.", m_wrapStyle);
+                }
+
+                using (new EditorGUILayout.HorizontalScope()) {
+                    EditorGUILayout.LabelField("RandomTargetPointKeyNode", m_nodeTitleStyle, GUILayout.Width(168));
+                    DrawSmallBadge(BossGraphNodeCategory.Utility.ToString(), 76f);
+                    EditorGUILayout.LabelField("Outputs one assigned TargetPointKey at random. Target Points controls the number of key slots, with a minimum of 2; missing scene keys are warned.", m_wrapStyle);
                 }
             }
         }

@@ -28,6 +28,7 @@ namespace TitanTool.Editor {
         public string metadataTooltip => string.IsNullOrWhiteSpace(behaviorBadge)
             ? tooltip
             : $"{tooltip}\n\nBadge: {behaviorBadge}";
+        public virtual int minimumChildCount => 1;
         protected virtual string behaviorBadge => null;
 
         [SerializeField] private List<string> m_childGuids = new();

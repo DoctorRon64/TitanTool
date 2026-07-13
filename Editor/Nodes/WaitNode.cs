@@ -7,7 +7,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.WaitNode), "Wait", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Wait, "Pauses this branch for the configured duration.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.WaitNode), "Wait", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Wait, "Keeps this branch Running for the configured duration, then returns Success.")]
     internal class WaitNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         public const string IN_PORT_DURATION = "InDuration";
         

@@ -19,7 +19,7 @@ namespace TitanTool.Runtime {
         [SerializeField] private SpriteRenderer m_spriteRenderer;
         [SerializeField] private TargetPointProvider m_targetPoints;
         [SerializeField, HideInInspector] private TargetPoint[] m_spawnPoints;
-        [field: SerializeField] public DamagableTeam team { get; private set; }
+        [field: SerializeField, HideInInspector] public DamagableTeam team { get; private set; } = DamagableTeam.Opponent;
         private Rigidbody2D m_rigidbody;
         public bool paused;
         
@@ -35,12 +35,16 @@ namespace TitanTool.Runtime {
 #endif
 
         private void OnValidate() {
+            team = DamagableTeam.Opponent;
+
             if (graph != null && graph.root == null) {
                 graph.EnsureValid();
             }
         }
 
         private void Start() {
+            team = DamagableTeam.Opponent;
+
             if (graph == null) {
                 Debug.LogError("No graph assigned.", this);
                 enabled = false;

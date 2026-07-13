@@ -16,6 +16,7 @@ namespace TitanTool.Editor {
             category = attribute.Category;
             icon = attribute.Icon;
             tooltip = attribute.Tooltip;
+            searchKeywords = attribute.SearchKeywords;
             color = BossGraphNodeCategoryColors.GetColor(category);
         }
 
@@ -26,6 +27,7 @@ namespace TitanTool.Editor {
         public BossGraphNodeCategory category { get; }
         public string icon { get; }
         public string tooltip { get; }
+        public string searchKeywords { get; }
         public Color color { get; }
     }
 
@@ -33,7 +35,8 @@ namespace TitanTool.Editor {
         private static Dictionary<Type, GraphNodeRegistration> s_editorRegistrations;
         private static Dictionary<Type, GraphNodeRegistration> s_runtimeRegistrations;
         private static readonly HashSet<Type> s_hiddenEditorTypes = new() {
-            typeof(StartNode)
+            typeof(StartNode),
+            typeof(BulletNode)
         };
 
         static NodeTypeRegistry() {
@@ -65,7 +68,8 @@ namespace TitanTool.Editor {
                 GraphNodeRegistration registration = new(editorType, attr);
 
                 if (s_runtimeRegistrations.TryGetValue(attr.RuntimeType, out GraphNodeRegistration existing)) {
-                    Debug.LogWarning($"Runtime node {attr.RuntimeType.Name} is already registered to {existing.editorType.Name}; ignoring {editorType.Name}.");
+                    Debug.LogWarning($"Runtime node {attr.RuntimeType.Name} is already registered to {existing.editorType.Name}; keeping {editorType.Name} as an editor alias.");
+                    s_editorRegistrations[editorType] = registration;
                     continue;
                 }
 
@@ -80,7 +84,7 @@ namespace TitanTool.Editor {
                     "Start",
                     "Flow/",
                     BossGraphNodeCategory.Flow,
-                    tooltip: "Entry point for the boss graph."));
+                    tooltip: "Automatic entry point. Connect Start to the first branch of the boss behavior; it cannot be added or deleted manually."));
         }
 
         private static void RegisterInternalNode(Type editorType, GraphNodeAttribute attr) {

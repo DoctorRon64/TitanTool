@@ -6,8 +6,8 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.BlackboardMathNode), "Change Blackboard Number", "Action/Blackboard/", BossGraphNodeCategory.Action, tooltip: "Sets or modifies a numeric value stored on the blackboard.")]
-    public class BlackboardMathNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.RuntimeMathNode), "Runtime Math", "Action/Runtime/", BossGraphNodeCategory.Action, tooltip: "Sets, adds, subtracts, multiplies, or divides a numeric runtime variable on the blackboard.", searchKeywords: "blackboard variable counter add subtract multiply divide set number")]
+    public class RuntimeMathNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_KEY_NAME = "KeyName";
         private const string IN_PORT_INT_OPERAND = "IntOperand";
         private const string IN_PORT_FLOAT_OPERAND = "FloatOperand";
@@ -18,7 +18,7 @@ namespace TitanTool.Editor.Nodes {
 
         public override void OnEnable() {
             base.OnEnable();
-            InitializeNode(typeof(TitanTool.Runtime.Nodes.Custom.BlackboardMathNode));
+            InitializeNode(typeof(TitanTool.Runtime.Nodes.Custom.RuntimeMathNode));
         }
 
         protected override void OnDefineOptions(IOptionDefinitionContext context) {
@@ -55,7 +55,7 @@ namespace TitanTool.Editor.Nodes {
         }
 
         public void Compile(RuntimeNode runtimeNode) {
-            if (runtimeNode is not TitanTool.Runtime.Nodes.Custom.BlackboardMathNode mathRuntime)
+            if (runtimeNode is not TitanTool.Runtime.Nodes.Custom.RuntimeMathNode mathRuntime)
                 return;
 
             mathRuntime.SetKeyName(GraphNodePortUtility.GetInputValue<string>(this, IN_PORT_KEY_NAME));

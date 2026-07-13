@@ -12,8 +12,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
         NotEqual
     }
 
-    [NodeView("Check Blackboard Number", "Condition/Blackboard/")]
-    public class BlackboardCompareNode : Node {
+    [NodeView("Runtime Compare", "Condition/Runtime/")]
+    public class RuntimeCompareNode : Node {
         [SerializeField] private string m_keyName = "Counter";
         [SerializeField] private BlackboardNumberType m_valueType = BlackboardNumberType.Int;
         [SerializeField] private BlackboardComparison m_comparison = BlackboardComparison.GreaterOrEqual;

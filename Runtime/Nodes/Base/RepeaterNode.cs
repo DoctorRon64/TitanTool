@@ -5,7 +5,6 @@ using UnityEngine;
 namespace TitanTool.Runtime.Nodes.Base {
     public class RepeaterState {
         public bool initialized;
-        public int currentIndex;
         public int completedRepeats;
         public int repeatCount;
     }
@@ -18,7 +17,8 @@ namespace TitanTool.Runtime.Nodes.Base {
         public void SetRepeatCount(RuntimeIntValue repeatCount) => m_repeatCount = repeatCount;
 
         public override NodeStatus Tick(NodeContext ctx) {
-            if (children.Count == 0) {
+            Node repeatedChild = children.Count > 0 ? children[0] : null;
+            if (repeatedChild == null) {
                 ctx.SetStatus(this, NodeStatus.Failure);
                 return NodeStatus.Failure;
             }
@@ -26,45 +26,32 @@ namespace TitanTool.Runtime.Nodes.Base {
             RepeaterState state = ctx.GetState<RepeaterState>(this);
             if (!state.initialized) {
                 state.initialized = true;
-                state.currentIndex = 0;
                 state.completedRepeats = 0;
                 state.repeatCount = Mathf.Max(1, m_repeatCount.Evaluate());
-                ShootPatternNode.ClearPlayerSnapshots(ctx);
+                ShootNode.ClearPlayerSnapshots(ctx);
             }
 
             while (state.completedRepeats < state.repeatCount) {
-                while (state.currentIndex < children.Count) {
-                    Node child = children[state.currentIndex];
-                    if (child == null) {
-                        ResetChildren(ctx);
+                NodeStatus status = ctx.ExecuteNode(repeatedChild);
+                switch (status) {
+                    case NodeStatus.Running:
+                        ctx.SetStatus(this, NodeStatus.Running);
+                        return NodeStatus.Running;
+
+                    case NodeStatus.Failure:
+                        ResetChild(ctx, repeatedChild);
+                        ShootNode.ClearPlayerSnapshots(ctx);
                         ResetState(state);
                         ctx.SetStatus(this, NodeStatus.Failure);
                         return NodeStatus.Failure;
-                    }
 
-                    NodeStatus status = ctx.ExecuteNode(child);
-                    switch (status) {
-                        case NodeStatus.Running:
-                            ctx.SetStatus(this, NodeStatus.Running);
-                            return NodeStatus.Running;
-
-                        case NodeStatus.Failure:
-                            ResetChildren(ctx);
-                            ShootPatternNode.ClearPlayerSnapshots(ctx);
-                            ResetState(state);
-                            ctx.SetStatus(this, NodeStatus.Failure);
-                            return NodeStatus.Failure;
-
-                        case NodeStatus.Success:
-                            ctx.ResetBranch(child);
-                            state.currentIndex++;
-                            break;
-                    }
+                    case NodeStatus.Success:
+                        ctx.ResetBranch(repeatedChild);
+                        break;
                 }
 
                 state.completedRepeats++;
-                state.currentIndex = 0;
-                ResetChildren(ctx);
+                ResetChild(ctx, repeatedChild);
 
                 if (state.completedRepeats < state.repeatCount) {
                     ctx.SetStatus(this, NodeStatus.Running);
@@ -73,19 +60,18 @@ namespace TitanTool.Runtime.Nodes.Base {
             }
 
             ResetState(state);
-            ShootPatternNode.ClearPlayerSnapshots(ctx);
+            ShootNode.ClearPlayerSnapshots(ctx);
             ctx.SetStatus(this, NodeStatus.Success);
             return NodeStatus.Success;
         }
 
-        private void ResetChildren(NodeContext ctx) {
-            foreach (Node child in children)
+        private static void ResetChild(NodeContext ctx, Node child) {
+            if (child != null)
                 ctx.ResetBranch(child);
         }
 
         private static void ResetState(RepeaterState state) {
             state.initialized = false;
-            state.currentIndex = 0;
             state.completedRepeats = 0;
             state.repeatCount = 0;
         }

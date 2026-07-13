@@ -13,7 +13,6 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public float elapsed;
         public float speed;
         public float stopDistance;
-        public float timeout;
         public MoveToMode moveMode;
         public Vector2 targetPosition;
         public Vector2 offset;
@@ -29,7 +28,6 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private TargetPointKey m_spawnPointKey;
         [SerializeField] private RuntimeFloatValue m_speed = RuntimeFloatValue.Fixed(4f);
         [SerializeField] private RuntimeFloatValue m_stopDistance = RuntimeFloatValue.Fixed(0.2f);
-        [SerializeField] private RuntimeFloatValue m_timeout = RuntimeFloatValue.Fixed(0f);
         [SerializeField] private bool m_stopOnArrival = true;
 
         public void SetMoveMode(MoveToMode moveMode) => m_moveMode = moveMode;
@@ -43,8 +41,6 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public void SetSpeed(RuntimeFloatValue speed) => m_speed = speed;
         public void SetStopDistance(float stopDistance) => m_stopDistance = RuntimeFloatValue.Fixed(Mathf.Max(0f, stopDistance));
         public void SetStopDistance(RuntimeFloatValue stopDistance) => m_stopDistance = stopDistance;
-        public void SetTimeout(float timeout) => m_timeout = RuntimeFloatValue.Fixed(Mathf.Max(0f, timeout));
-        public void SetTimeout(RuntimeFloatValue timeout) => m_timeout = timeout;
         public void SetStopOnArrival(bool stopOnArrival) => m_stopOnArrival = stopOnArrival;
 
         public override NodeStatus Tick(NodeContext ctx) {
@@ -58,7 +54,6 @@ namespace TitanTool.Runtime.Nodes.Custom {
             if (state.elapsed <= 0f) {
                 state.speed = Mathf.Max(0f, m_speed.Evaluate());
                 state.stopDistance = Mathf.Max(0f, m_stopDistance.Evaluate());
-                state.timeout = Mathf.Max(0f, m_timeout.Evaluate());
                 state.moveMode = m_moveMode;
                 state.targetPosition = m_targetPosition.Evaluate();
                 state.offset = m_offset.Evaluate();
@@ -89,15 +84,6 @@ namespace TitanTool.Runtime.Nodes.Custom {
                 ctx.ResetNode(this);
                 ctx.SetStatus(this, NodeStatus.Success);
                 return NodeStatus.Success;
-            }
-
-            if (state.timeout > 0f && state.elapsed >= state.timeout) {
-                if (m_stopOnArrival)
-                    Stop(rb);
-
-                ctx.ResetNode(this);
-                ctx.SetStatus(this, NodeStatus.Failure);
-                return NodeStatus.Failure;
             }
 
             Vector2 moveDirection = GetMoveDirection(state, rb, toTarget);

@@ -77,7 +77,6 @@ namespace TitanTool.Editor {
                 DrawProperty("m_tickRate", "Tick Rate");
                 DrawProperty("m_debugLogging", "Debug Logging");
                 DrawProperty("paused", "Paused");
-                DrawProperty("<team>k__BackingField", "Team");
 
                 GUILayout.Space(4);
                 string runtimeText = Application.isPlaying

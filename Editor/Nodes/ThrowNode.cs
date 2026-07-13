@@ -9,7 +9,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.ThrowNode), "Throw Object", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Spawn, "Launches a Rigidbody2D prefab from one source toward another.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.ThrowNode), "Throw Object", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Spawn, "Launches a Rigidbody2D prefab, such as a bomb, from a spawn source toward a target source.", "bomb projectile prefab launch lob arc")]
     public class ThrowNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_PREFAB = "Prefab";
         private const string IN_PORT_SPAWN_POSITION = "SpawnPosition";

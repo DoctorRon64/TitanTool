@@ -6,7 +6,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RerouteNode), "Reroute", "Utility/", BossGraphNodeCategory.Utility, BossGraphNodeIcons.Reroute, "Redirects flow wires to keep the graph layout tidy.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RerouteNode), "Reroute", "Utility/", BossGraphNodeCategory.Utility, BossGraphNodeIcons.Reroute, "Passes execution through without changing behavior. Use it to bend long wires and keep the graph readable.")]
     public class RerouteNode : BossGraphNode, IGraphNodeValidator {
         protected override int outputCount => 1;
         protected override bool hasInput => true;

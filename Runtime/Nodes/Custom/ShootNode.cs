@@ -5,10 +5,9 @@ using Utility;
 
 namespace TitanTool.Runtime.Nodes.Custom {
     public enum ShootPattern {
-        Single,
-        Spread,
-        Circle,
-        AimedAtPlayer
+        Single = 0,
+        Spread = 1,
+        AimedAtPlayer = 3
     }
 
     public enum ShootAimSource {
@@ -19,13 +18,13 @@ namespace TitanTool.Runtime.Nodes.Custom {
         PlayerSnapshot
     }
 
-    public class ShootPatternState {
+    public class ShootState {
         public bool fired;
     }
 
-    [NodeView("Fire Bullets", "Action/")]
-    public class ShootPatternNode : ActionNode {
-        private const string PlayerSnapshotKey = "__ShootPattern_PlayerSnapshot";
+    [NodeView("Shoot", "Action/")]
+    public class ShootNode : ActionNode {
+        private const string PlayerSnapshotKey = "__Shoot_PlayerSnapshot";
 
         [SerializeField] private GameObject m_bulletPrefab;
         [SerializeField] private ShootPattern m_pattern = ShootPattern.Single;
@@ -42,7 +41,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private DamagableTeam m_ownerTeam = DamagableTeam.Opponent;
 
         public void SetBulletPrefab(GameObject bulletPrefab) => m_bulletPrefab = bulletPrefab;
-        public void SetPattern(ShootPattern pattern) => m_pattern = pattern;
+        public void SetPattern(ShootPattern pattern) => m_pattern = (int)pattern == 2 ? ShootPattern.Spread : pattern;
         public void SetPositionSource(SpawnPositionSource positionSource) => m_positionSource = positionSource;
         public void SetAimSource(ShootAimSource aimSource) => m_aimSource = aimSource;
         public void SetPosition(Vector2 position) => m_spawnPosition = RuntimeVector2Value.Fixed(position);
@@ -66,7 +65,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         }
 
         public override NodeStatus Tick(NodeContext ctx) {
-            ShootPatternState state = ctx.GetState<ShootPatternState>(this);
+            ShootState state = ctx.GetState<ShootState>(this);
             if (state.fired) {
                 ctx.SetStatus(this, NodeStatus.Success);
                 return NodeStatus.Success;
@@ -93,12 +92,6 @@ namespace TitanTool.Runtime.Nodes.Custom {
             Vector2 baseDirection = GetBaseDirection(ctx, origin);
 
             switch (m_pattern) {
-                case ShootPattern.Circle:
-                    int circleCount = Mathf.Max(1, m_bulletCount.Evaluate());
-                    for (int i = 0; i < circleCount; i++)
-                        yield return Rotate(Vector2.right, 360f * i / circleCount);
-                    break;
-
                 case ShootPattern.Spread:
                     int spreadCount = Mathf.Max(1, m_bulletCount.Evaluate());
                     if (spreadCount == 1) {

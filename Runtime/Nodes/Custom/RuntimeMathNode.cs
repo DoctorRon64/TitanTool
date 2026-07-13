@@ -16,8 +16,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
         Divide
     }
 
-    [NodeView("Change Blackboard Number", "Action/Blackboard/")]
-    public class BlackboardMathNode : Node {
+    [NodeView("Runtime Math", "Action/Runtime/")]
+    public class RuntimeMathNode : Node {
         [SerializeField] private string m_keyName = "Counter";
         [SerializeField] private BlackboardNumberType m_valueType = BlackboardNumberType.Int;
         [SerializeField] private BlackboardMathOperation m_operation = BlackboardMathOperation.Add;

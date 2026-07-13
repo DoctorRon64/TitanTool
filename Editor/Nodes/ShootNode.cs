@@ -9,8 +9,8 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.ShootPatternNode), "Fire Bullets", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Shoot, "Spawns bullets in the selected pattern from the chosen source.")]
-    public class ShootPatternNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.ShootNode), "Shoot", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Shoot, "Fires bullet or projectile prefabs from the selected source using single, burst, or spread patterns.", "bullet bullets projectile projectiles fire shoot pattern spread")]
+    public class ShootNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_BULLET_PREFAB = "BulletPrefab";
         private const string IN_PORT_POSITION = "Position";
         private const string IN_PORT_DIRECTION = "Direction";
@@ -24,12 +24,13 @@ namespace TitanTool.Editor.Nodes {
         private const string OPTION_POSITION_SOURCE = "PositionSource";
         private const string OPTION_AIM_SOURCE = "AimSource";
         private const string OPTION_OWNER_TEAM = "OwnerTeam";
+        private const int LEGACY_CIRCLE_PATTERN_VALUE = 2;
 
         protected override bool hasInput => true;
 
         public override void OnEnable() {
             base.OnEnable();
-            InitializeNode(typeof(TitanTool.Runtime.Nodes.Custom.ShootPatternNode));
+            InitializeNode(typeof(TitanTool.Runtime.Nodes.Custom.ShootNode));
         }
 
         protected override void OnDefineOptions(IOptionDefinitionContext context) {
@@ -112,11 +113,12 @@ namespace TitanTool.Editor.Nodes {
         }
 
         public void Compile(RuntimeNode runtimeNode) {
-            if (runtimeNode is not TitanTool.Runtime.Nodes.Custom.ShootPatternNode shootRuntime)
+            if (runtimeNode is not TitanTool.Runtime.Nodes.Custom.ShootNode shootRuntime)
                 return;
 
+            bool legacyCirclePattern = IsLegacyCirclePattern();
             shootRuntime.SetBulletPrefab(GraphNodePortUtility.GetInputValue<GameObject>(this, IN_PORT_BULLET_PREFAB));
-            shootRuntime.SetPattern(GetPattern());
+            shootRuntime.SetPattern(legacyCirclePattern ? ShootPattern.Spread : GetPattern());
             shootRuntime.SetPositionSource(GetPositionSource());
             shootRuntime.SetAimSource(GetAimSource());
             shootRuntime.SetPosition(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_POSITION));
@@ -125,30 +127,33 @@ namespace TitanTool.Editor.Nodes {
             shootRuntime.SetSpawnPointKey(GraphNodePortUtility.GetInputValue<TargetPointKey>(this, IN_PORT_SPAWN_POINT_KEY));
             shootRuntime.SetTargetTransform(GraphNodePortUtility.GetInputValue<Transform>(this, IN_PORT_TARGET_TRANSFORM));
             shootRuntime.SetBulletCount(GraphNodePortUtility.GetRuntimeIntValue(this, IN_PORT_BULLET_COUNT));
-            shootRuntime.SetSpreadAngle(GraphNodePortUtility.GetRuntimeFloatValue(this, IN_PORT_SPREAD_ANGLE));
+            if (legacyCirclePattern)
+                shootRuntime.SetSpreadAngle(360f);
+            else
+                shootRuntime.SetSpreadAngle(GraphNodePortUtility.GetRuntimeFloatValue(this, IN_PORT_SPREAD_ANGLE));
             shootRuntime.SetSpeed(GraphNodePortUtility.GetRuntimeFloatValue(this, IN_PORT_SPEED));
             shootRuntime.SetOwnerTeam(GetOwnerTeam());
         }
 
         public void Validate(BossGraphNodeValidationContext context) {
             if (context.GetInputValue<GameObject>(IN_PORT_BULLET_PREFAB) == null)
-                context.Error("Shoot Pattern requires a bullet prefab.");
+                context.Error("Shoot requires a bullet prefab.");
 
             if (context.GetInputValue<int>(IN_PORT_BULLET_COUNT) <= 0)
-                context.Error("Shoot Pattern bullet count must be greater than 0.");
+                context.Error("Shoot bullet count must be greater than 0.");
 
             if (context.GetInputValue<float>(IN_PORT_SPEED) <= 0f)
-                context.Error("Shoot Pattern speed must be greater than 0.");
+                context.Error("Shoot speed must be greater than 0.");
 
             if (GetPositionSource() == SpawnPositionSource.TargetPoint) {
                 if (context.GetInputValue<TargetPointKey>(IN_PORT_SPAWN_POINT_KEY) == null)
-                    context.Error("Shoot Pattern target point key is required.");
+                    context.Error("Shoot target point key is required.");
                 else
-                    context.ValidateTargetPointKey(IN_PORT_SPAWN_POINT_KEY, "Shoot Pattern target point");
+                    context.ValidateTargetPointKey(IN_PORT_SPAWN_POINT_KEY, "Shoot target point");
             }
 
             if (GetAimSource() == ShootAimSource.TargetTransform && context.GetInputValue<Transform>(IN_PORT_TARGET_TRANSFORM) == null)
-                context.Error("Shoot Pattern target transform is required when Aim Target is Target Transform.");
+                context.Error("Shoot target transform is required when Aim Target is Target Transform.");
         }
 
         private ShootPattern GetPattern() {
@@ -156,6 +161,11 @@ namespace TitanTool.Editor.Nodes {
                 return pattern;
 
             return ShootPattern.Single;
+        }
+
+        private bool IsLegacyCirclePattern() {
+            return GetNodeOptionByName(OPTION_PATTERN)?.TryGetValue(out ShootPattern pattern) == true &&
+                   (int)pattern == LEGACY_CIRCLE_PATTERN_VALUE;
         }
 
         private SpawnPositionSource GetPositionSource() {

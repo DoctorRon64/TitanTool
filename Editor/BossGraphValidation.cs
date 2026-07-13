@@ -14,7 +14,7 @@ namespace TitanTool.Editor {
     }
 
     public readonly struct BossGraphValidationIssue {
-        public BossGraphValidationIssue(BossGraphValidationSeverity severity, string message, BossGraphNode node = null) {
+        public BossGraphValidationIssue(BossGraphValidationSeverity severity, string message, object node = null) {
             this.severity = severity;
             this.message = message;
             this.node = node;
@@ -22,7 +22,7 @@ namespace TitanTool.Editor {
 
         public readonly BossGraphValidationSeverity severity;
         public readonly string message;
-        public readonly BossGraphNode node;
+        public readonly object node;
     }
 
     public sealed class BossGraphNodeValidationContext {
@@ -62,9 +62,45 @@ namespace TitanTool.Editor {
         void Validate(BossGraphNodeValidationContext context);
     }
 
+    public sealed class GraphValueNodeValidationContext {
+        private readonly INode m_node;
+        private readonly List<BossGraphValidationIssue> m_issues;
+
+        public GraphValueNodeValidationContext(INode node, List<BossGraphValidationIssue> issues) {
+            m_node = node;
+            m_issues = issues;
+        }
+
+        public T GetInputValue<T>(string portName) {
+            return GraphNodePortUtility.GetInputValue<T>(m_node, portName);
+        }
+
+        public void Error(string message) {
+            m_issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Error, message, m_node));
+        }
+
+        public void Warning(string message) {
+            m_issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Warning, message, m_node));
+        }
+
+        public void ValidateTargetPointKey(string portName, string label) {
+            TargetPointKey key = GetInputValue<TargetPointKey>(portName);
+            if (key == null)
+                return;
+
+            if (!TargetPointKeySceneLookup.Contains(key))
+                Warning($"{label} uses TargetPointKey '{key.name}', but no TargetPoint in the current scene/provider uses that key.");
+        }
+    }
+
+    public interface IGraphValueNodeValidator {
+        void Validate(GraphValueNodeValidationContext context);
+    }
+
     public static class BossGraphValidator {
-        public static List<BossGraphValidationIssue> Validate(IEnumerable<BossGraphNode> nodes) {
-            List<BossGraphNode> graphNodes = nodes.ToList();
+        public static List<BossGraphValidationIssue> Validate(IEnumerable<INode> nodes) {
+            List<INode> allNodes = nodes.ToList();
+            List<BossGraphNode> graphNodes = allNodes.OfType<BossGraphNode>().ToList();
             List<BossGraphValidationIssue> issues = new();
 
             if (graphNodes.Count == 0) {
@@ -72,13 +108,43 @@ namespace TitanTool.Editor {
                 return issues;
             }
 
-            ValidateNodeIdentity(graphNodes, issues);
             ValidateStartNode(graphNodes, issues);
-            ValidateConnectivity(graphNodes, issues);
-            ValidateCycles(graphNodes, issues);
-            ValidateNodeRules(graphNodes, issues);
+            HashSet<BossGraphNode> executableNodes = GetExecutableNodes(graphNodes);
+            if (executableNodes.Count == 0)
+                return issues;
+
+            ValidateNodeIdentity(executableNodes.ToList(), issues);
+            ValidateExecutionOutputConnections(executableNodes.ToList(), issues);
+            ValidateConnectivity(graphNodes, executableNodes, issues);
+            ValidateCycles(executableNodes.ToList(), issues);
+            ValidateNodeRules(executableNodes.ToList(), issues);
+            ValidateValueNodeRules(allNodes, issues);
 
             return issues;
+        }
+
+        public static HashSet<BossGraphNode> GetExecutableNodes(IEnumerable<BossGraphNode> nodes) {
+            List<BossGraphNode> graphNodes = nodes.ToList();
+            BossGraphNode startNode = graphNodes.FirstOrDefault(n => NodeTypeRegistry.GetRuntime(n.GetType()) == typeof(RuntimeStartNode));
+            if (startNode == null)
+                return new HashSet<BossGraphNode>();
+
+            HashSet<BossGraphNode> reachable = new();
+            Stack<BossGraphNode> stack = new();
+            stack.Push(startNode);
+
+            while (stack.Count > 0) {
+                BossGraphNode node = stack.Pop();
+                if (!reachable.Add(node))
+                    continue;
+
+                foreach (BossGraphNode child in GetConnectedChildren(node)) {
+                    if (child != null)
+                        stack.Push(child);
+                }
+            }
+
+            return reachable;
         }
 
         public static IEnumerable<BossGraphNode> GetConnectedChildren(BossGraphNode node) {
@@ -136,16 +202,38 @@ namespace TitanTool.Editor {
             }
         }
 
-        private static void ValidateConnectivity(List<BossGraphNode> graphNodes, List<BossGraphValidationIssue> issues) {
-            HashSet<BossGraphNode> connectedChildren = graphNodes
-                .SelectMany(GetConnectedChildren)
-                .ToHashSet();
-
+        private static void ValidateConnectivity(List<BossGraphNode> graphNodes, HashSet<BossGraphNode> executableNodes, List<BossGraphValidationIssue> issues) {
             foreach (BossGraphNode node in graphNodes.Where(n => NodeTypeRegistry.GetRuntime(n.GetType()) != typeof(RuntimeStartNode))) {
-                if (!connectedChildren.Contains(node)) {
-                    issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Warning, $"{node.GetType().Name} is unreachable from any parent node.", node));
+                if (!executableNodes.Contains(node)) {
+                    issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Warning, $"{node.GetType().Name} is not connected to Start and will be ignored at runtime.", node));
                 }
             }
+        }
+
+        private static void ValidateExecutionOutputConnections(List<BossGraphNode> graphNodes, List<BossGraphValidationIssue> issues) {
+            foreach (BossGraphNode node in graphNodes) {
+                INode iNode = node;
+                for (int i = 0; i < iNode.outputPortCount; i++) {
+                    IPort port = iNode.GetOutputPort(i);
+                    if (port == null || !IsExecutionOutputPortName(port.name))
+                        continue;
+
+                    List<IPort> connected = new();
+                    port.GetConnectedPorts(connected);
+                    if (connected.Count > 1) {
+                        issues.Add(new BossGraphValidationIssue(
+                            BossGraphValidationSeverity.Error,
+                            $"{node.GetType().Name} output {port.name} can only connect to one child. Use another output port for another child.",
+                            node));
+                    }
+                }
+            }
+        }
+
+        private static bool IsExecutionOutputPortName(string portName) {
+            return portName != null &&
+                   portName.StartsWith("Out", StringComparison.Ordinal) &&
+                   int.TryParse(portName["Out".Length..], out _);
         }
 
         private static void ValidateCycles(List<BossGraphNode> graphNodes, List<BossGraphValidationIssue> issues) {
@@ -181,6 +269,13 @@ namespace TitanTool.Editor {
                 if (node is IGraphNodeValidator validator) {
                     validator.Validate(new BossGraphNodeValidationContext(node, issues));
                 }
+            }
+        }
+
+        private static void ValidateValueNodeRules(List<INode> nodes, List<BossGraphValidationIssue> issues) {
+            foreach (INode node in nodes) {
+                if (node is IGraphValueNodeValidator validator)
+                    validator.Validate(new GraphValueNodeValidationContext(node, issues));
             }
         }
     }

@@ -25,6 +25,7 @@ namespace TitanTool.Editor {
         [SerializeField] private int m_lastNodeCount = -1;
         [SerializeField] private int m_lastWireCount = -1;
         [NonSerialized] private bool m_ensuringStartNode;
+        [NonSerialized] private bool m_enforcingWireRules;
         public string assetPath => m_assetPath;
         public void SetAssetPath(string path) => m_assetPath = path;
 
@@ -52,6 +53,7 @@ namespace TitanTool.Editor {
 
             PlaySoundForGraphDelta();
             EnsureStartNode();
+            EnforceSingleExecutionWirePerOutput(logger);
             BossGraphRuntimeGuidUtility.EnsureUniqueRuntimeGuids(GetNodes().OfType<BossGraphNode>());
             CheckGraphErrors(logger);
 
@@ -61,11 +63,12 @@ namespace TitanTool.Editor {
         }
 
         void CheckGraphErrors(GraphLogger logger) {
-            foreach (BossGraphValidationIssue issue in BossGraphValidator.Validate(GetNodes().OfType<BossGraphNode>())) {
+            foreach (BossGraphValidationIssue issue in BossGraphValidator.Validate(GetNodes().OfType<INode>())) {
+                object logTarget = issue.node ?? this;
                 if (issue.severity == BossGraphValidationSeverity.Error) {
-                    logger.LogError(issue.message, issue.node != null ? issue.node : this);
+                    logger.LogError(issue.message, logTarget);
                 } else {
-                    logger.LogWarning(issue.message, issue.node != null ? issue.node : this);
+                    logger.LogWarning(issue.message, logTarget);
                 }
             }
         }
@@ -116,6 +119,124 @@ namespace TitanTool.Editor {
             }
 
             return count;
+        }
+
+        private bool EnforceSingleExecutionWirePerOutput(GraphLogger logger) {
+            if (m_enforcingWireRules)
+                return false;
+
+            m_enforcingWireRules = true;
+            try {
+                object graphModel = BossGraphReflection.graphImplementationField?.GetValue(this);
+                if (graphModel == null)
+                    return false;
+
+                List<object> duplicateWires = GetDuplicateExecutionOutputWires(graphModel);
+                if (duplicateWires.Count == 0)
+                    return false;
+
+                if (!DeleteGraphElements(graphModel, duplicateWires))
+                    return false;
+
+                logger.LogWarning("An execution output port can only connect to one node. Extra edge removed.", this);
+                m_lastWireCount = CountWireModels();
+                return true;
+            }
+            finally {
+                m_enforcingWireRules = false;
+            }
+        }
+
+        private static List<object> GetDuplicateExecutionOutputWires(object graphModel) {
+            object rawWireModels = graphModel.GetType()
+                .GetProperty("WireModels", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                ?.GetValue(graphModel);
+
+            Dictionary<string, object> firstWireByOutputPort = new();
+            List<object> duplicateWires = new();
+
+            if (rawWireModels is not IEnumerable wireModels)
+                return duplicateWires;
+
+            foreach (object wireModel in wireModels) {
+                string outputPortKey = GetExecutionOutputPortKey(wireModel);
+                if (string.IsNullOrEmpty(outputPortKey))
+                    continue;
+
+                if (!firstWireByOutputPort.ContainsKey(outputPortKey)) {
+                    firstWireByOutputPort[outputPortKey] = wireModel;
+                    continue;
+                }
+
+                duplicateWires.Add(wireModel);
+            }
+
+            return duplicateWires;
+        }
+
+        private static string GetExecutionOutputPortKey(object wireModel) {
+            object fromPort = GetProperty(wireModel, "FromPort") ?? GetProperty(wireModel, "FromPortReference");
+            string portName = GetPortName(fromPort);
+            if (!IsExecutionOutputPortName(portName))
+                return null;
+
+            object fromNodeGuid = GetProperty(wireModel, "FromNodeGuid") ?? GetPortNodeGuid(fromPort);
+            return fromNodeGuid == null ? null : $"{fromNodeGuid}:{portName}";
+        }
+
+        private static string GetPortName(object port) {
+            return GetProperty(port, "UniqueName") as string ??
+                   GetProperty(port, "UniqueId") as string ??
+                   GetProperty(port, "Name") as string ??
+                   GetProperty(port, "name") as string;
+        }
+
+        private static object GetPortNodeGuid(object port) {
+            object nodeModel = GetProperty(port, "NodeModel") ?? GetProperty(port, "Node");
+            return GetProperty(nodeModel, "Guid");
+        }
+
+        private static bool IsExecutionOutputPortName(string portName) {
+            return portName != null &&
+                   portName.StartsWith("Out", StringComparison.Ordinal) &&
+                   int.TryParse(portName["Out".Length..], out _);
+        }
+
+        private static bool DeleteGraphElements(object graphModel, IReadOnlyList<object> elements) {
+            if (elements == null || elements.Count == 0)
+                return false;
+
+            Type graphElementModelType = FindType("Unity.GraphToolkit.Editor.GraphElementModel");
+            MethodInfo deleteElements = graphModel.GetType().GetMethod("DeleteElements", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (graphElementModelType == null || deleteElements == null)
+                return false;
+
+            Array array = Array.CreateInstance(graphElementModelType, elements.Count);
+            for (int i = 0; i < elements.Count; i++) {
+                if (!graphElementModelType.IsInstanceOfType(elements[i]))
+                    return false;
+
+                array.SetValue(elements[i], i);
+            }
+
+            try {
+                deleteElements.Invoke(graphModel, new object[] { array });
+                return true;
+            }
+            catch (TargetInvocationException exception) {
+                Debug.LogException(exception.InnerException ?? exception);
+                return false;
+            }
+            catch (Exception exception) {
+                Debug.LogException(exception);
+                return false;
+            }
+        }
+
+        private static object GetProperty(object target, string propertyName) {
+            return target?.GetType()
+                .GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                ?.GetValue(target);
         }
 
         private void EnsureStartNodeDelayed() {

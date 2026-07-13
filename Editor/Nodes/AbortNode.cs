@@ -6,7 +6,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.AbortNode), "Abort", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Action, "Cancels currently running actions and clears their runtime state.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.AbortNode), "Abort", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Action, "Stops currently running child actions and clears their stored runtime state. Use it to interrupt movement, waits, or long-running branches.")]
     public class AbortNode : BossGraphNode, IRuntimeNodeCompiler {
         protected override bool hasInput => true;
 

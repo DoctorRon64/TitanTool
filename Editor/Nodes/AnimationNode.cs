@@ -7,7 +7,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.AnimationNode), "Control Animation", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Action, "Triggers parameters or plays animation clips on the boss animator.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.AnimationNode), "Control Animation", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Action, "Controls the boss Animator by setting parameters or playing a clip. Use it when a graph branch should trigger a visual state.")]
     public class AnimationNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_PARAMETER_NAME = "ParameterName";
         private const string IN_PORT_STATE_NAME = "StateName";

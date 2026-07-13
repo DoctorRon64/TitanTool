@@ -21,7 +21,8 @@ namespace TitanTool.Editor {
             string menuPath = null,
             BossGraphNodeCategory category = BossGraphNodeCategory.Utility,
             string icon = null,
-            string tooltip = null
+            string tooltip = null,
+            string searchKeywords = null
         ) {
             if (runtimeType == null)
                 throw new ArgumentNullException(nameof(runtimeType));
@@ -35,6 +36,7 @@ namespace TitanTool.Editor {
             Category = category;
             Icon = string.IsNullOrWhiteSpace(icon) ? BossGraphNodeIcons.GetDefaultIcon(category) : icon;
             Tooltip = string.IsNullOrWhiteSpace(tooltip) ? DisplayName : tooltip;
+            SearchKeywords = searchKeywords ?? string.Empty;
         }
 
         public Type RuntimeType { get; }
@@ -43,6 +45,7 @@ namespace TitanTool.Editor {
         public BossGraphNodeCategory Category { get; }
         public string Icon { get; }
         public string Tooltip { get; }
+        public string SearchKeywords { get; }
 
         public Type runtimeType => RuntimeType;
     }

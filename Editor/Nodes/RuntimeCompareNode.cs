@@ -6,8 +6,8 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.BlackboardCompareNode), "Check Blackboard Number", "Condition/Blackboard/", BossGraphNodeCategory.Condition, tooltip: "Passes when a blackboard number matches the selected comparison.")]
-    public class BlackboardCompareNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.RuntimeCompareNode), "Runtime Compare", "Condition/Runtime/", BossGraphNodeCategory.Condition, tooltip: "Checks a numeric runtime variable and succeeds only when the selected comparison is true.", searchKeywords: "blackboard variable counter condition compare less greater equal number")]
+    public class RuntimeCompareNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_KEY_NAME = "KeyName";
         private const string IN_PORT_INT_THRESHOLD = "IntThreshold";
         private const string IN_PORT_FLOAT_THRESHOLD = "FloatThreshold";
@@ -19,7 +19,7 @@ namespace TitanTool.Editor.Nodes {
 
         public override void OnEnable() {
             base.OnEnable();
-            InitializeNode(typeof(TitanTool.Runtime.Nodes.Custom.BlackboardCompareNode));
+            InitializeNode(typeof(TitanTool.Runtime.Nodes.Custom.RuntimeCompareNode));
         }
 
         protected override void OnDefineOptions(IOptionDefinitionContext context) {
@@ -56,7 +56,7 @@ namespace TitanTool.Editor.Nodes {
         }
 
         public void Compile(RuntimeNode runtimeNode) {
-            if (runtimeNode is not TitanTool.Runtime.Nodes.Custom.BlackboardCompareNode compareRuntime)
+            if (runtimeNode is not TitanTool.Runtime.Nodes.Custom.RuntimeCompareNode compareRuntime)
                 return;
 
             compareRuntime.SetKeyName(GraphNodePortUtility.GetInputValue<string>(this, IN_PORT_KEY_NAME));

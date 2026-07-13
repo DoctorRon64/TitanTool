@@ -7,7 +7,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.PhaseNode), "Health Phase", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Runs its child only while boss health is inside this percent range.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.PhaseNode), "Health Phase", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Allows its child to run only while the boss health percentage is inside the configured range.")]
     public class PhaseNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_MIN_HEALTH_PERCENT = "MinHealthPercent";
         private const string IN_PORT_MAX_HEALTH_PERCENT = "MaxHealthPercent";

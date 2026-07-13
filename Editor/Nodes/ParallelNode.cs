@@ -7,7 +7,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.ParallelNode), "Run In Parallel", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs child branches at the same time. Direct Sequence children advance in lockstep.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.ParallelNode), "Run In Parallel", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Ticks every connected child branch in the same graph update. Use it when actions like moving and shooting must happen together.")]
     public class ParallelNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";
         private const string OPTION_SUCCESS_RULE = "SuccessRule";
@@ -17,6 +17,7 @@ namespace TitanTool.Editor.Nodes {
         protected override bool hasInput => true;
         protected override bool hasOutput => true;
         protected override string behaviorBadge => "PAR";
+        public override int minimumChildCount => 2;
 
         public override void OnEnable() {
             base.OnEnable();
@@ -56,14 +57,11 @@ namespace TitanTool.Editor.Nodes {
             int connectedChildren = BossGraphValidator.GetConnectedChildren(this).Count();
             int childCount = GetChildCount();
 
-            if (connectedChildren == 0) {
-                context.Error("Parallel must have at least one connected child.");
+            if (connectedChildren < minimumChildCount) {
+                context.Error("Parallel must have at least two connected children.");
             } else if (connectedChildren < childCount) {
                 context.Warning($"Parallel has {childCount} child slots but only {connectedChildren} connected.");
             }
-
-            if (connectedChildren == 1)
-                context.Warning("Parallel has only one connected child, so it behaves like a direct connection.");
 
             if (GetSuccessRule() == ParallelSuccessRule.AnyChild &&
                 GetFailureRule() == ParallelFailureRule.AnyChild) {
@@ -73,7 +71,7 @@ namespace TitanTool.Editor.Nodes {
 
         private int GetChildCount() {
             if (GetNodeOptionByName(OPTION_CHILD_COUNT)?.TryGetValue(out int childCount) == true)
-                return Math.Max(1, childCount);
+                return Math.Max(minimumChildCount, childCount);
 
             return 2;
         }

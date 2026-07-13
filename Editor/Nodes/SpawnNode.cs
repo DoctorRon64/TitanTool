@@ -9,7 +9,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.SpawnNode), "Spawn Object", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Spawn, "Instantiates a prefab at a fixed position, target point, or boss-relative source.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.SpawnNode), "Spawn Object", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Spawn, "Creates a prefab at the boss, the player, a TargetPointKey, or a fixed world position.")]
     public class SpawnNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         public const string IN_PORT_PREFAB = "InPrefabPort";
         public const string IN_PORT_POSITION = "InPostionPOrt";

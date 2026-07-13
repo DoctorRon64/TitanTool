@@ -7,7 +7,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RunOnceNode), "Run Once", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Runs its child once, then returns the configured result on later visits.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RunOnceNode), "Run Once", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Runs its child one time. After that, later visits immediately return the configured status.")]
     public class RunOnceNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string OPTION_COMPLETED_STATUS = "CompletedStatus";
 

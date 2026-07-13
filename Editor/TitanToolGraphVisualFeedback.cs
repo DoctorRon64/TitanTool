@@ -40,7 +40,7 @@ namespace TitanTool.Editor {
                     continue;
 
                 RuntimeViewState runtimeState = ResolveRuntimeState(graph);
-                ApplyVisuals(graphView, runtimeState);
+                ApplyVisuals(graphView, graph, runtimeState);
             }
         }
 
@@ -84,11 +84,15 @@ namespace TitanTool.Editor {
             return new RuntimeViewState(runtimeGraph, director.context);
         }
 
-        private static void ApplyVisuals(VisualElement graphView, RuntimeViewState runtimeState) {
+        private static void ApplyVisuals(VisualElement graphView, BossGraph graph, RuntimeViewState runtimeState) {
+            HashSet<BossGraphNode> executableNodes = graph != null
+                ? BossGraphValidator.GetExecutableNodes(graph.GetNodes().OfType<BossGraphNode>())
+                : new HashSet<BossGraphNode>();
+
             foreach (VisualElement element in Traverse(graphView)) {
                 BossGraphNode graphNode = GetGraphNodeFromView(element);
                 if (graphNode != null) {
-                    ApplyNodeColor(element, graphNode, runtimeState);
+                    ApplyNodeColor(element, graphNode, executableNodes.Contains(graphNode), runtimeState);
                     continue;
                 }
 
@@ -194,11 +198,12 @@ namespace TitanTool.Editor {
                 visualElement.MarkDirtyRepaint();
         }
 
-        private static void ApplyNodeColor(VisualElement nodeView, BossGraphNode graphNode, RuntimeViewState runtimeState) {
+        private static void ApplyNodeColor(VisualElement nodeView, BossGraphNode graphNode, bool isExecutable, RuntimeViewState runtimeState) {
             Color baseColor = TryGetUserNodeColor(nodeView, out Color userColor)
                 ? userColor
                 : graphNode.categoryColor;
 
+            nodeView.style.opacity = 1f;
             EnsureCategoryStrip(nodeView).style.backgroundColor = baseColor;
             EnsureCategoryGlow(nodeView).style.backgroundColor = new Color(baseColor.r, baseColor.g, baseColor.b, 0.18f);
             SetIconBadge(nodeView, GetIconBadgeText(graphNode), baseColor, graphNode.tooltip);
@@ -216,6 +221,11 @@ namespace TitanTool.Editor {
             nodeView.style.borderBottomLeftRadius = 7f;
             nodeView.style.borderBottomRightRadius = 7f;
 
+            if (!isExecutable) {
+                ApplyGhostNodeVisual(nodeView);
+                return;
+            }
+
             if (TryGetRuntimeStatus(graphNode, runtimeState, out NodeStatus status, out bool visitedThisTick)) {
                 Color statusColor = GetStatusColor(status);
                 ApplyBorder(nodeView, statusColor, visitedThisTick ? 3f : 1.5f);
@@ -225,6 +235,16 @@ namespace TitanTool.Editor {
 
             ApplyBorder(nodeView, new Color(baseColor.r, baseColor.g, baseColor.b, 0.82f), 1.5f);
             HideStatusBadge(nodeView);
+        }
+
+        private static void ApplyGhostNodeVisual(VisualElement nodeView) {
+            Color ghostColor = new(0.42f, 0.46f, 0.52f, 0.72f);
+            nodeView.style.opacity = 0.58f;
+            nodeView.style.backgroundColor = new Color(0.10f, 0.11f, 0.13f, 0.72f);
+            EnsureCategoryStrip(nodeView).style.backgroundColor = ghostColor;
+            EnsureCategoryGlow(nodeView).style.backgroundColor = new Color(ghostColor.r, ghostColor.g, ghostColor.b, 0.10f);
+            ApplyBorder(nodeView, ghostColor, 1f);
+            SetStatusBadge(nodeView, "GHOST", ghostColor);
         }
 
         private static VisualElement EnsureCategoryStrip(VisualElement nodeView) {
@@ -445,11 +465,13 @@ namespace TitanTool.Editor {
             Button addButton = controls.Q<Button>("child-add");
             Label countLabel = controls.Q<Label>("child-count");
 
-            bool canRemove = childCount > 1 && !IsLastChildPortConnected(graphNode, childCount);
+            bool canRemove = childCount > graphNode.minimumChildCount && !IsLastChildPortConnected(graphNode, childCount);
             removeButton.SetEnabled(canRemove);
             removeButton.tooltip = canRemove
                 ? "Remove the last empty child slot."
-                : "Cannot remove because the last child slot is still connected.";
+                : childCount <= graphNode.minimumChildCount
+                    ? $"This node needs at least {graphNode.minimumChildCount} child slot(s)."
+                    : "Cannot remove because the last child slot is still connected.";
 
             countLabel.text = $"Children {childCount}";
             countLabel.tooltip = $"{childCount} child slots";
@@ -617,7 +639,7 @@ namespace TitanTool.Editor {
             if (graphNode == null || !TryGetChildCount(graphNode, out int childCount))
                 return;
 
-            int nextCount = Mathf.Max(1, childCount + delta);
+            int nextCount = Mathf.Max(graphNode.minimumChildCount, childCount + delta);
             if (nextCount == childCount)
                 return;
 
@@ -654,7 +676,7 @@ namespace TitanTool.Editor {
             if (option == null || option.dataType != typeof(int) || !option.TryGetValue(out childCount))
                 return false;
 
-            childCount = Mathf.Max(1, childCount);
+            childCount = Mathf.Max(graphNode.minimumChildCount, childCount);
             return true;
         }
 
@@ -666,7 +688,7 @@ namespace TitanTool.Editor {
             if (objectValueProperty?.CanWrite != true)
                 return false;
 
-            objectValueProperty.SetValue(embeddedValue, Mathf.Max(1, childCount));
+            objectValueProperty.SetValue(embeddedValue, Mathf.Max(graphNode.minimumChildCount, childCount));
             return true;
         }
 

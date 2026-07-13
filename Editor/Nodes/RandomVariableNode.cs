@@ -3,7 +3,7 @@ using Unity.GraphToolkit.Editor;
 using UnityEngine;
 
 namespace TitanTool.Editor.Nodes {
-    public enum RandomConstantValueType {
+    public enum RandomVariableValueType {
         Float,
         Int,
         Vector2
@@ -11,7 +11,7 @@ namespace TitanTool.Editor.Nodes {
 
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    public class RandomConstantNode : Node, IGraphValueProvider, IGraphRandomRangeProvider {
+    public class RandomVariableNode : Node, IGraphValueProvider, IGraphRandomRangeProvider {
         private const string IN_PORT_MIN = "Min";
         private const string IN_PORT_MAX = "Max";
         private const string OUT_PORT_VALUE = "Value";
@@ -19,19 +19,19 @@ namespace TitanTool.Editor.Nodes {
 
         public override void OnEnable() {
             base.OnEnable();
-            BossGraphNodeMetadataUtility.ApplyTooltip(this, "Outputs a random value between the minimum and maximum range.");
+            BossGraphNodeMetadataUtility.ApplyTooltip(this, "Random Variable: outputs a random float, int, or Vector2 between Min and Max. Connect it to compatible value ports.");
         }
 
         protected override void OnDefineOptions(IOptionDefinitionContext context) {
-            context.AddOption<RandomConstantValueType>(OPTION_VALUE_TYPE)
+            context.AddOption<RandomVariableValueType>(OPTION_VALUE_TYPE)
                 .WithDisplayName("Value Type")
-                .WithDefaultValue(RandomConstantValueType.Float)
+                .WithDefaultValue(RandomVariableValueType.Float)
                 .Delayed();
         }
 
         protected override void OnDefinePorts(IPortDefinitionContext context) {
             switch (GetValueType()) {
-                case RandomConstantValueType.Int:
+                case RandomVariableValueType.Int:
                     context.AddInputPort<int>(IN_PORT_MIN)
                         .WithDisplayName("Min Value")
                         .WithDefaultValue(0)
@@ -45,7 +45,7 @@ namespace TitanTool.Editor.Nodes {
                         .Build();
                     break;
 
-                case RandomConstantValueType.Vector2:
+                case RandomVariableValueType.Vector2:
                     context.AddInputPort<Vector2>(IN_PORT_MIN)
                         .WithDisplayName("Min Value")
                         .WithDefaultValue(Vector2.zero)
@@ -77,8 +77,8 @@ namespace TitanTool.Editor.Nodes {
 
         public bool TryGetValue<T>(out T value) {
             object randomValue = GetValueType() switch {
-                RandomConstantValueType.Int => GetRandomInt(),
-                RandomConstantValueType.Vector2 => GetRandomVector2(),
+                RandomVariableValueType.Int => GetRandomInt(),
+                RandomVariableValueType.Vector2 => GetRandomVector2(),
                 _ => GetRandomFloat()
             };
 
@@ -93,17 +93,17 @@ namespace TitanTool.Editor.Nodes {
 
         public bool TryGetRange<T>(out GraphRandomRange<T> range) {
             switch (GetValueType()) {
-                case RandomConstantValueType.Int when typeof(T) == typeof(int):
+                case RandomVariableValueType.Int when typeof(T) == typeof(int):
                     GetIntRange(out int intMin, out int intMax);
                     range = (GraphRandomRange<T>)(object)new GraphRandomRange<int>(intMin, intMax);
                     return true;
 
-                case RandomConstantValueType.Vector2 when typeof(T) == typeof(Vector2):
+                case RandomVariableValueType.Vector2 when typeof(T) == typeof(Vector2):
                     GetVectorRange(out Vector2 vectorMin, out Vector2 vectorMax);
                     range = (GraphRandomRange<T>)(object)new GraphRandomRange<Vector2>(vectorMin, vectorMax);
                     return true;
 
-                case RandomConstantValueType.Float when typeof(T) == typeof(float):
+                case RandomVariableValueType.Float when typeof(T) == typeof(float):
                     GetFloatRange(out float floatMin, out float floatMax);
                     range = (GraphRandomRange<T>)(object)new GraphRandomRange<float>(floatMin, floatMax);
                     return true;
@@ -150,11 +150,11 @@ namespace TitanTool.Editor.Nodes {
             max = GraphNodePortUtility.GetInputValue<Vector2>(this, IN_PORT_MAX);
         }
 
-        private RandomConstantValueType GetValueType() {
-            if (GetNodeOptionByName(OPTION_VALUE_TYPE)?.TryGetValue(out RandomConstantValueType valueType) == true)
+        private RandomVariableValueType GetValueType() {
+            if (GetNodeOptionByName(OPTION_VALUE_TYPE)?.TryGetValue(out RandomVariableValueType valueType) == true)
                 return valueType;
 
-            return RandomConstantValueType.Float;
+            return RandomVariableValueType.Float;
         }
     }
 }

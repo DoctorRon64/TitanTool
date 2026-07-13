@@ -23,7 +23,7 @@ namespace TitanTool.Editor {
 
             List<BossGraphNode> graphNodes = graph.GetNodes().OfType<BossGraphNode>().ToList();
             BossGraphRuntimeGuidUtility.EnsureUniqueRuntimeGuids(graphNodes);
-            issues.AddRange(BossGraphValidator.Validate(graphNodes));
+            issues.AddRange(BossGraphValidator.Validate(graph.GetNodes().OfType<INode>()));
 
             List<BossGraphValidationIssue> errors = issues
                 .Where(issue => issue.severity == BossGraphValidationSeverity.Error)
@@ -34,9 +34,10 @@ namespace TitanTool.Editor {
                 return new BossGraphCompileResult(runtime, runtimeNodes, issues);
             }
 
+            List<BossGraphNode> executableGraphNodes = BossGraphValidator.GetExecutableNodes(graphNodes).ToList();
             Dictionary<string, RuntimeNode> runtimeByGuid = new();
 
-            foreach (BossGraphNode graphNode in graphNodes) {
+            foreach (BossGraphNode graphNode in executableGraphNodes) {
                 RuntimeNode runtimeNode = CreateRuntimeNode(graphNode, issues);
                 if (runtimeNode == null)
                     continue;
@@ -48,7 +49,7 @@ namespace TitanTool.Editor {
                 runtimeByGuid[graphNode.runtimeGuid] = runtimeNode;
             }
 
-            foreach (BossGraphNode graphNode in graphNodes) {
+            foreach (BossGraphNode graphNode in executableGraphNodes) {
                 if (!runtimeByGuid.TryGetValue(graphNode.runtimeGuid, out RuntimeNode parent))
                     continue;
 
