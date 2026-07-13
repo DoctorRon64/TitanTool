@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using PackageManagerInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace TitanTool.Editor {
     public sealed class TitanToolDocumentationWindow : EditorWindow {
-        private const string DocumentationFileName = "TitanTool Documentation.docx";
-
         private Vector2 m_scroll;
         private string m_filter = string.Empty;
         private BossGraphNodeCategory? m_categoryFilter;
@@ -20,6 +16,32 @@ namespace TitanTool.Editor {
         private GUIStyle m_badgeStyle;
         private GUIStyle m_wrapStyle;
         private Texture2D m_cardTexture;
+
+        private static readonly string[] OverviewLines = {
+            "TitanTool is a Unity editor tool for designing boss behaviour as a visual graph.",
+            "Graphs are validated in the editor, compiled into BossGraphAsset runtime data, and executed in Play Mode by a BossDirector.",
+            "Use it to author boss phases, movement, timing, shooting, spawning, throwing, animation, conditions, and shared blackboard values without hard-coding every sequence."
+        };
+
+        private static readonly string[] SetupLines = {
+            "Add a BossDirector to the boss object and assign the graph plus the required scene references such as animator, sprite renderer, player transform, rigidbody, health, pools, and target points.",
+            "Use Scene Points collects TargetPoint objects from the scene. Create Missing Target Point Keys creates reusable TargetPointKey assets under Data/TitanTool/TargetPoints.",
+            "Make New Graph creates a .titan graph under Data/TitanTool. Open Graph opens the visual editor for that graph."
+        };
+
+        private static readonly string[] ExecutionLines = {
+            "Every graph owns exactly one Start node. It is created automatically, cannot be added manually, and cannot be deleted.",
+            "Execution flows through wires from parent nodes to child nodes. Each tick, a node returns Success, Failure, or Running.",
+            "Composite nodes shape the branch: Run In Order stops at the first running or failed child, Try Children stops when a child succeeds, random selectors choose a branch, and Run In Parallel ticks multiple branches.",
+            "Decorator and condition nodes decide whether a child is allowed to run. Action nodes create the visible gameplay result.",
+            "During Play Mode the graph highlights live execution: active nodes show status badges, followed execution wires become brighter, and the Runtime Debugger shows visited nodes, timings, and blackboard values."
+        };
+
+        private static readonly string[] BlackboardLines = {
+            "The blackboard is shared runtime memory for graph values such as boss references, health values, target data, counters, and temporary decisions.",
+            "Change Blackboard Number writes or modifies numeric values. Check Blackboard Number reads those values to decide whether a branch can continue.",
+            "Random Constant can feed random int, float, or Vector2 values into compatible node ports."
+        };
 
         [MenuItem("Window/TitanTool/Documentation")]
         private static void Open() {
@@ -42,6 +64,7 @@ namespace TitanTool.Editor {
 
             m_scroll = EditorGUILayout.BeginScrollView(m_scroll);
             DrawDocumentationCard();
+            DrawBuiltInDocumentation();
             DrawNodeSummary(registrations.Count, NodeTypeRegistry.GetRegistrations().Count);
 
             foreach (IGrouping<BossGraphNodeCategory, GraphNodeRegistration> group in registrations.GroupBy(registration => registration.category)) {
@@ -54,6 +77,8 @@ namespace TitanTool.Editor {
 
             if (registrations.Count == 0)
                 DrawEmptyState();
+
+            DrawValueNodeReference();
 
             EditorGUILayout.EndScrollView();
         }
@@ -114,23 +139,36 @@ namespace TitanTool.Editor {
         private void DrawDocumentationCard() {
             using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
                 EditorGUILayout.LabelField("TitanTool Documentation", m_headerStyle);
-                EditorGUILayout.LabelField("Open the package documentation or browse the node reference below.", m_subtleStyle);
+                EditorGUILayout.LabelField("Package overview, setup notes, execution flow, and current node reference.", m_subtleStyle);
+            }
+        }
 
-                using (new EditorGUILayout.HorizontalScope()) {
-                    if (GUILayout.Button("Open Documentation", GUILayout.Width(150)))
-                        OpenDocumentationFile();
+        private void DrawBuiltInDocumentation() {
+            DrawTextSection("Overview", OverviewLines);
+            DrawTextSection("Setup", SetupLines);
+            DrawTextSection("Execution Flow", ExecutionLines);
+            DrawTextSection("Blackboard And Values", BlackboardLines);
+        }
 
-                    if (GUILayout.Button("Open Folder", GUILayout.Width(100)))
-                        OpenDocumentationFolder();
+        private void DrawTextSection(string title, IReadOnlyList<string> lines) {
+            using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
+                EditorGUILayout.LabelField(title, m_headerStyle);
 
-                    GUILayout.FlexibleSpace();
-                }
+                foreach (string line in lines)
+                    DrawBullet(line);
+            }
+        }
+
+        private void DrawBullet(string text) {
+            using (new EditorGUILayout.HorizontalScope()) {
+                EditorGUILayout.LabelField("-", m_subtleStyle, GUILayout.Width(14));
+                EditorGUILayout.LabelField(text, m_wrapStyle);
             }
         }
 
         private void DrawNodeSummary(int visibleCount, int totalCount) {
             using (new EditorGUILayout.HorizontalScope()) {
-                EditorGUILayout.LabelField("Node Reference", m_headerStyle);
+                EditorGUILayout.LabelField("Addable Node Reference", m_headerStyle);
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.LabelField($"{visibleCount} of {totalCount} nodes", m_subtleStyle, GUILayout.Width(110));
             }
@@ -147,14 +185,33 @@ namespace TitanTool.Editor {
                 EditorGUILayout.LabelField(registration.tooltip, m_wrapStyle);
 
                 using (new EditorGUILayout.HorizontalScope()) {
-                    EditorGUILayout.LabelField("Menu", m_subtleStyle, GUILayout.Width(58));
-                    EditorGUILayout.LabelField(CombineMenuPath(registration.menuPath, registration.displayName), m_subtleStyle);
+                    EditorGUILayout.LabelField("Add Menu", m_subtleStyle, GUILayout.Width(68));
+                    EditorGUILayout.LabelField(FormatMenuPath(registration.menuPath, registration.displayName), m_subtleStyle);
+                }
+            }
+        }
+
+        private void DrawValueNodeReference() {
+            if (m_categoryFilter.HasValue && m_categoryFilter.Value != BossGraphNodeCategory.Utility)
+                return;
+
+            if (!string.IsNullOrWhiteSpace(m_filter) &&
+                !Contains("Random Constant", m_filter) &&
+                !Contains("random value int float vector2", m_filter))
+                return;
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Value Nodes", m_headerStyle);
+
+            using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
+                using (new EditorGUILayout.HorizontalScope()) {
+                    EditorGUILayout.LabelField("Random Constant", m_nodeTitleStyle);
+                    GUILayout.FlexibleSpace();
+                    DrawBadge(BossGraphNodeCategory.Utility.ToString());
                 }
 
-                using (new EditorGUILayout.HorizontalScope()) {
-                    EditorGUILayout.LabelField("Runtime", m_subtleStyle, GUILayout.Width(58));
-                    EditorGUILayout.LabelField(registration.runtimeType.Name, m_subtleStyle);
-                }
+                EditorGUILayout.LabelField("Outputs a random float, int, or Vector2 between a minimum and maximum range for compatible node ports.", m_wrapStyle);
+                EditorGUILayout.LabelField("Add Menu: create it from the GraphToolkit node search as Random Constant.", m_subtleStyle);
             }
         }
 
@@ -172,41 +229,11 @@ namespace TitanTool.Editor {
             }
         }
 
-        private static string CombineMenuPath(string menuPath, string displayName) {
+        private static string FormatMenuPath(string menuPath, string displayName) {
             if (string.IsNullOrWhiteSpace(menuPath))
                 return displayName;
 
-            return menuPath.TrimEnd('/') + "/" + displayName;
-        }
-
-        private static void OpenDocumentationFile() {
-            string path = GetDocumentationFilePath();
-            if (File.Exists(path)) {
-                EditorUtility.OpenWithDefaultApp(path);
-                return;
-            }
-
-            Debug.LogWarning($"TitanTool documentation file not found: {path}");
-        }
-
-        private static void OpenDocumentationFolder() {
-            string path = GetDocumentationFolderPath();
-            if (Directory.Exists(path)) {
-                EditorUtility.RevealInFinder(path);
-                return;
-            }
-
-            Debug.LogWarning($"TitanTool documentation folder not found: {path}");
-        }
-
-        private static string GetDocumentationFilePath() {
-            return Path.Combine(GetDocumentationFolderPath(), DocumentationFileName);
-        }
-
-        private static string GetDocumentationFolderPath() {
-            PackageManagerInfo package = PackageManagerInfo.FindForAssembly(typeof(TitanToolDocumentationWindow).Assembly);
-            string packagePath = package != null ? package.resolvedPath : Application.dataPath;
-            return Path.Combine(packagePath, "Documentation~");
+            return menuPath.TrimEnd('/').Replace("/", " / ") + " / " + displayName;
         }
 
         private void EnsureStyles() {
