@@ -3,6 +3,7 @@ using TitanTool.Runtime;
 using TitanTool.Runtime.Nodes.Custom;
 using UnityEngine;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
+using Unity.GraphToolkit.Editor;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
@@ -73,6 +74,8 @@ namespace TitanTool.Editor.Nodes {
             if (GetTargetSource() == SpawnPositionSource.TargetPoint &&
                 context.GetInputValue<TargetPointKey>(IN_PORT_TARGET_POINT) == null) {
                 context.Error("Teleport To target point key is required.");
+            } else if (GetTargetSource() == SpawnPositionSource.TargetPoint) {
+                context.ValidateTargetPointKey(IN_PORT_TARGET_POINT, "Teleport To target");
             }
         }
 

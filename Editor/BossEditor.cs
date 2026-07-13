@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TitanTool.Runtime;
@@ -26,7 +25,7 @@ namespace TitanTool.Editor {
             DrawGraphCard(bossDirector);
             DrawRuntimeCard(bossDirector);
             DrawReferencesCard();
-            DrawSpawnPointsCard();
+            DrawTargetProviderCard(bossDirector);
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -101,66 +100,54 @@ namespace TitanTool.Editor {
             });
         }
 
-        private void DrawSpawnPointsCard() {
-            SerializedProperty spawnPoints = serializedObject.FindProperty("m_spawnPoints");
-            if (spawnPoints == null)
-                return;
+        private void DrawTargetProviderCard(BossDirector bossDirector) {
+            DrawCard("Scene Locations", () => {
+                SerializedProperty targetPoints = serializedObject.FindProperty("m_targetPoints");
+                EditorGUILayout.PropertyField(targetPoints, new GUIContent("Target Point Provider"));
 
-            DrawCard("Target Points", () => {
-                int childPointCount = ((BossDirector)target).GetComponentsInChildren<TargetPoint>(true).Count(point => point != null);
-                int scenePointCount = FindObjectsByType<TargetPoint>(FindObjectsSortMode.None).Count(point => point != null);
+                TargetPointProvider provider = targetPoints.objectReferenceValue as TargetPointProvider;
+                if (provider == null) {
+                    DrawStatusLine("No provider", "Create or assign a TargetPointProvider scene object.", MessageType.Warning);
+                }
+                else {
+                    int pointCount = provider.GetPoints().Count(point => point != null);
+                    DrawStatusLine("Provider ready", $"{provider.name} provides {pointCount} target points.", MessageType.Info);
+                }
 
                 using (new EditorGUILayout.HorizontalScope()) {
-                    DrawMetric("Manual", spawnPoints.arraySize.ToString());
-                    DrawMetric("Children", childPointCount.ToString());
-                    DrawMetric("Scene", scenePointCount.ToString());
-                }
+                    if (GUILayout.Button("Create Provider", GUILayout.Height(24)))
+                        CreateTargetPointProvider(bossDirector, targetPoints);
 
-                EditorGUILayout.PropertyField(spawnPoints, new GUIContent("Override Target Points"), true);
+                    if (GUILayout.Button("Use Scene Provider", GUILayout.Height(24)))
+                        AssignSceneProvider(targetPoints);
 
-                using (new EditorGUILayout.HorizontalScope()) {
-                    if (GUILayout.Button("Setup Child Points", GUILayout.Height(24))) {
-                        CollectTargetPoints(spawnPoints, ((BossDirector)target).GetComponentsInChildren<TargetPoint>(true), true);
-                    }
-
-                    if (GUILayout.Button("Use Scene Points", GUILayout.Height(24))) {
-                        CollectTargetPoints(spawnPoints, FindObjectsByType<TargetPoint>(FindObjectsSortMode.None), true);
+                    using (new EditorGUI.DisabledScope(provider == null)) {
+                        if (GUILayout.Button("Select", GUILayout.Height(24)))
+                            Selection.activeObject = provider;
                     }
                 }
-
-                if (spawnPoints.arraySize <= 0) {
-                    DrawStatusLine("Automatic lookup", "Empty override list: runtime will use all TargetPoint components in the scene.", MessageType.Info);
-                    return;
-                }
-
-                int missingKeyCount = CountMissingKeys(spawnPoints);
-                using (new EditorGUI.DisabledScope(missingKeyCount == 0)) {
-                    if (GUILayout.Button(missingKeyCount > 0 ? $"Create Missing Target Point Keys ({missingKeyCount})" : "Create Missing Target Point Keys", GUILayout.Height(24)))
-                        EnsureTargetPointKeys(GetSpawnPoints(spawnPoints));
-                }
-
-                DrawSpawnPointSummary(spawnPoints);
             });
         }
 
-        private void DrawSpawnPointSummary(SerializedProperty spawnPoints) {
-            HashSet<TargetPointKey> seenKeys = new();
-            bool foundDuplicate = false;
+        private void CreateTargetPointProvider(BossDirector bossDirector, SerializedProperty targetPoints) {
+            GameObject providerObject = new("Boss Target Points");
+            Undo.RegisterCreatedObjectUndo(providerObject, "Create Target Point Provider");
+            providerObject.transform.position = bossDirector.transform.position;
 
-            using (new EditorGUI.DisabledScope(true)) {
-                for (int i = 0; i < spawnPoints.arraySize; i++) {
-                    TargetPoint point = spawnPoints.GetArrayElementAtIndex(i).objectReferenceValue as TargetPoint;
-                    string keyName = point != null && point.key != null ? point.key.name : "No Key";
-                    string label = point != null ? $"{keyName} ({point.name})" : "Missing";
-                    EditorGUILayout.TextField($"Index {i}", label);
+            TargetPointProvider provider = providerObject.AddComponent<TargetPointProvider>();
+            Undo.RecordObject(bossDirector, "Assign Target Point Provider");
+            targetPoints.objectReferenceValue = provider;
+            EditorUtility.SetDirty(bossDirector);
+            Selection.activeObject = providerObject;
+        }
 
-                    if (point?.key != null && !seenKeys.Add(point.key))
-                        foundDuplicate = true;
-                }
-            }
+        private static void AssignSceneProvider(SerializedProperty targetPoints) {
+            TargetPointProvider provider = UnityEngine.Object.FindFirstObjectByType<TargetPointProvider>();
+            if (provider == null)
+                return;
 
-            if (foundDuplicate)
-                DrawStatusLine("Duplicate keys", "TargetPoint lookup will use the first point with each duplicated key.", MessageType.Warning);
+            targetPoints.objectReferenceValue = provider;
+            Selection.activeObject = provider;
         }
 
         private void DrawCard(string title, Action content) {
@@ -169,13 +156,6 @@ namespace TitanTool.Editor {
                 EditorGUILayout.LabelField(title, m_headerStyle);
                 GUILayout.Space(3);
                 content?.Invoke();
-            }
-        }
-
-        private void DrawMetric(string label, string value) {
-            using (new EditorGUILayout.VerticalScope(GUILayout.Width(82))) {
-                EditorGUILayout.LabelField(value, m_statusStyle);
-                EditorGUILayout.LabelField(label, m_subtleStyle);
             }
         }
 
@@ -194,72 +174,13 @@ namespace TitanTool.Editor {
             };
 
             using (new EditorGUILayout.HorizontalScope()) {
-                GUILayout.Label("●", m_statusStyle, GUILayout.Width(16));
+                GUILayout.Label("*", m_statusStyle, GUILayout.Width(16));
                 GUI.color = oldColor;
                 EditorGUILayout.LabelField(title, m_statusStyle, GUILayout.Width(112));
                 EditorGUILayout.LabelField(message, m_subtleStyle);
             }
 
             GUI.color = oldColor;
-        }
-
-        private void CollectTargetPoints(SerializedProperty spawnPoints, IEnumerable<TargetPoint> targetPoints, bool createMissingKeys) {
-            Undo.RecordObject(target, "Collect Spawn Points");
-
-            TargetPoint[] orderedTargetPoints = targetPoints
-                .Where(point => point != null)
-                .OrderBy(point => point.key != null ? point.key.name : point.name)
-                .ThenBy(point => point.name)
-                .ToArray();
-
-            if (createMissingKeys)
-                EnsureTargetPointKeys(orderedTargetPoints);
-
-            spawnPoints.arraySize = orderedTargetPoints.Length;
-            for (int i = 0; i < orderedTargetPoints.Length; i++)
-                spawnPoints.GetArrayElementAtIndex(i).objectReferenceValue = orderedTargetPoints[i];
-
-            serializedObject.ApplyModifiedProperties();
-            EditorUtility.SetDirty(target);
-        }
-
-        private static IEnumerable<TargetPoint> GetSpawnPoints(SerializedProperty spawnPoints) {
-            for (int i = 0; i < spawnPoints.arraySize; i++) {
-                if (spawnPoints.GetArrayElementAtIndex(i).objectReferenceValue is TargetPoint point)
-                    yield return point;
-            }
-        }
-
-        private static int CountMissingKeys(SerializedProperty spawnPoints) {
-            int count = 0;
-            for (int i = 0; i < spawnPoints.arraySize; i++) {
-                if (spawnPoints.GetArrayElementAtIndex(i).objectReferenceValue is TargetPoint point && point.key == null)
-                    count++;
-            }
-
-            return count;
-        }
-
-        private static void EnsureTargetPointKeys(IEnumerable<TargetPoint> targetPoints) {
-            BossGraph.EnsureAssetFolder();
-            string folderPath = $"{AssetPath.ASSET_PATH}/TargetPoints";
-            if (!AssetDatabase.IsValidFolder(folderPath))
-                AssetDatabase.CreateFolder(AssetPath.ASSET_PATH, "TargetPoints");
-
-            foreach (TargetPoint point in targetPoints.Where(point => point != null && point.key == null)) {
-                TargetPointKey key = ScriptableObject.CreateInstance<TargetPointKey>();
-                key.name = MakeSafeFileName(point.name);
-
-                string assetPath = AssetDatabase.GenerateUniqueAssetPath($"{folderPath}/{key.name}.asset");
-                AssetDatabase.CreateAsset(key, assetPath);
-
-                SerializedObject pointObject = new(point);
-                pointObject.FindProperty("m_key").objectReferenceValue = key;
-                pointObject.ApplyModifiedPropertiesWithoutUndo();
-                EditorUtility.SetDirty(point);
-            }
-
-            AssetDatabase.SaveAssets();
         }
 
         private static void OpenGraph(BossGraphAsset runtimeAsset) {

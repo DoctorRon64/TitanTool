@@ -2,6 +2,7 @@ using System;
 using TitanTool.Runtime.Nodes.Custom;
 using UnityEngine;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
+using Unity.GraphToolkit.Editor;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]

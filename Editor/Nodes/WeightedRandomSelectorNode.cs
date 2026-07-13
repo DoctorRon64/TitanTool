@@ -4,6 +4,7 @@ using System.Linq;
 using TitanTool.Runtime.Nodes.Base;
 using TitanTool.Runtime.Values;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
+using Unity.GraphToolkit.Editor;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]

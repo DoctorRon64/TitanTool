@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using TitanTool.Runtime.Nodes.Base;
+using Unity.GraphToolkit.Editor;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]

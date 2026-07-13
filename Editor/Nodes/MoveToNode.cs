@@ -3,6 +3,7 @@ using TitanTool.Runtime;
 using TitanTool.Runtime.Nodes.Custom;
 using UnityEngine;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
+using Unity.GraphToolkit.Editor;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
@@ -113,8 +114,12 @@ namespace TitanTool.Editor.Nodes {
                 context.Error("Move timeout cannot be negative.");
 
             SpawnPositionSource targetSource = GetTargetSource();
-            if (targetSource == SpawnPositionSource.TargetPoint && context.GetInputValue<TargetPointKey>(IN_PORT_SPAWN_POINT_KEY) == null)
-                context.Error("Move target point key is required.");
+            if (targetSource == SpawnPositionSource.TargetPoint) {
+                if (context.GetInputValue<TargetPointKey>(IN_PORT_SPAWN_POINT_KEY) == null)
+                    context.Error("Move target point key is required.");
+                else
+                    context.ValidateTargetPointKey(IN_PORT_SPAWN_POINT_KEY, "Move target");
+            }
         }
 
         private MoveToMode GetMoveMode() {

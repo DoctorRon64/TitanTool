@@ -4,6 +4,7 @@ using TitanTool.Runtime.Nodes.Custom;
 using UnityEditor;
 using UnityEngine;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
+using Unity.GraphToolkit.Editor;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
@@ -90,6 +91,8 @@ namespace TitanTool.Editor.Nodes {
             SpawnPositionSource source = GetPositionSource();
             if (source == SpawnPositionSource.TargetPoint && context.GetInputValue<TargetPointKey>(IN_PORT_SPAWN_POINT_KEY) == null) {
                 context.Error("Target Point key is required.");
+            } else if (source == SpawnPositionSource.TargetPoint) {
+                context.ValidateTargetPointKey(IN_PORT_SPAWN_POINT_KEY, "Spawn point");
             }
         }
 

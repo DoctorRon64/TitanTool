@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TitanTool.Runtime;
 using TitanTool.Runtime.Values;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
@@ -44,6 +45,16 @@ namespace TitanTool.Editor {
 
         public void Warning(string message) {
             m_issues.Add(new BossGraphValidationIssue(BossGraphValidationSeverity.Warning, message, node));
+        }
+
+        public void ValidateTargetPointKey(string portName, string label) {
+            TargetPointKey key = GetInputValue<TargetPointKey>(portName);
+            if (key == null)
+                return;
+
+            if (!TargetPointKeySceneLookup.Contains(key)) {
+                Warning($"{label} uses TargetPointKey '{key.name}', but no TargetPoint in the current scene/provider uses that key.");
+            }
         }
     }
 
@@ -171,6 +182,26 @@ namespace TitanTool.Editor {
                     validator.Validate(new BossGraphNodeValidationContext(node, issues));
                 }
             }
+        }
+    }
+
+    public static class TargetPointKeySceneLookup {
+        public static bool Contains(TargetPointKey key) {
+            if (key == null)
+                return false;
+
+            foreach (TargetPoint point in Resources.FindObjectsOfTypeAll<TargetPoint>()) {
+                if (point == null ||
+                    point.key != key ||
+                    point.gameObject == null ||
+                    !point.gameObject.scene.IsValid()) {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 

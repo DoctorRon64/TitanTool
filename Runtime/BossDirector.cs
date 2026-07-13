@@ -17,7 +17,8 @@ namespace TitanTool.Runtime {
         [SerializeField] private Transform m_player;
         [SerializeField] private Animator m_animator;
         [SerializeField] private SpriteRenderer m_spriteRenderer;
-        [SerializeField] private TargetPoint[] m_spawnPoints;
+        [SerializeField] private TargetPointProvider m_targetPoints;
+        [SerializeField, HideInInspector] private TargetPoint[] m_spawnPoints;
         [field: SerializeField] public DamagableTeam team { get; private set; }
         private Rigidbody2D m_rigidbody;
         public bool paused;
@@ -73,6 +74,9 @@ namespace TitanTool.Runtime {
 
             if (m_spriteRenderer == null) {
                 m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            }
+            if (m_targetPoints == null) {
+                m_targetPoints = FindFirstObjectByType<TargetPointProvider>();
             }
             if (m_rigidbody != null) {
                 m_rigidbody.gravityScale = 0f;
@@ -141,6 +145,15 @@ namespace TitanTool.Runtime {
         }
 
         private IEnumerable<TargetPoint> GetConfiguredSpawnPoints() {
+            if (m_targetPoints != null) {
+                foreach (TargetPoint spawnPoint in m_targetPoints.GetPoints()) {
+                    if (spawnPoint != null)
+                        yield return spawnPoint;
+                }
+
+                yield break;
+            }
+
             bool hasManualPoints = false;
             if (m_spawnPoints != null) {
                 foreach (TargetPoint spawnPoint in m_spawnPoints) {

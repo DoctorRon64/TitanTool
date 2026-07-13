@@ -4,6 +4,7 @@ using TitanTool.Runtime.Nodes.Custom;
 using UnityEngine;
 using Utility;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
+using Unity.GraphToolkit.Editor;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
@@ -143,8 +144,13 @@ namespace TitanTool.Editor.Nodes {
             string spawnPointKeyPort,
             string label
         ) {
-            if (source == SpawnPositionSource.TargetPoint && context.GetInputValue<TargetPointKey>(spawnPointKeyPort) == null)
+            if (source != SpawnPositionSource.TargetPoint)
+                return;
+
+            if (context.GetInputValue<TargetPointKey>(spawnPointKeyPort) == null)
                 context.Error($"Throw {label} target point key is required.");
+            else
+                context.ValidateTargetPointKey(spawnPointKeyPort, $"Throw {label} target");
         }
 
         private SpawnPositionSource GetSpawnSource() {

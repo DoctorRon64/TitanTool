@@ -327,8 +327,56 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c215159bbf8efa47af6952ad137e0ba, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: '::'
+--- !u!1 &930010100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 930010101}
+  - component: {fileID: 930010102}
+  m_Layer: 0
+  m_Name: Boss Target Points
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &930010101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930010100}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &930010102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930010100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 063d53aa56c64a43badd7eb72d79dacf, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: TitanTool.Runtime::TitanTool.Runtime.TargetPointProvider
+  m_points:
+  - {fileID: 461746033}
+  - {fileID: 351947090}
+  - {fileID: 470028554}
 --- !u!1001 &461746032
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2016,6 +2064,7 @@ MonoBehaviour:
   m_player: {fileID: 5608641499724338067}
   m_animator: {fileID: 4822270335520690168}
   m_spriteRenderer: {fileID: 4982557897654594191}
+  m_targetPoints: {fileID: 930010102}
   m_spawnPoints:
   - {fileID: 461746033}
   - {fileID: 351947090}

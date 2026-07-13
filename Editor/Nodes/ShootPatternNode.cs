@@ -4,6 +4,7 @@ using TitanTool.Runtime.Nodes.Custom;
 using UnityEngine;
 using Utility;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
+using Unity.GraphToolkit.Editor;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
@@ -139,8 +140,12 @@ namespace TitanTool.Editor.Nodes {
             if (context.GetInputValue<float>(IN_PORT_SPEED) <= 0f)
                 context.Error("Shoot Pattern speed must be greater than 0.");
 
-            if (GetPositionSource() == SpawnPositionSource.TargetPoint && context.GetInputValue<TargetPointKey>(IN_PORT_SPAWN_POINT_KEY) == null)
-                context.Error("Shoot Pattern target point key is required.");
+            if (GetPositionSource() == SpawnPositionSource.TargetPoint) {
+                if (context.GetInputValue<TargetPointKey>(IN_PORT_SPAWN_POINT_KEY) == null)
+                    context.Error("Shoot Pattern target point key is required.");
+                else
+                    context.ValidateTargetPointKey(IN_PORT_SPAWN_POINT_KEY, "Shoot Pattern target point");
+            }
 
             if (GetAimSource() == ShootAimSource.TargetTransform && context.GetInputValue<Transform>(IN_PORT_TARGET_TRANSFORM) == null)
                 context.Error("Shoot Pattern target transform is required when Aim Target is Target Transform.");
