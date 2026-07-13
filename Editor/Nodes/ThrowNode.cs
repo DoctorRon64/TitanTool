@@ -90,8 +90,8 @@ namespace TitanTool.Editor.Nodes {
             throwRuntime.SetTargetPosition(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_TARGET_POSITION));
             throwRuntime.SetSpawnOffset(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_SPAWN_OFFSET));
             throwRuntime.SetTargetOffset(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_TARGET_OFFSET));
-            throwRuntime.SetSpawnPointKey(GraphNodePortUtility.GetInputValue<TargetPointKey>(this, IN_PORT_SPAWN_POINT_KEY));
-            throwRuntime.SetTargetSpawnPointKey(GraphNodePortUtility.GetInputValue<TargetPointKey>(this, IN_PORT_TARGET_SPAWN_POINT_KEY));
+            throwRuntime.SetSpawnPointKey(GraphNodePortUtility.GetRuntimeTargetPointKeyValue(this, IN_PORT_SPAWN_POINT_KEY));
+            throwRuntime.SetTargetSpawnPointKey(GraphNodePortUtility.GetRuntimeTargetPointKeyValue(this, IN_PORT_TARGET_SPAWN_POINT_KEY));
             throwRuntime.SetFlightTime(GraphNodePortUtility.GetRuntimeFloatValue(this, IN_PORT_FLIGHT_TIME));
             throwRuntime.SetAngularVelocity(GraphNodePortUtility.GetRuntimeFloatValue(this, IN_PORT_ANGULAR_VELOCITY));
             throwRuntime.SetOwnerTeam(GetOwnerTeam());

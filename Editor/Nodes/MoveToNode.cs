@@ -17,6 +17,7 @@ namespace TitanTool.Editor.Nodes {
         private const string IN_PORT_STOP_DISTANCE = "StopDistance";
         private const string OPTION_MOVE_MODE = "MoveMode";
         private const string OPTION_TARGET_SOURCE = "TargetSource";
+        private const string OPTION_TARGET_POINT_UPDATE_MODE = "TargetPointUpdateMode";
         private const string OPTION_STOP_ON_ARRIVAL = "StopOnArrival";
 
         protected override bool hasInput => true;
@@ -35,6 +36,11 @@ namespace TitanTool.Editor.Nodes {
             context.AddOption<SpawnPositionSource>(OPTION_TARGET_SOURCE)
                 .WithDisplayName("Target Source")
                 .WithDefaultValue(SpawnPositionSource.Player)
+                .Delayed();
+
+            context.AddOption<MoveTargetPointUpdateMode>(OPTION_TARGET_POINT_UPDATE_MODE)
+                .WithDisplayName("Target Point Update")
+                .WithDefaultValue(MoveTargetPointUpdateMode.OnMoveStart)
                 .Delayed();
 
             context.AddOption<bool>(OPTION_STOP_ON_ARRIVAL)
@@ -86,7 +92,8 @@ namespace TitanTool.Editor.Nodes {
             moveRuntime.SetTargetSource(GetTargetSource());
             moveRuntime.SetTargetPosition(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_TARGET_POSITION));
             moveRuntime.SetOffset(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_OFFSET));
-            moveRuntime.SetSpawnPointKey(GraphNodePortUtility.GetInputValue<TargetPointKey>(this, IN_PORT_SPAWN_POINT_KEY));
+            moveRuntime.SetSpawnPointKey(GraphNodePortUtility.GetRuntimeTargetPointKeyValue(this, IN_PORT_SPAWN_POINT_KEY));
+            moveRuntime.SetTargetPointUpdateMode(GetTargetPointUpdateMode());
             moveRuntime.SetSpeed(GraphNodePortUtility.GetRuntimeFloatValue(this, IN_PORT_SPEED));
             moveRuntime.SetStopDistance(GraphNodePortUtility.GetRuntimeFloatValue(this, IN_PORT_STOP_DISTANCE));
             moveRuntime.SetStopOnArrival(GetStopOnArrival());
@@ -124,6 +131,13 @@ namespace TitanTool.Editor.Nodes {
                 return source;
 
             return SpawnPositionSource.Player;
+        }
+
+        private MoveTargetPointUpdateMode GetTargetPointUpdateMode() {
+            if (GetNodeOptionByName(OPTION_TARGET_POINT_UPDATE_MODE)?.TryGetValue(out MoveTargetPointUpdateMode updateMode) == true)
+                return updateMode;
+
+            return MoveTargetPointUpdateMode.OnMoveStart;
         }
 
         private bool GetStopOnArrival() {

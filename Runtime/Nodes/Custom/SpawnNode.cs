@@ -13,7 +13,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private GameObject m_prefab;
         [SerializeField] private RuntimeVector2Value m_spawnPosition = RuntimeVector2Value.Fixed(Vector2.zero);
         [SerializeField] private RuntimeVector2Value m_offset = RuntimeVector2Value.Fixed(Vector2.zero);
-        [SerializeField] private TargetPointKey m_spawnPointKey;
+        [SerializeField] private RuntimeTargetPointKeyValue m_spawnPointKey;
         [SerializeField] private SpawnPositionSource m_positionSource;
         
         public void SetPrefab(GameObject prefab) => m_prefab = prefab;
@@ -21,7 +21,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public void SetPosition(RuntimeVector2Value position) => m_spawnPosition = position;
         public void SetOffset(Vector2 offset) => m_offset = RuntimeVector2Value.Fixed(offset);
         public void SetOffset(RuntimeVector2Value offset) => m_offset = offset;
-        public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = spawnPointKey;
+        public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = RuntimeTargetPointKeyValue.Fixed(spawnPointKey);
+        public void SetSpawnPointKey(RuntimeTargetPointKeyValue spawnPointKey) => m_spawnPointKey = spawnPointKey;
         public void SetPositionSource(SpawnPositionSource source) => m_positionSource = source;
 
         public override NodeStatus Tick(NodeContext ctx) {
@@ -52,8 +53,9 @@ namespace TitanTool.Runtime.Nodes.Custom {
                     break;
 
                 case SpawnPositionSource.TargetPoint:
-                    if (!SpawnPointResolver.TryResolveByKey(ctx, m_spawnPointKey, out Vector2 keyedSpawnPosition)) {
-                        Debug.LogError($"SpawnNode: Target point key '{(m_spawnPointKey != null ? m_spawnPointKey.name : "None")}' was not found.");
+                    TargetPointKey spawnPointKey = m_spawnPointKey.Evaluate();
+                    if (!SpawnPointResolver.TryResolveByKey(ctx, spawnPointKey, out Vector2 keyedSpawnPosition)) {
+                        Debug.LogError($"SpawnNode: Target point key '{(spawnPointKey != null ? spawnPointKey.name : "None")}' was not found.");
                         return NodeStatus.Failure;
                     }
 

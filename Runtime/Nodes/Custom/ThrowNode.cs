@@ -18,8 +18,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private RuntimeVector2Value m_targetPosition = RuntimeVector2Value.Fixed(Vector2.zero);
         [SerializeField] private RuntimeVector2Value m_spawnOffset = RuntimeVector2Value.Fixed(Vector2.zero);
         [SerializeField] private RuntimeVector2Value m_targetOffset = RuntimeVector2Value.Fixed(Vector2.zero);
-        [SerializeField] private TargetPointKey m_spawnPointKey;
-        [SerializeField] private TargetPointKey m_targetSpawnPointKey;
+        [SerializeField] private RuntimeTargetPointKeyValue m_spawnPointKey;
+        [SerializeField] private RuntimeTargetPointKeyValue m_targetSpawnPointKey;
         [SerializeField] private RuntimeFloatValue m_flightTime = RuntimeFloatValue.Fixed(1f);
         [SerializeField] private RuntimeFloatValue m_angularVelocity = RuntimeFloatValue.Fixed(0f);
         [SerializeField] private DamagableTeam m_ownerTeam = DamagableTeam.Opponent;
@@ -35,8 +35,10 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public void SetSpawnOffset(RuntimeVector2Value offset) => m_spawnOffset = offset;
         public void SetTargetOffset(Vector2 offset) => m_targetOffset = RuntimeVector2Value.Fixed(offset);
         public void SetTargetOffset(RuntimeVector2Value offset) => m_targetOffset = offset;
-        public void SetSpawnPointKey(TargetPointKey key) => m_spawnPointKey = key;
-        public void SetTargetSpawnPointKey(TargetPointKey key) => m_targetSpawnPointKey = key;
+        public void SetSpawnPointKey(TargetPointKey key) => m_spawnPointKey = RuntimeTargetPointKeyValue.Fixed(key);
+        public void SetSpawnPointKey(RuntimeTargetPointKeyValue key) => m_spawnPointKey = key;
+        public void SetTargetSpawnPointKey(TargetPointKey key) => m_targetSpawnPointKey = RuntimeTargetPointKeyValue.Fixed(key);
+        public void SetTargetSpawnPointKey(RuntimeTargetPointKeyValue key) => m_targetSpawnPointKey = key;
         public void SetFlightTime(float flightTime) => m_flightTime = RuntimeFloatValue.Fixed(Mathf.Max(0.05f, flightTime));
         public void SetFlightTime(RuntimeFloatValue flightTime) => m_flightTime = flightTime;
         public void SetAngularVelocity(float angularVelocity) => m_angularVelocity = RuntimeFloatValue.Fixed(angularVelocity);
@@ -53,8 +55,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
                 return NodeStatus.Failure;
             }
 
-            if (!TryResolvePosition(ctx, m_spawnSource, m_spawnPosition.Evaluate(), m_spawnPointKey, m_spawnOffset.Evaluate(), out Vector2 spawnPosition) ||
-                !TryResolvePosition(ctx, m_targetSource, m_targetPosition.Evaluate(), m_targetSpawnPointKey, m_targetOffset.Evaluate(), out Vector2 targetPosition)) {
+            if (!TryResolvePosition(ctx, m_spawnSource, m_spawnPosition.Evaluate(), m_spawnPointKey.Evaluate(), m_spawnOffset.Evaluate(), out Vector2 spawnPosition) ||
+                !TryResolvePosition(ctx, m_targetSource, m_targetPosition.Evaluate(), m_targetSpawnPointKey.Evaluate(), m_targetOffset.Evaluate(), out Vector2 targetPosition)) {
                 Debug.LogError($"{name}: Throw node could not resolve spawn or target position.");
                 return NodeStatus.Failure;
             }

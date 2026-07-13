@@ -33,7 +33,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private RuntimeVector2Value m_spawnPosition = RuntimeVector2Value.Fixed(Vector2.zero);
         [SerializeField] private RuntimeVector2Value m_direction = RuntimeVector2Value.Fixed(Vector2.left);
         [SerializeField] private RuntimeVector2Value m_offset = RuntimeVector2Value.Fixed(Vector2.zero);
-        [SerializeField] private TargetPointKey m_spawnPointKey;
+        [SerializeField] private RuntimeTargetPointKeyValue m_spawnPointKey;
         [SerializeField] private Transform m_targetTransform;
         [SerializeField] private RuntimeIntValue m_bulletCount = RuntimeIntValue.Fixed(1);
         [SerializeField] private RuntimeFloatValue m_spreadAngle = RuntimeFloatValue.Fixed(45f);
@@ -50,7 +50,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public void SetDirection(RuntimeVector2Value direction) => m_direction = direction;
         public void SetOffset(Vector2 offset) => m_offset = RuntimeVector2Value.Fixed(offset);
         public void SetOffset(RuntimeVector2Value offset) => m_offset = offset;
-        public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = spawnPointKey;
+        public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = RuntimeTargetPointKeyValue.Fixed(spawnPointKey);
+        public void SetSpawnPointKey(RuntimeTargetPointKeyValue spawnPointKey) => m_spawnPointKey = spawnPointKey;
         public void SetTargetTransform(Transform targetTransform) => m_targetTransform = targetTransform;
         public void SetBulletCount(int bulletCount) => m_bulletCount = RuntimeIntValue.Fixed(Mathf.Max(1, bulletCount));
         public void SetBulletCount(RuntimeIntValue bulletCount) => m_bulletCount = bulletCount;
@@ -185,7 +186,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
                     break;
 
                 case SpawnPositionSource.TargetPoint:
-                    if (SpawnPointResolver.TryResolveByKey(ctx, m_spawnPointKey, out Vector2 keyedSpawnPosition))
+                    if (SpawnPointResolver.TryResolveByKey(ctx, m_spawnPointKey.Evaluate(), out Vector2 keyedSpawnPosition))
                         resolved = keyedSpawnPosition;
                     break;
             }

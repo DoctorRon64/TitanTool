@@ -79,7 +79,7 @@ namespace TitanTool.Editor.Nodes {
             spawnRuntime.SetPrefab(GraphNodePortUtility.GetInputValue<GameObject>(this, IN_PORT_PREFAB));
             spawnRuntime.SetPosition(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_POSITION));
             spawnRuntime.SetOffset(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_OFFSET));
-            spawnRuntime.SetSpawnPointKey(GraphNodePortUtility.GetInputValue<TargetPointKey>(this, IN_PORT_SPAWN_POINT_KEY));
+            spawnRuntime.SetSpawnPointKey(GraphNodePortUtility.GetRuntimeTargetPointKeyValue(this, IN_PORT_SPAWN_POINT_KEY));
             spawnRuntime.SetPositionSource(GetPositionSource());
         }
 

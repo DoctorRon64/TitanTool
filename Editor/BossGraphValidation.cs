@@ -337,6 +337,10 @@ namespace TitanTool.Editor {
         bool TryGetRange<T>(out GraphRandomRange<T> range);
     }
 
+    public interface IGraphTargetPointKeySetProvider {
+        bool TryGetTargetPointKeys(out TargetPointKey[] keys);
+    }
+
     public static class GraphNodePortUtility {
         public static T GetInputValue<T>(BossGraphNode node, string portName) {
             return TryGetInputValue(node, portName, out T value) ? value : default;
@@ -410,6 +414,13 @@ namespace TitanTool.Editor {
             return RuntimeVector2Value.Fixed(GetInputValue<Vector2>(node, portName));
         }
 
+        public static RuntimeTargetPointKeyValue GetRuntimeTargetPointKeyValue(INode node, string portName) {
+            if (TryGetInputTargetPointKeys(node, portName, out TargetPointKey[] keys))
+                return RuntimeTargetPointKeyValue.Random(keys);
+
+            return RuntimeTargetPointKeyValue.Fixed(GetInputValue<TargetPointKey>(node, portName));
+        }
+
         public static bool TryGetInputRandomRange<T>(INode node, string portName, out GraphRandomRange<T> range) {
             range = default;
 
@@ -426,6 +437,29 @@ namespace TitanTool.Editor {
             foreach (IPort connectedPort in connectedPorts) {
                 if (connectedPort.GetNode() is IGraphRandomRangeProvider rangeProvider &&
                     rangeProvider.TryGetRange(out range)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TryGetInputTargetPointKeys(INode node, string portName, out TargetPointKey[] keys) {
+            keys = null;
+
+            if (node == null)
+                return false;
+
+            IPort port = FindInputPortByName(node, portName);
+            if (port == null)
+                return false;
+
+            List<IPort> connectedPorts = new();
+            port.GetConnectedPorts(connectedPorts);
+
+            foreach (IPort connectedPort in connectedPorts) {
+                if (connectedPort.GetNode() is IGraphTargetPointKeySetProvider keySetProvider &&
+                    keySetProvider.TryGetTargetPointKeys(out keys)) {
                     return true;
                 }
             }

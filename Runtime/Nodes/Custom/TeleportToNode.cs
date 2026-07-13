@@ -8,13 +8,14 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private SpawnPositionSource m_targetSource = SpawnPositionSource.Player;
         [SerializeField] private RuntimeVector2Value m_targetPosition = RuntimeVector2Value.Fixed(Vector2.zero);
         [SerializeField] private RuntimeVector2Value m_offset = RuntimeVector2Value.Fixed(Vector2.zero);
-        [SerializeField] private TargetPointKey m_spawnPointKey;
+        [SerializeField] private RuntimeTargetPointKeyValue m_spawnPointKey;
         [SerializeField] private bool m_stopMovement = true;
 
         public void SetTargetSource(SpawnPositionSource targetSource) => m_targetSource = targetSource;
         public void SetTargetPosition(RuntimeVector2Value targetPosition) => m_targetPosition = targetPosition;
         public void SetOffset(RuntimeVector2Value offset) => m_offset = offset;
-        public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = spawnPointKey;
+        public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = RuntimeTargetPointKeyValue.Fixed(spawnPointKey);
+        public void SetSpawnPointKey(RuntimeTargetPointKeyValue spawnPointKey) => m_spawnPointKey = spawnPointKey;
         public void SetStopMovement(bool stopMovement) => m_stopMovement = stopMovement;
 
         public override NodeStatus Tick(NodeContext ctx) {
@@ -64,7 +65,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
                     break;
 
                 case SpawnPositionSource.TargetPoint:
-                    if (!SpawnPointResolver.TryResolveByKey(ctx, m_spawnPointKey, out target))
+                    if (!SpawnPointResolver.TryResolveByKey(ctx, m_spawnPointKey.Evaluate(), out target))
                         return false;
                     break;
             }

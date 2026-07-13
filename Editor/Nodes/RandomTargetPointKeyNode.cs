@@ -7,7 +7,7 @@ using UnityEngine;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    public class RandomTargetPointKeyNode : Node, IGraphValueProvider, IGraphValueNodeValidator {
+    public class RandomTargetPointKeyNode : Node, IGraphValueProvider, IGraphTargetPointKeySetProvider, IGraphValueNodeValidator {
         private const string IN_PORT_TARGET_KEY_PREFIX = "TargetPointKey";
         private const string OUT_PORT_VALUE = "Value";
         private const string OPTION_TARGET_KEY_COUNT = "TargetKeyCount";
@@ -48,6 +48,12 @@ namespace TitanTool.Editor.Nodes {
             return false;
         }
 
+        public bool TryGetTargetPointKeys(out TargetPointKey[] keys) {
+            List<TargetPointKey> keyList = GetTargetPointKeys();
+            keys = keyList.ToArray();
+            return keyList.Count > 0;
+        }
+
         public void Validate(GraphValueNodeValidationContext context) {
             int filledKeys = 0;
             for (int i = 0; i < GetTargetKeyCount(); i++) {
@@ -67,6 +73,11 @@ namespace TitanTool.Editor.Nodes {
         }
 
         private TargetPointKey GetRandomTargetPointKey() {
+            List<TargetPointKey> keys = GetTargetPointKeys();
+            return keys.Count > 0 ? keys[UnityEngine.Random.Range(0, keys.Count)] : null;
+        }
+
+        private List<TargetPointKey> GetTargetPointKeys() {
             List<TargetPointKey> keys = new();
             for (int i = 0; i < GetTargetKeyCount(); i++) {
                 TargetPointKey key = GraphNodePortUtility.GetInputValue<TargetPointKey>(this, GetTargetPointKeyPortName(i));
@@ -74,7 +85,7 @@ namespace TitanTool.Editor.Nodes {
                     keys.Add(key);
             }
 
-            return keys.Count > 0 ? keys[UnityEngine.Random.Range(0, keys.Count)] : null;
+            return keys;
         }
 
         private int GetTargetKeyCount() {

@@ -3,6 +3,56 @@ using UnityEngine;
 
 namespace TitanTool.Runtime.Values {
     [Serializable]
+    public struct RuntimeTargetPointKeyValue {
+        [SerializeField] private bool m_random;
+        [SerializeField] private TargetPointKey m_value;
+        [SerializeField] private TargetPointKey[] m_values;
+
+        public static RuntimeTargetPointKeyValue Fixed(TargetPointKey value) {
+            return new RuntimeTargetPointKeyValue {
+                m_value = value
+            };
+        }
+
+        public static RuntimeTargetPointKeyValue Random(params TargetPointKey[] values) {
+            return new RuntimeTargetPointKeyValue {
+                m_random = true,
+                m_values = values
+            };
+        }
+
+        public TargetPointKey Evaluate() {
+            if (!m_random)
+                return m_value;
+
+            if (m_values == null || m_values.Length == 0)
+                return null;
+
+            int filledCount = 0;
+            for (int i = 0; i < m_values.Length; i++) {
+                if (m_values[i] != null)
+                    filledCount++;
+            }
+
+            if (filledCount == 0)
+                return null;
+
+            int selectedIndex = UnityEngine.Random.Range(0, filledCount);
+            for (int i = 0; i < m_values.Length; i++) {
+                if (m_values[i] == null)
+                    continue;
+
+                if (selectedIndex == 0)
+                    return m_values[i];
+
+                selectedIndex--;
+            }
+
+            return null;
+        }
+    }
+
+    [Serializable]
     public struct RuntimeFloatValue {
         [SerializeField] private bool m_randomRange;
         [SerializeField] private float m_value;

@@ -124,7 +124,7 @@ namespace TitanTool.Editor.Nodes {
             shootRuntime.SetPosition(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_POSITION));
             shootRuntime.SetDirection(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_DIRECTION));
             shootRuntime.SetOffset(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_OFFSET));
-            shootRuntime.SetSpawnPointKey(GraphNodePortUtility.GetInputValue<TargetPointKey>(this, IN_PORT_SPAWN_POINT_KEY));
+            shootRuntime.SetSpawnPointKey(GraphNodePortUtility.GetRuntimeTargetPointKeyValue(this, IN_PORT_SPAWN_POINT_KEY));
             shootRuntime.SetTargetTransform(GraphNodePortUtility.GetInputValue<Transform>(this, IN_PORT_TARGET_TRANSFORM));
             shootRuntime.SetBulletCount(GraphNodePortUtility.GetRuntimeIntValue(this, IN_PORT_BULLET_COUNT));
             if (legacyCirclePattern)

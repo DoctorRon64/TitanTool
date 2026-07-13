@@ -66,7 +66,7 @@ namespace TitanTool.Editor.Nodes {
             teleportRuntime.SetTargetSource(GetTargetSource());
             teleportRuntime.SetTargetPosition(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_TARGET_POSITION));
             teleportRuntime.SetOffset(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_OFFSET));
-            teleportRuntime.SetSpawnPointKey(GraphNodePortUtility.GetInputValue<TargetPointKey>(this, IN_PORT_TARGET_POINT));
+            teleportRuntime.SetSpawnPointKey(GraphNodePortUtility.GetRuntimeTargetPointKeyValue(this, IN_PORT_TARGET_POINT));
             teleportRuntime.SetStopMovement(GetStopMovement());
         }
 

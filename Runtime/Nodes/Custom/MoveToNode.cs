@@ -9,6 +9,11 @@ namespace TitanTool.Runtime.Nodes.Custom {
         AwayFromTarget
     }
 
+    public enum MoveTargetPointUpdateMode {
+        OnMoveStart,
+        EveryTick
+    }
+
     public class MoveToState {
         public float elapsed;
         public float speed;
@@ -25,7 +30,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private SpawnPositionSource m_targetSource = SpawnPositionSource.Player;
         [SerializeField] private RuntimeVector2Value m_targetPosition = RuntimeVector2Value.Fixed(Vector2.zero);
         [SerializeField] private RuntimeVector2Value m_offset = RuntimeVector2Value.Fixed(Vector2.zero);
-        [SerializeField] private TargetPointKey m_spawnPointKey;
+        [SerializeField] private RuntimeTargetPointKeyValue m_spawnPointKey;
+        [SerializeField] private MoveTargetPointUpdateMode m_targetPointUpdateMode = MoveTargetPointUpdateMode.OnMoveStart;
         [SerializeField] private RuntimeFloatValue m_speed = RuntimeFloatValue.Fixed(4f);
         [SerializeField] private RuntimeFloatValue m_stopDistance = RuntimeFloatValue.Fixed(0.2f);
         [SerializeField] private bool m_stopOnArrival = true;
@@ -36,7 +42,9 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public void SetTargetPosition(RuntimeVector2Value targetPosition) => m_targetPosition = targetPosition;
         public void SetOffset(Vector2 offset) => m_offset = RuntimeVector2Value.Fixed(offset);
         public void SetOffset(RuntimeVector2Value offset) => m_offset = offset;
-        public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = spawnPointKey;
+        public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = RuntimeTargetPointKeyValue.Fixed(spawnPointKey);
+        public void SetSpawnPointKey(RuntimeTargetPointKeyValue spawnPointKey) => m_spawnPointKey = spawnPointKey;
+        public void SetTargetPointUpdateMode(MoveTargetPointUpdateMode targetPointUpdateMode) => m_targetPointUpdateMode = targetPointUpdateMode;
         public void SetSpeed(float speed) => m_speed = RuntimeFloatValue.Fixed(Mathf.Max(0f, speed));
         public void SetSpeed(RuntimeFloatValue speed) => m_speed = speed;
         public void SetStopDistance(float stopDistance) => m_stopDistance = RuntimeFloatValue.Fixed(Mathf.Max(0f, stopDistance));
@@ -57,7 +65,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
                 state.moveMode = m_moveMode;
                 state.targetPosition = m_targetPosition.Evaluate();
                 state.offset = m_offset.Evaluate();
-                state.spawnPointKey = m_spawnPointKey;
+                state.spawnPointKey = m_spawnPointKey.Evaluate();
             }
 
             if (!TryResolveTarget(ctx, state, out Vector2 target)) {
@@ -132,7 +140,11 @@ namespace TitanTool.Runtime.Nodes.Custom {
                     break;
 
                 case SpawnPositionSource.TargetPoint:
-                    if (!SpawnPointResolver.TryResolveByKey(ctx, state.spawnPointKey, out target))
+                    TargetPointKey spawnPointKey = m_targetPointUpdateMode == MoveTargetPointUpdateMode.EveryTick
+                        ? m_spawnPointKey.Evaluate()
+                        : state.spawnPointKey;
+
+                    if (!SpawnPointResolver.TryResolveByKey(ctx, spawnPointKey, out target))
                         return false;
                     break;
             }
