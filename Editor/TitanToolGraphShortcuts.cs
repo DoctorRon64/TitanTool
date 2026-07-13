@@ -35,7 +35,6 @@ namespace TitanTool.Editor {
             { KeyCode.F, new NodeShortcut(typeof(RepeaterNode), "Loop") },
             { KeyCode.O, new NodeShortcut(typeof(RunOnceNode), "Do Once") },
             { KeyCode.R, new NodeShortcut(typeof(RerouteNode), "Reroute") },
-            { KeyCode.P, new NodeShortcut(typeof(StartNode), "Begin Play") },
             { KeyCode.B, new NodeShortcut(typeof(SelectorNode), "Branch") },
             { KeyCode.N, new NodeShortcut(typeof(RepeaterNode), "Do N") },
             { KeyCode.M, new NodeShortcut(typeof(RandomSelectorNode), "Multi Gate") },

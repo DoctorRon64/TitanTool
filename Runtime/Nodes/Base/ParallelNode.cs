@@ -107,6 +107,8 @@ namespace TitanTool.Runtime.Nodes.Base {
                     continue;
                 }
 
+                RecordLockstepEdge(ctx, children[i], step);
+
                 NodeStatus result = step != null
                     ? ctx.ExecuteNode(step)
                     : NodeStatus.Failure;
@@ -142,6 +144,14 @@ namespace TitanTool.Runtime.Nodes.Base {
 
             ctx.SetStatus(this, NodeStatus.Running);
             return NodeStatus.Running;
+        }
+
+        private void RecordLockstepEdge(NodeContext ctx, Node branch, Node step) {
+            if (branch == null || step == null || ReferenceEquals(branch, step))
+                return;
+
+            ctx.RecordEdge(this, branch);
+            ctx.RecordEdge(branch, step);
         }
 
         private void EnsureStateSize(ParallelState state) {

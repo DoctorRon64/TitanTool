@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using TitanTool.Editor.Nodes;
+using RuntimeStartNode = TitanTool.Runtime.Nodes.Base.StartNode;
 using UnityEngine;
 
 namespace TitanTool.Editor {
@@ -30,6 +32,9 @@ namespace TitanTool.Editor {
     public static class NodeTypeRegistry {
         private static Dictionary<Type, GraphNodeRegistration> s_editorRegistrations;
         private static Dictionary<Type, GraphNodeRegistration> s_runtimeRegistrations;
+        private static readonly HashSet<Type> s_hiddenEditorTypes = new() {
+            typeof(StartNode)
+        };
 
         static NodeTypeRegistry() {
             Build();
@@ -67,6 +72,21 @@ namespace TitanTool.Editor {
                 s_editorRegistrations[editorType] = registration;
                 s_runtimeRegistrations[attr.RuntimeType] = registration;
             }
+
+            RegisterInternalNode(
+                typeof(StartNode),
+                new GraphNodeAttribute(
+                    typeof(RuntimeStartNode),
+                    "Start",
+                    "Flow/",
+                    BossGraphNodeCategory.Flow,
+                    tooltip: "Entry point for the boss graph."));
+        }
+
+        private static void RegisterInternalNode(Type editorType, GraphNodeAttribute attr) {
+            GraphNodeRegistration registration = new(editorType, attr);
+            s_editorRegistrations[editorType] = registration;
+            s_runtimeRegistrations[attr.RuntimeType] = registration;
         }
 
         public static Type GetRuntime(Type editorType) {
@@ -91,6 +111,7 @@ namespace TitanTool.Editor {
 
         public static IReadOnlyList<GraphNodeRegistration> GetRegistrations() {
             return s_editorRegistrations.Values
+                .Where(registration => !s_hiddenEditorTypes.Contains(registration.editorType))
                 .OrderBy(registration => registration.category)
                 .ThenBy(registration => registration.displayName)
                 .ToList();

@@ -126,16 +126,22 @@ namespace TitanTool.Editor {
 
             if (!runtimeState.isValid ||
                 !TryGetWireEndpointNodes(wireModel, out BossGraphNode fromNode, out BossGraphNode toNode) ||
-                fromNode == null ||
-                !TryGetRuntimeStatus(fromNode, runtimeState, out NodeStatus status, out bool fromVisitedThisTick)) {
+                fromNode == null) {
                 ResetWireVisual(wireView);
                 return;
             }
 
             RuntimeNode fromRuntimeNode = runtimeState.graph.GetNode(fromNode.runtimeGuid);
             RuntimeNode toRuntimeNode = toNode != null ? runtimeState.graph.GetNode(toNode.runtimeGuid) : null;
-            bool toVisitedThisTick = toRuntimeNode != null && runtimeState.lastTickPath.Contains(toRuntimeNode);
-            bool activePath = fromVisitedThisTick && toVisitedThisTick;
+            bool activePath = fromRuntimeNode != null &&
+                              toRuntimeNode != null &&
+                              runtimeState.lastTickEdges.Contains(new RuntimeNodeEdge(fromRuntimeNode, toRuntimeNode));
+
+            bool hasStatus = TryGetRuntimeStatus(fromNode, runtimeState, out NodeStatus status, out bool _);
+            if (!hasStatus && !activePath) {
+                ResetWireVisual(wireView);
+                return;
+            }
 
             Color color = GetStatusColor(activePath ? NodeStatus.Running : status);
             color.a = activePath ? 1f : 0.78f;
@@ -834,6 +840,7 @@ namespace TitanTool.Editor {
             public readonly BossGraphAsset graph;
             public readonly NodeContext context;
             public readonly HashSet<RuntimeNode> lastTickPath;
+            public readonly HashSet<RuntimeNodeEdge> lastTickEdges;
             public bool isValid => graph != null && context != null;
 
             public static RuntimeViewState None => new(null, null);
@@ -844,6 +851,9 @@ namespace TitanTool.Editor {
                 lastTickPath = context?.lastTickPath != null
                     ? new HashSet<RuntimeNode>(context.lastTickPath)
                     : new HashSet<RuntimeNode>();
+                lastTickEdges = context?.lastTickEdges != null
+                    ? new HashSet<RuntimeNodeEdge>(context.lastTickEdges)
+                    : new HashSet<RuntimeNodeEdge>();
             }
         }
     }

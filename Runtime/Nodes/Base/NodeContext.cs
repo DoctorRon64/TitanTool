@@ -3,6 +3,30 @@ using UnityEngine;
 using Utility;
 
 namespace TitanTool.Runtime.Nodes.Base {
+    public readonly struct RuntimeNodeEdge : System.IEquatable<RuntimeNodeEdge> {
+        public readonly Node from;
+        public readonly Node to;
+
+        public RuntimeNodeEdge(Node from, Node to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        public bool Equals(RuntimeNodeEdge other) {
+            return ReferenceEquals(from, other.from) && ReferenceEquals(to, other.to);
+        }
+
+        public override bool Equals(object obj) {
+            return obj is RuntimeNodeEdge other && Equals(other);
+        }
+
+        public override int GetHashCode() {
+            unchecked {
+                return ((from != null ? from.GetHashCode() : 0) * 397) ^ (to != null ? to.GetHashCode() : 0);
+            }
+        }
+    }
+
     public class RuntimeNodeDebugData {
         public NodeStatus status;
         public float executionTime;
@@ -41,8 +65,12 @@ namespace TitanTool.Runtime.Nodes.Base {
         private readonly List<Node> m_lastTickPath = new();
         public IReadOnlyList<Node> lastTickPath => m_lastTickPath;
 
+        private readonly List<RuntimeNodeEdge> m_lastTickEdges = new();
+        public IReadOnlyList<RuntimeNodeEdge> lastTickEdges => m_lastTickEdges;
+
         public void BeginFrame() {
             m_lastTickPath.Clear();
+            m_lastTickEdges.Clear();
 
             foreach (RuntimeNodeDebugData data in m_debug.Values) {
                 data.visited = false;
@@ -53,11 +81,22 @@ namespace TitanTool.Runtime.Nodes.Base {
             m_lastTickPath.Add(node);
         }
 
+        public void RecordEdge(Node from, Node to) {
+            if (from == null || to == null || ReferenceEquals(from, to))
+                return;
+
+            m_lastTickEdges.Add(new RuntimeNodeEdge(from, to));
+        }
+
         public NodeStatus ExecuteNode(Node node) {
             if (node == null) {
                 Debug.Log($"<color=red>{nameof(node)} is null</color>");
                 return NodeStatus.Failure;
             }
+
+            if (m_executionStack.Count > 0)
+                RecordEdge(m_executionStack[m_executionStack.Count - 1], node);
+
             RecordVisited(node);
             float start = Time.realtimeSinceStartup;
             m_executionStack.Add(node);
