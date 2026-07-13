@@ -5,6 +5,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.CooldownNode), "Cooldown Gate", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Runs its child, then keeps the branch running until the cooldown finishes.")]
     public class CooldownNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_DURATION = "Duration";

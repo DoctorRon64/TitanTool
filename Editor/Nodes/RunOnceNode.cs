@@ -5,6 +5,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RunOnceNode), "Run Once", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Runs its child once, then returns the configured result on later visits.")]
     public class RunOnceNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string OPTION_COMPLETED_STATUS = "CompletedStatus";

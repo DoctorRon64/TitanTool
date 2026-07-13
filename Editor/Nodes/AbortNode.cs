@@ -4,6 +4,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.AbortNode), "Abort", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Action, "Cancels currently running actions and clears their runtime state.")]
     public class AbortNode : BossGraphNode, IRuntimeNodeCompiler {
         protected override bool hasInput => true;

@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.ShuffleBagNode), "Shuffle Bag", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Picks from a random bag of connected children, then refills the bag after each child has been chosen.")]
     public class ShuffleBagNode : BossGraphNode, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";

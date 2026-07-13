@@ -4,6 +4,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.BlackboardCompareNode), "Check Blackboard Number", "Condition/Blackboard/", BossGraphNodeCategory.Condition, tooltip: "Passes when a blackboard number matches the selected comparison.")]
     public class BlackboardCompareNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_KEY_NAME = "KeyName";

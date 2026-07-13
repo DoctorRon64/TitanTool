@@ -7,6 +7,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.ShootPatternNode), "Fire Bullets", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Shoot, "Spawns bullets in the selected pattern from the chosen source.")]
     public class ShootPatternNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_BULLET_PREFAB = "BulletPrefab";

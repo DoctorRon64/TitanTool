@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TitanTool.Editor.Nodes;
@@ -15,7 +16,7 @@ namespace TitanTool.Editor {
         public const string ASSET_PATH = ROOT + "/" + TITAN_TOOL_FOLDER;
     }
 
-    [Graph(ASSET_EXTENSION)]
+    [Graph(ASSET_EXTENSION, GraphOptions.DisableAutoInclusionOfNodesFromGraphAssembly)]
     [Serializable]
     public class BossGraph : Graph {
         public const string ASSET_EXTENSION = "titan";

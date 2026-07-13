@@ -7,6 +7,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.ThrowNode), "Throw Object", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Spawn, "Launches a Rigidbody2D prefab from one source toward another.")]
     public class ThrowNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_PREFAB = "Prefab";

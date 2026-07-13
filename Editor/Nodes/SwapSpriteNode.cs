@@ -5,6 +5,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.SwapSpriteNode), "Set Sprite", "Action/", BossGraphNodeCategory.Action, tooltip: "Changes the boss SpriteRenderer to the selected sprite.")]
     public class SwapSpriteNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_SPRITE = "Sprite";

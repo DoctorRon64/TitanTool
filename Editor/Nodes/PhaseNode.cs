@@ -5,6 +5,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.PhaseNode), "Health Phase", "Decorator/", BossGraphNodeCategory.Decorator, tooltip: "Runs its child only while boss health is inside this percent range.")]
     public class PhaseNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_MIN_HEALTH_PERCENT = "MinHealthPercent";

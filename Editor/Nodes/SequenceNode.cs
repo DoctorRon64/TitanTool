@@ -4,6 +4,7 @@ using TitanTool.Runtime.Nodes.Base;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.SequenceNode), "Run In Order", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs children in order and stops when one fails.")]
     public class SequenceNode : BossGraphNode, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";

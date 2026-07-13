@@ -4,6 +4,7 @@ using TitanTool.Runtime.Nodes.Base;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.SelectorNode), "Try Children", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs children in order until one succeeds.")]
     public class SelectorNode : BossGraphNode, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";

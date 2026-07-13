@@ -5,6 +5,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.AnimationNode), "Control Animation", "Action/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Action, "Triggers parameters or plays animation clips on the boss animator.")]
     public class AnimationNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_PARAMETER_NAME = "ParameterName";

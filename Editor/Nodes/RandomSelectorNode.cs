@@ -4,6 +4,7 @@ using TitanTool.Runtime.Nodes.Base;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RandomSelectorNode), "Pick Random Child", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Chooses one child at random and runs it.")]
     public class RandomSelectorNode : BossGraphNode, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";

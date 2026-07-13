@@ -5,6 +5,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RepeaterNode), "Repeat Child", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs its child repeatedly for the configured number of loops.")]
     public class RepeaterNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_REPEAT_COUNT = "RepeatCount";

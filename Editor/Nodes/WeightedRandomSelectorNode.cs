@@ -7,6 +7,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.WeightedRandomSelectorNode), "Pick Weighted Child", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Chooses one child at random, using weights to favor some branches.")]
     public class WeightedRandomSelectorNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";

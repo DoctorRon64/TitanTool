@@ -6,6 +6,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.TeleportToNode), "Teleport To Target", "Action/Movement/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Movement, "Instantly moves the boss to a player, point, or fixed position.")]
     public class TeleportToNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_TARGET_POSITION = "TargetPosition";

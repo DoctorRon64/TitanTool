@@ -4,6 +4,7 @@ using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor.Nodes {
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.BlackboardMathNode), "Change Blackboard Number", "Action/Blackboard/", BossGraphNodeCategory.Action, tooltip: "Sets or modifies a numeric value stored on the blackboard.")]
     public class BlackboardMathNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_KEY_NAME = "KeyName";

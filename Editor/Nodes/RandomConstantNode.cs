@@ -10,6 +10,7 @@ namespace TitanTool.Editor.Nodes {
     }
 
     [Serializable]
+    [UseWithGraph(typeof(BossGraph))]
     public class RandomConstantNode : Node, IGraphValueProvider, IGraphRandomRangeProvider {
         private const string IN_PORT_MIN = "Min";
         private const string IN_PORT_MAX = "Max";
