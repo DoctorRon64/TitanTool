@@ -35,6 +35,10 @@ namespace TitanTool.Editor {
 
         [MenuItem("Window/TitanTool/Runtime Debugger")]
         private static void Open() {
+            OpenWindow();
+        }
+
+        internal static void OpenWindow() {
             GetWindow<BossGraphDebugWindow>("TitanTool Debug");
         }
 

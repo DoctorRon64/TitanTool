@@ -8,14 +8,13 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.MoveToNode), "Move", "Action/Movement/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Movement, "Moves the boss toward or away from the player, a TargetPointKey, or a fixed world position until the stop distance is reached.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.MoveToNode), "Move", "Action/Movement/", BossGraphNodeCategory.Action, BossGraphNodeIcons.Movement, "Moves the boss toward the target with positive speed or away from it with negative speed until the stop distance is reached.")]
     public class MoveToNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_TARGET_POSITION = "TargetPosition";
         private const string IN_PORT_OFFSET = "Offset";
         private const string IN_PORT_SPAWN_POINT_KEY = "SpawnPointKey";
         private const string IN_PORT_SPEED = "Speed";
         private const string IN_PORT_STOP_DISTANCE = "StopDistance";
-        private const string OPTION_MOVE_MODE = "MoveMode";
         private const string OPTION_TARGET_SOURCE = "TargetSource";
         private const string OPTION_TARGET_POINT_UPDATE_MODE = "TargetPointUpdateMode";
         private const string OPTION_STOP_ON_ARRIVAL = "StopOnArrival";
@@ -28,11 +27,6 @@ namespace TitanTool.Editor.Nodes {
         }
 
         protected override void OnDefineOptions(IOptionDefinitionContext context) {
-            context.AddOption<MoveToMode>(OPTION_MOVE_MODE)
-                .WithDisplayName("Move Mode")
-                .WithDefaultValue(MoveToMode.TowardTarget)
-                .Delayed();
-
             context.AddOption<SpawnPositionSource>(OPTION_TARGET_SOURCE)
                 .WithDisplayName("Target Source")
                 .WithDefaultValue(SpawnPositionSource.Player)
@@ -79,8 +73,8 @@ namespace TitanTool.Editor.Nodes {
                 .Build();
 
             context.AddInputPort<float>(IN_PORT_STOP_DISTANCE)
-                .WithDisplayName(GetMoveMode() == MoveToMode.AwayFromTarget ? "Minimum Distance" : "Stop Distance")
-                .WithDefaultValue(GetMoveMode() == MoveToMode.AwayFromTarget ? 4f : 0.2f)
+                .WithDisplayName("Stop Distance")
+                .WithDefaultValue(0.2f)
                 .Build();
         }
 
@@ -88,7 +82,6 @@ namespace TitanTool.Editor.Nodes {
             if (runtimeNode is not TitanTool.Runtime.Nodes.Custom.MoveToNode moveRuntime)
                 return;
 
-            moveRuntime.SetMoveMode(GetMoveMode());
             moveRuntime.SetTargetSource(GetTargetSource());
             moveRuntime.SetTargetPosition(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_TARGET_POSITION));
             moveRuntime.SetOffset(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_OFFSET));
@@ -100,15 +93,16 @@ namespace TitanTool.Editor.Nodes {
         }
 
         public void Validate(BossGraphNodeValidationContext context) {
-            if (context.GetInputValue<float>(IN_PORT_SPEED) <= 0f)
-                context.Error("Move speed must be greater than 0.");
+            float speed = context.GetInputValue<float>(IN_PORT_SPEED);
+            if (Mathf.Approximately(speed, 0f))
+                context.Error("Move speed cannot be 0. Use a positive speed to move toward the target or a negative speed to move away.");
 
             float stopDistance = context.GetInputValue<float>(IN_PORT_STOP_DISTANCE);
             if (stopDistance < 0f)
                 context.Error("Move distance cannot be negative.");
 
-            if (GetMoveMode() == MoveToMode.AwayFromTarget && stopDistance <= 0f)
-                context.Error("Move Away minimum distance must be greater than 0.");
+            if (speed < 0f && stopDistance <= 0f)
+                context.Error("Moving away requires a stop distance greater than 0.");
 
             SpawnPositionSource targetSource = GetTargetSource();
             if (targetSource == SpawnPositionSource.TargetPoint) {
@@ -117,13 +111,6 @@ namespace TitanTool.Editor.Nodes {
                 else
                     context.ValidateTargetPointKey(IN_PORT_SPAWN_POINT_KEY, "Move target");
             }
-        }
-
-        private MoveToMode GetMoveMode() {
-            if (GetNodeOptionByName(OPTION_MOVE_MODE)?.TryGetValue(out MoveToMode moveMode) == true)
-                return moveMode;
-
-            return MoveToMode.TowardTarget;
         }
 
         private SpawnPositionSource GetTargetSource() {

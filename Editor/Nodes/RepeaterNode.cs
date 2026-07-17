@@ -7,11 +7,12 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RepeaterNode), "Repeat Child", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs exactly one child repeatedly for the configured loop count. Use Delay inside the child branch to space out repetitions.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RepeaterNode), "Repeat Children", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs each connected child branch in order, then repeats that whole group for the configured loop count. Use Delay inside a child branch to space out repetitions.")]
     public class RepeaterNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
+        private const string OPTION_CHILD_COUNT = "ChildCount";
         private const string IN_PORT_REPEAT_COUNT = "RepeatCount";
 
-        protected override int outputCount => 1;
+        protected override int outputCount => GetChildCount();
         protected override bool hasInput => true;
         protected override bool hasOutput => true;
         protected override string behaviorBadge => "xN";
@@ -19,6 +20,13 @@ namespace TitanTool.Editor.Nodes {
         public override void OnEnable() {
             base.OnEnable();
             InitializeNode(typeof(TitanTool.Runtime.Nodes.Base.RepeaterNode));
+        }
+
+        protected override void OnDefineOptions(IOptionDefinitionContext context) {
+            context.AddOption<int>(OPTION_CHILD_COUNT)
+                .WithDisplayName("Children")
+                .WithDefaultValue(1)
+                .Delayed();
         }
 
         protected override void OnDefinePorts(IPortDefinitionContext context) {
@@ -39,12 +47,23 @@ namespace TitanTool.Editor.Nodes {
 
         public void Validate(BossGraphNodeValidationContext context) {
             int connectedChildren = BossGraphValidator.GetConnectedChildren(this).Count();
+            int childCount = GetChildCount();
 
-            if (connectedChildren != 1)
-                context.Error("Repeater must have exactly one connected child.");
+            if (connectedChildren < 1) {
+                context.Error("Repeater must have at least one connected child.");
+            } else if (connectedChildren < childCount) {
+                context.Warning($"Repeater has {childCount} child slots but only {connectedChildren} connected.");
+            }
 
             if (context.GetInputValue<int>(IN_PORT_REPEAT_COUNT) < 1)
                 context.Error("Repeater repeat count must be at least 1.");
+        }
+
+        private int GetChildCount() {
+            if (GetNodeOptionByName(OPTION_CHILD_COUNT)?.TryGetValue(out int childCount) == true)
+                return Math.Max(minimumChildCount, childCount);
+
+            return 1;
         }
     }
 }

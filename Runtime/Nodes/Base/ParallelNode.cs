@@ -35,7 +35,7 @@ namespace TitanTool.Runtime.Nodes.Base {
             EnsureStateSize(state);
 
             for (int i = 0; i < children.Count; i++) {
-                if (state.completed[i] && state.statuses[i] == NodeStatus.Failure)
+                if (state.completed[i])
                     continue;
 
                 Node child = children[i];

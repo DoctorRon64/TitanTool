@@ -6,22 +6,28 @@ namespace TitanTool.Editor {
     [InitializeOnLoad]
     internal static class TitanToolDocumentationAutoOpen {
         private const string PrefKeyPrefix = "TitanTool.Documentation.Opened.";
+        private const string RuntimeDebuggerPrefKeyPrefix = "TitanTool.RuntimeDebugger.Opened.";
 
         static TitanToolDocumentationAutoOpen() {
-            EditorApplication.delayCall += OpenDocumentationOncePerVersion;
+            EditorApplication.delayCall += OpenPackageWindowsOncePerVersion;
         }
 
-        private static void OpenDocumentationOncePerVersion() {
+        private static void OpenPackageWindowsOncePerVersion() {
             if (Application.isBatchMode || EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 
             string version = GetPackageVersion();
-            string prefKey = PrefKeyPrefix + version;
+
+            OpenOnce(PrefKeyPrefix + version, () => TitanToolDocumentationWindow.OpenWindow());
+            OpenOnce(RuntimeDebuggerPrefKeyPrefix + version, () => BossGraphDebugWindow.OpenWindow());
+        }
+
+        private static void OpenOnce(string prefKey, System.Action openWindow) {
             if (EditorPrefs.GetBool(prefKey, false))
                 return;
 
             EditorPrefs.SetBool(prefKey, true);
-            TitanToolDocumentationWindow.OpenWindow();
+            openWindow?.Invoke();
         }
 
         private static string GetPackageVersion() {

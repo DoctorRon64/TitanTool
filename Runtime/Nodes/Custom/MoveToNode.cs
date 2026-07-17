@@ -18,7 +18,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public float elapsed;
         public float speed;
         public float stopDistance;
-        public MoveToMode moveMode;
+        public float startDistance;
+        public bool hasStartDistance;
         public Vector2 targetPosition;
         public Vector2 offset;
         public TargetPointKey spawnPointKey;
@@ -45,7 +46,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public void SetSpawnPointKey(TargetPointKey spawnPointKey) => m_spawnPointKey = RuntimeTargetPointKeyValue.Fixed(spawnPointKey);
         public void SetSpawnPointKey(RuntimeTargetPointKeyValue spawnPointKey) => m_spawnPointKey = spawnPointKey;
         public void SetTargetPointUpdateMode(MoveTargetPointUpdateMode targetPointUpdateMode) => m_targetPointUpdateMode = targetPointUpdateMode;
-        public void SetSpeed(float speed) => m_speed = RuntimeFloatValue.Fixed(Mathf.Max(0f, speed));
+        public void SetSpeed(float speed) => m_speed = RuntimeFloatValue.Fixed(speed);
         public void SetSpeed(RuntimeFloatValue speed) => m_speed = speed;
         public void SetStopDistance(float stopDistance) => m_stopDistance = RuntimeFloatValue.Fixed(Mathf.Max(0f, stopDistance));
         public void SetStopDistance(RuntimeFloatValue stopDistance) => m_stopDistance = stopDistance;
@@ -60,9 +61,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
 
             MoveToState state = ctx.GetState<MoveToState>(this);
             if (state.elapsed <= 0f) {
-                state.speed = Mathf.Max(0f, m_speed.Evaluate());
+                state.speed = m_speed.Evaluate();
                 state.stopDistance = Mathf.Max(0f, m_stopDistance.Evaluate());
-                state.moveMode = m_moveMode;
                 state.targetPosition = m_targetPosition.Evaluate();
                 state.offset = m_offset.Evaluate();
                 state.spawnPointKey = m_spawnPointKey.Evaluate();
@@ -80,10 +80,14 @@ namespace TitanTool.Runtime.Nodes.Custom {
             Vector2 current = rb.position;
             Vector2 toTarget = target - current;
             float distanceToTarget = toTarget.magnitude;
+            if (!state.hasStartDistance) {
+                state.startDistance = distanceToTarget;
+                state.hasStartDistance = true;
+            }
 
             if (HasReachedDestination(state, distanceToTarget)) {
                 if (m_stopOnArrival) {
-                    if (state.moveMode == MoveToMode.TowardTarget)
+                    if (state.speed > 0f)
                         rb.position = target;
 
                     Stop(rb);
@@ -95,7 +99,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
             }
 
             Vector2 moveDirection = GetMoveDirection(state, rb, toTarget);
-            float speed = state.moveMode == MoveToMode.TowardTarget
+            float speed = state.speed > 0f
                 ? Mathf.Min(state.speed, distanceToTarget / Mathf.Max(ctx.deltaTime, Time.fixedDeltaTime))
                 : state.speed;
 
@@ -154,18 +158,14 @@ namespace TitanTool.Runtime.Nodes.Custom {
         }
 
         private static bool HasReachedDestination(MoveToState state, float distanceToTarget) {
-            return state.moveMode == MoveToMode.AwayFromTarget
-                ? state.stopDistance > 0f && distanceToTarget >= state.stopDistance
+            return state.speed < 0f
+                ? state.stopDistance > 0f && distanceToTarget >= state.startDistance + state.stopDistance
                 : distanceToTarget <= state.stopDistance;
         }
 
         private static Vector2 GetMoveDirection(MoveToState state, Rigidbody2D rb, Vector2 toTarget) {
-            Vector2 direction = state.moveMode == MoveToMode.AwayFromTarget
-                ? -toTarget
-                : toTarget;
-
-            if (direction.sqrMagnitude > 0.0001f)
-                return direction.normalized;
+            if (toTarget.sqrMagnitude > 0.0001f)
+                return toTarget.normalized;
 
             if (rb.linearVelocity.sqrMagnitude > 0.0001f)
                 return rb.linearVelocity.normalized;

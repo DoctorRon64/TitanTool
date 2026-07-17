@@ -6,10 +6,11 @@ namespace TitanTool.Runtime.Nodes.Base {
     public class RepeaterState {
         public bool initialized;
         public int completedRepeats;
+        public int currentIndex;
         public int repeatCount;
     }
 
-    [NodeView("Repeat Child", "Composite/")]
+    [NodeView("Repeat Children", "Composite/")]
     public class RepeaterNode : Node {
         [SerializeField] private RuntimeIntValue m_repeatCount = RuntimeIntValue.Fixed(2);
 
@@ -17,8 +18,7 @@ namespace TitanTool.Runtime.Nodes.Base {
         public void SetRepeatCount(RuntimeIntValue repeatCount) => m_repeatCount = repeatCount;
 
         public override NodeStatus Tick(NodeContext ctx) {
-            Node repeatedChild = children.Count > 0 ? children[0] : null;
-            if (repeatedChild == null) {
+            if (children.Count == 0) {
                 ctx.SetStatus(this, NodeStatus.Failure);
                 return NodeStatus.Failure;
             }
@@ -32,26 +32,39 @@ namespace TitanTool.Runtime.Nodes.Base {
             }
 
             while (state.completedRepeats < state.repeatCount) {
-                NodeStatus status = ctx.ExecuteNode(repeatedChild);
-                switch (status) {
-                    case NodeStatus.Running:
-                        ctx.SetStatus(this, NodeStatus.Running);
-                        return NodeStatus.Running;
-
-                    case NodeStatus.Failure:
-                        ResetChild(ctx, repeatedChild);
+                while (state.currentIndex < children.Count) {
+                    Node child = children[state.currentIndex];
+                    if (child == null) {
+                        ResetChildren(ctx);
                         ShootNode.ClearPlayerSnapshots(ctx);
                         ResetState(state);
                         ctx.SetStatus(this, NodeStatus.Failure);
                         return NodeStatus.Failure;
+                    }
 
-                    case NodeStatus.Success:
-                        ctx.ResetBranch(repeatedChild);
-                        break;
+                    NodeStatus status = ctx.ExecuteNode(child);
+                    switch (status) {
+                        case NodeStatus.Running:
+                            ctx.SetStatus(this, NodeStatus.Running);
+                            return NodeStatus.Running;
+
+                        case NodeStatus.Failure:
+                            ResetChildren(ctx);
+                            ShootNode.ClearPlayerSnapshots(ctx);
+                            ResetState(state);
+                            ctx.SetStatus(this, NodeStatus.Failure);
+                            return NodeStatus.Failure;
+
+                        case NodeStatus.Success:
+                            ctx.ResetBranch(child);
+                            state.currentIndex++;
+                            break;
+                    }
                 }
 
                 state.completedRepeats++;
-                ResetChild(ctx, repeatedChild);
+                state.currentIndex = 0;
+                ResetChildren(ctx);
 
                 if (state.completedRepeats < state.repeatCount) {
                     ctx.SetStatus(this, NodeStatus.Running);
@@ -65,14 +78,17 @@ namespace TitanTool.Runtime.Nodes.Base {
             return NodeStatus.Success;
         }
 
-        private static void ResetChild(NodeContext ctx, Node child) {
-            if (child != null)
-                ctx.ResetBranch(child);
+        private void ResetChildren(NodeContext ctx) {
+            foreach (Node child in children) {
+                if (child != null)
+                    ctx.ResetBranch(child);
+            }
         }
 
         private static void ResetState(RepeaterState state) {
             state.initialized = false;
             state.completedRepeats = 0;
+            state.currentIndex = 0;
             state.repeatCount = 0;
         }
     }

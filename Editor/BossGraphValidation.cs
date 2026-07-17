@@ -375,6 +375,11 @@ namespace TitanTool.Editor {
                     return true;
                 }
 
+                if (connectedPort.GetNode() is IConstantNode constantNode &&
+                    constantNode.TryGetValue(out value)) {
+                    return true;
+                }
+
                 if (connectedPort.TryGetValue(out value)) {
                     return true;
                 }
