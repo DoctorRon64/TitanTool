@@ -25,6 +25,7 @@ namespace TitanTool.Editor.Nodes {
         private const string OPTION_AIM_SOURCE = "AimSource";
         private const string OPTION_OWNER_TEAM = "OwnerTeam";
         private const int LEGACY_CIRCLE_PATTERN_VALUE = 2;
+        private const int LEGACY_AIMED_AT_PLAYER_PATTERN_VALUE = 3;
 
         protected override bool hasInput => true;
 
@@ -117,10 +118,11 @@ namespace TitanTool.Editor.Nodes {
                 return;
 
             bool legacyCirclePattern = IsLegacyCirclePattern();
+            bool legacyAimedAtPlayerPattern = IsLegacyAimedAtPlayerPattern();
             shootRuntime.SetBulletPrefab(GraphNodePortUtility.GetInputValue<GameObject>(this, IN_PORT_BULLET_PREFAB));
-            shootRuntime.SetPattern(legacyCirclePattern ? ShootPattern.Spread : GetPattern());
+            shootRuntime.SetPattern(legacyCirclePattern ? ShootPattern.Spread : GetNormalizedPattern());
             shootRuntime.SetPositionSource(GetPositionSource());
-            shootRuntime.SetAimSource(GetAimSource());
+            shootRuntime.SetAimSource(legacyAimedAtPlayerPattern ? ShootAimSource.Player : GetAimSource());
             shootRuntime.SetPosition(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_POSITION));
             shootRuntime.SetDirection(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_DIRECTION));
             shootRuntime.SetOffset(GraphNodePortUtility.GetRuntimeVector2Value(this, IN_PORT_OFFSET));
@@ -163,9 +165,18 @@ namespace TitanTool.Editor.Nodes {
             return ShootPattern.Single;
         }
 
+        private ShootPattern GetNormalizedPattern() {
+            return IsLegacyAimedAtPlayerPattern() ? ShootPattern.Single : GetPattern();
+        }
+
         private bool IsLegacyCirclePattern() {
             return GetNodeOptionByName(OPTION_PATTERN)?.TryGetValue(out ShootPattern pattern) == true &&
                    (int)pattern == LEGACY_CIRCLE_PATTERN_VALUE;
+        }
+
+        private bool IsLegacyAimedAtPlayerPattern() {
+            return GetNodeOptionByName(OPTION_PATTERN)?.TryGetValue(out ShootPattern pattern) == true &&
+                   (int)pattern == LEGACY_AIMED_AT_PLAYER_PATTERN_VALUE;
         }
 
         private SpawnPositionSource GetPositionSource() {

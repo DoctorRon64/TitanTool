@@ -7,11 +7,16 @@ using UnityEngine;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    public class RandomTargetPointKeyNode : Node, IGraphValueProvider, IGraphTargetPointKeySetProvider, IGraphValueNodeValidator {
+    public class RandomTargetPointKeyNode : Node, IResizableSlotNode, IGraphValueProvider, IGraphTargetPointKeySetProvider, IGraphValueNodeValidator {
         private const string IN_PORT_TARGET_KEY_PREFIX = "TargetPointKey";
         private const string OUT_PORT_VALUE = "Value";
         private const string OPTION_TARGET_KEY_COUNT = "TargetKeyCount";
         private const int MIN_TARGET_KEY_COUNT = 2;
+
+        public string slotCountOptionName => OPTION_TARGET_KEY_COUNT;
+        public string slotDisplayName => "Target Points";
+        public int minimumSlotCount => MIN_TARGET_KEY_COUNT;
+        public ResizableSlotPortDirection slotPortDirection => ResizableSlotPortDirection.Input;
 
         public override void OnEnable() {
             base.OnEnable();
@@ -71,6 +76,8 @@ namespace TitanTool.Editor.Nodes {
             if (filledKeys == 0)
                 context.Error("Random Target Point Key has no target keys assigned.");
         }
+
+        public string GetSlotPortName(int index) => GetTargetPointKeyPortName(index);
 
         private TargetPointKey GetRandomTargetPointKey() {
             List<TargetPointKey> keys = GetTargetPointKeys();

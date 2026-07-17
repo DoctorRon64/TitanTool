@@ -6,8 +6,7 @@ using Utility;
 namespace TitanTool.Runtime.Nodes.Custom {
     public enum ShootPattern {
         Single = 0,
-        Spread = 1,
-        AimedAtPlayer = 3
+        Spread = 1
     }
 
     public enum ShootAimSource {
@@ -25,6 +24,8 @@ namespace TitanTool.Runtime.Nodes.Custom {
     [NodeView("Shoot", "Action/")]
     public class ShootNode : ActionNode {
         private const string PlayerSnapshotKey = "__Shoot_PlayerSnapshot";
+        private const int LegacyCirclePatternValue = 2;
+        private const int LegacyAimedAtPlayerPatternValue = 3;
 
         [SerializeField] private GameObject m_bulletPrefab;
         [SerializeField] private ShootPattern m_pattern = ShootPattern.Single;
@@ -41,7 +42,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         [SerializeField] private DamagableTeam m_ownerTeam = DamagableTeam.Opponent;
 
         public void SetBulletPrefab(GameObject bulletPrefab) => m_bulletPrefab = bulletPrefab;
-        public void SetPattern(ShootPattern pattern) => m_pattern = (int)pattern == 2 ? ShootPattern.Spread : pattern;
+        public void SetPattern(ShootPattern pattern) => m_pattern = (int)pattern == LegacyCirclePatternValue ? ShootPattern.Spread : NormalizePattern(pattern);
         public void SetPositionSource(SpawnPositionSource positionSource) => m_positionSource = positionSource;
         public void SetAimSource(ShootAimSource aimSource) => m_aimSource = aimSource;
         public void SetPosition(Vector2 position) => m_spawnPosition = RuntimeVector2Value.Fixed(position);
@@ -114,7 +115,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         }
 
         private Vector2 GetBaseDirection(NodeContext ctx, Vector3 origin) {
-            ShootAimSource aimSource = m_pattern == ShootPattern.AimedAtPlayer ? ShootAimSource.Player : m_aimSource;
+            ShootAimSource aimSource = IsLegacyAimedAtPlayerPattern() ? ShootAimSource.Player : m_aimSource;
             if (aimSource == ShootAimSource.PlayerSnapshot && TryResolvePlayerSnapshot(ctx, out Vector2 snapshotPosition)) {
                 Vector2 snapshotDirection = snapshotPosition - (Vector2)origin;
                 if (snapshotDirection.sqrMagnitude > 0.0001f)
@@ -129,6 +130,14 @@ namespace TitanTool.Runtime.Nodes.Custom {
 
             Vector2 fixedDirection = m_direction.Evaluate();
             return fixedDirection.sqrMagnitude > 0.0001f ? fixedDirection.normalized : Vector2.left;
+        }
+
+        private static ShootPattern NormalizePattern(ShootPattern pattern) {
+            return (int)pattern == LegacyAimedAtPlayerPatternValue ? ShootPattern.Single : pattern;
+        }
+
+        private bool IsLegacyAimedAtPlayerPattern() {
+            return (int)m_pattern == LegacyAimedAtPlayerPatternValue;
         }
 
         private bool TryResolveAimTarget(NodeContext ctx, ShootAimSource aimSource, out Transform target) {

@@ -3,14 +3,14 @@ using TitanTool.Runtime.Values;
 using UnityEngine;
 
 namespace TitanTool.Runtime.Nodes.Custom {
-    public class WaitState {
+    public class DelayState {
         public float elapsed;
         public float duration;
         public bool started;
     }
 
-    [NodeView("Wait", "Action/")]
-    public class WaitNode : ActionNode {
+    [NodeView("Delay", "Action/")]
+    public class DelayNode : ActionNode {
         [SerializeField] private RuntimeFloatValue m_duration = RuntimeFloatValue.Fixed(1f);
 
         public float duration {
@@ -21,7 +21,7 @@ namespace TitanTool.Runtime.Nodes.Custom {
         public void SetDuration(RuntimeFloatValue durationValue) => m_duration = durationValue;
 
         public override NodeStatus Tick(NodeContext ctx) {
-            WaitState state = ctx.GetState<WaitState>(this);
+            DelayState state = ctx.GetState<DelayState>(this);
 
             if (!state.started) {
                 state.started = true;

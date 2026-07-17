@@ -7,7 +7,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RepeaterNode), "Repeat Child", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs exactly one child repeatedly for the configured loop count. Use Wait inside the child branch to space out repetitions.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RepeaterNode), "Repeat Child", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs exactly one child repeatedly for the configured loop count. Use Delay inside the child branch to space out repetitions.")]
     public class RepeaterNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string IN_PORT_REPEAT_COUNT = "RepeatCount";
 

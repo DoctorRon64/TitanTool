@@ -131,14 +131,14 @@ namespace TitanTool.Editor {
                 if (graphModel == null)
                     return false;
 
-                List<object> duplicateWires = GetDuplicateExecutionOutputWires(graphModel);
+                List<object> duplicateWires = GetSupersededSingleConnectionWires(graphModel);
                 if (duplicateWires.Count == 0)
                     return false;
 
                 if (!DeleteGraphElements(graphModel, duplicateWires))
                     return false;
 
-                logger.LogWarning("An execution output port can only connect to one node. Extra edge removed.", this);
+                logger.LogWarning("TitanTool replaced an existing edge on a single-connection port.", this);
                 m_lastWireCount = CountWireModels();
                 return true;
             }
@@ -147,31 +147,41 @@ namespace TitanTool.Editor {
             }
         }
 
-        private static List<object> GetDuplicateExecutionOutputWires(object graphModel) {
+        private static List<object> GetSupersededSingleConnectionWires(object graphModel) {
             object rawWireModels = graphModel.GetType()
                 .GetProperty("WireModels", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 ?.GetValue(graphModel);
 
-            Dictionary<string, object> firstWireByOutputPort = new();
-            List<object> duplicateWires = new();
+            List<object> orderedWires = new();
 
             if (rawWireModels is not IEnumerable wireModels)
-                return duplicateWires;
+                return orderedWires;
 
-            foreach (object wireModel in wireModels) {
-                string outputPortKey = GetExecutionOutputPortKey(wireModel);
-                if (string.IsNullOrEmpty(outputPortKey))
+            foreach (object wireModel in wireModels)
+                orderedWires.Add(wireModel);
+
+            HashSet<object> supersededWires = new();
+            AddSupersededWires(orderedWires, GetExecutionOutputPortKey, supersededWires);
+            AddSupersededWires(orderedWires, GetInputPortKey, supersededWires);
+            return orderedWires.Where(supersededWires.Contains).ToList();
+        }
+
+        private static void AddSupersededWires(
+            IReadOnlyList<object> orderedWires,
+            Func<object, string> getPortKey,
+            HashSet<object> supersededWires) {
+            Dictionary<string, object> latestWireByPort = new();
+
+            foreach (object wireModel in orderedWires) {
+                string portKey = getPortKey(wireModel);
+                if (string.IsNullOrEmpty(portKey))
                     continue;
 
-                if (!firstWireByOutputPort.ContainsKey(outputPortKey)) {
-                    firstWireByOutputPort[outputPortKey] = wireModel;
-                    continue;
-                }
+                if (latestWireByPort.TryGetValue(portKey, out object previousWire))
+                    supersededWires.Add(previousWire);
 
-                duplicateWires.Add(wireModel);
+                latestWireByPort[portKey] = wireModel;
             }
-
-            return duplicateWires;
         }
 
         private static string GetExecutionOutputPortKey(object wireModel) {
@@ -182,6 +192,16 @@ namespace TitanTool.Editor {
 
             object fromNodeGuid = GetProperty(wireModel, "FromNodeGuid") ?? GetPortNodeGuid(fromPort);
             return fromNodeGuid == null ? null : $"{fromNodeGuid}:{portName}";
+        }
+
+        private static string GetInputPortKey(object wireModel) {
+            object toPort = GetProperty(wireModel, "ToPort") ?? GetProperty(wireModel, "ToPortReference");
+            string portName = GetPortName(toPort);
+            if (string.IsNullOrEmpty(portName))
+                return null;
+
+            object toNodeGuid = GetProperty(wireModel, "ToNodeGuid") ?? GetPortNodeGuid(toPort);
+            return toNodeGuid == null ? null : $"{toNodeGuid}:{portName}";
         }
 
         private static string GetPortName(object port) {

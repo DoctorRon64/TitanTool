@@ -91,23 +91,46 @@ namespace TitanTool.Editor {
 
         protected IReadOnlyList<string> AddInputOutputExecutionPorts(IPortDefinitionContext context) {
             if (hasInput) {
-                context.AddInputPort<NodeFlow>(EXECUTION_PORT_IN)
+                IPort inputPort = context.AddInputPort<NodeFlow>(EXECUTION_PORT_IN)
                     .WithDisplayName(string.Empty)
                     .WithConnectorUI(PortConnectorUI.Arrowhead)
                     .Build();
+                SetSingleConnectionCapacity(inputPort);
             }
 
             IReadOnlyList<string> outputPortNames = GetExecutionOutputPortNames();
             if (hasOutput) {
                 foreach (string portName in outputPortNames) {
-                    context.AddOutputPort<NodeFlow>(portName)
+                    IPort outputPort = context.AddOutputPort<NodeFlow>(portName)
                         .WithDisplayName(string.Empty)
                         .WithConnectorUI(PortConnectorUI.Arrowhead)
                         .Build();
+                    SetSingleConnectionCapacity(outputPort);
                 }
             }
 
             return outputPortNames;
+        }
+
+        private static void SetSingleConnectionCapacity(IPort port) {
+            if (port == null)
+                return;
+
+            PropertyInfo capacityProperty = port.GetType().GetProperty("Capacity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (capacityProperty?.CanWrite != true)
+                return;
+
+            Type capacityType = capacityProperty.PropertyType;
+            if (!capacityType.IsEnum)
+                return;
+
+            try {
+                object singleCapacity = Enum.Parse(capacityType, "Single");
+                capacityProperty.SetValue(port, singleCapacity);
+            }
+            catch {
+                // Graph Toolkit keeps port capacity internal; if it changes, fall back to validation cleanup.
+            }
         }
 
         protected IReadOnlyList<string> GetExecutionOutputPortNames() {

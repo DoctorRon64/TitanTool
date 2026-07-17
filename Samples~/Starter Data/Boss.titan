@@ -1122,9 +1122,9 @@ MonoBehaviour:
       data:
         m_Value: 1
     - rid: 1402544186550911093
-      type: {class: WaitNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: DelayNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.WaitNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.DelayNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 9a59e920-a17d-4354-a152-9c2a34f89211
         m_childGuids: []
@@ -2284,7 +2284,7 @@ MonoBehaviour:
           Hash: e0be8a12be395d1cbbbb9e66bd2f4bcc
         m_Version: 2
         m_Position: {x: 1135.5903, y: 2335.6897}
-        m_Title: WaitNode
+        m_Title: DelayNode
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
           rid: -2
@@ -2319,9 +2319,9 @@ MonoBehaviour:
       data:
         m_Value: 0.5
     - rid: 1402544186550911335
-      type: {class: WaitNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: DelayNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.WaitNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.DelayNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 80c96a4a-617f-483a-8b42-5731515cf5dd
         m_childGuids: []
@@ -3229,7 +3229,7 @@ MonoBehaviour:
           Hash: 3289a6709af67bd6c3638322832412fe
         m_Version: 2
         m_Position: {x: 1221.5115, y: 1535.7904}
-        m_Title: WaitNode
+        m_Title: DelayNode
         m_Tooltip: Pauses this branch for the configured duration.
         m_NodePreviewModel:
           rid: -2
@@ -3264,9 +3264,9 @@ MonoBehaviour:
       data:
         m_Value: 2
     - rid: 1402544193823309876
-      type: {class: WaitNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: DelayNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.WaitNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.DelayNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 0535f92c-f52e-4aa0-b367-55c48e0e1d41
         m_childGuids: []

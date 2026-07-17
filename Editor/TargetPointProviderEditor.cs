@@ -9,6 +9,8 @@ using UnityEngine;
 namespace TitanTool.Editor {
     [CustomEditor(typeof(TargetPointProvider))]
     public class TargetPointProviderEditor : UnityEditor.Editor {
+        private const string CHILD_TARGET_POINT_NAME = "Target Point";
+
         private GUIStyle m_cardStyle;
         private GUIStyle m_headerStyle;
         private GUIStyle m_subtleStyle;
@@ -146,7 +148,7 @@ namespace TitanTool.Editor {
 
         private void CreateChildTargetPoint(SerializedProperty points) {
             TargetPointProvider provider = (TargetPointProvider)target;
-            GameObject pointObject = new("Target Point");
+            GameObject pointObject = new(GetNextChildTargetPointName(provider.transform));
             Undo.RegisterCreatedObjectUndo(pointObject, "Create Target Point");
             Undo.SetTransformParent(pointObject.transform, provider.transform, "Parent Target Point");
             pointObject.transform.localPosition = Vector3.zero;
@@ -155,6 +157,34 @@ namespace TitanTool.Editor {
             EnsureTargetPointKeys(new[] { point });
             AddTargetPoint(points, point);
             Selection.activeObject = pointObject;
+        }
+
+        private static string GetNextChildTargetPointName(Transform parent) {
+            HashSet<int> usedNumbers = new();
+            foreach (TargetPoint point in parent.GetComponentsInChildren<TargetPoint>(true)) {
+                if (point == null)
+                    continue;
+
+                string pointName = point.name.Trim();
+                if (pointName == CHILD_TARGET_POINT_NAME) {
+                    usedNumbers.Add(1);
+                    continue;
+                }
+
+                string prefix = $"{CHILD_TARGET_POINT_NAME} ";
+                if (!pointName.StartsWith(prefix, StringComparison.Ordinal))
+                    continue;
+
+                string numberText = pointName.Substring(prefix.Length).Split(' ')[0];
+                if (int.TryParse(numberText, out int number) && number > 0)
+                    usedNumbers.Add(number);
+            }
+
+            int nextNumber = 1;
+            while (usedNumbers.Contains(nextNumber))
+                nextNumber++;
+
+            return $"{CHILD_TARGET_POINT_NAME} {nextNumber} {Guid.NewGuid():N}";
         }
 
         private void CollectTargetPoints(SerializedProperty points, IEnumerable<TargetPoint> targetPoints, bool createMissingKeys) {

@@ -12,6 +12,19 @@ using UnityEngine.UIElements;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 
 namespace TitanTool.Editor {
+    public enum ResizableSlotPortDirection {
+        Input,
+        Output
+    }
+
+    public interface IResizableSlotNode {
+        string slotCountOptionName { get; }
+        string slotDisplayName { get; }
+        int minimumSlotCount { get; }
+        ResizableSlotPortDirection slotPortDirection { get; }
+        string GetSlotPortName(int index);
+    }
+
     [InitializeOnLoad]
     internal static class TitanToolGraphVisualFeedback {
         private const BindingFlags FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
@@ -96,6 +109,10 @@ namespace TitanTool.Editor {
                     continue;
                 }
 
+                Unity.GraphToolkit.Editor.Node node = GetGraphToolkitNodeFromView(element);
+                if (node is IResizableSlotNode resizableSlotNode)
+                    ApplyResizableSlotControls(element, node, resizableSlotNode, graphNode: null, nodeColor: new Color(0.28f, 0.50f, 0.78f));
+
                 ApplyWireColor(element, runtimeState);
             }
         }
@@ -121,6 +138,12 @@ namespace TitanTool.Editor {
             object model = GetProperty(element, "Model");
             object node = model != null ? GetProperty(model, "Node") : null;
             return node as BossGraphNode;
+        }
+
+        private static Unity.GraphToolkit.Editor.Node GetGraphToolkitNodeFromView(VisualElement element) {
+            object model = GetProperty(element, "Model");
+            object node = model != null ? GetProperty(model, "Node") : null;
+            return node as Unity.GraphToolkit.Editor.Node;
         }
 
         private static void ApplyWireColor(VisualElement wireView, RuntimeViewState runtimeState) {
@@ -439,12 +462,25 @@ namespace TitanTool.Editor {
         }
 
         private static void ApplyChildControls(VisualElement nodeView, BossGraphNode graphNode, Color color) {
-            if (!TryGetChildCount(graphNode, out int childCount)) {
+            ApplyResizableSlotControls(nodeView, graphNode, CreateChildSlotDescriptor(graphNode), graphNode, color);
+        }
+
+        private static IResizableSlotNode CreateChildSlotDescriptor(BossGraphNode graphNode) {
+            return new ChildSlotDescriptor(graphNode);
+        }
+
+        private static void ApplyResizableSlotControls(
+            VisualElement nodeView,
+            Unity.GraphToolkit.Editor.Node node,
+            IResizableSlotNode slotNode,
+            BossGraphNode graphNode,
+            Color nodeColor) {
+            if (!TryGetResizableSlotCount(node, slotNode, out int slotCount)) {
                 HideChildControls(nodeView);
                 return;
             }
 
-            VisualElement optionField = FindChildCountOptionField(nodeView, graphNode);
+            VisualElement optionField = FindSlotCountOptionField(nodeView, node, slotNode);
             if (optionField == null || optionField.parent == null) {
                 HideChildControls(nodeView);
                 return;
@@ -459,29 +495,29 @@ namespace TitanTool.Editor {
             VisualElement controls = EnsureChildControls(parent, Mathf.Max(0, fieldIndex));
             optionField.style.display = DisplayStyle.None;
             controls.style.display = DisplayStyle.Flex;
-            controls.style.backgroundColor = new Color(color.r, color.g, color.b, 0.46f);
+            controls.style.backgroundColor = new Color(nodeColor.r, nodeColor.g, nodeColor.b, 0.46f);
 
             Button removeButton = controls.Q<Button>("child-remove");
             Button addButton = controls.Q<Button>("child-add");
             Label countLabel = controls.Q<Label>("child-count");
 
-            bool canRemove = childCount > graphNode.minimumChildCount && !IsLastChildPortConnected(graphNode, childCount);
+            bool canRemove = slotCount > slotNode.minimumSlotCount && !IsLastSlotPortConnected(node, slotNode, slotCount);
             removeButton.SetEnabled(canRemove);
             removeButton.tooltip = canRemove
-                ? "Remove the last empty child slot."
-                : childCount <= graphNode.minimumChildCount
-                    ? $"This node needs at least {graphNode.minimumChildCount} child slot(s)."
-                    : "Cannot remove because the last child slot is still connected.";
+                ? $"Remove the last empty {slotNode.slotDisplayName.ToLowerInvariant()} slot."
+                : slotCount <= slotNode.minimumSlotCount
+                    ? $"This node needs at least {slotNode.minimumSlotCount} {slotNode.slotDisplayName.ToLowerInvariant()} slot(s)."
+                    : $"Cannot remove because the last {slotNode.slotDisplayName.ToLowerInvariant()} slot is still connected.";
 
-            countLabel.text = $"Children {childCount}";
-            countLabel.tooltip = $"{childCount} child slots";
+            countLabel.text = $"{slotNode.slotDisplayName} {slotCount}";
+            countLabel.tooltip = $"{slotCount} {slotNode.slotDisplayName.ToLowerInvariant()} slots";
 
-            removeButton.userData = new ChildControlBinding(graphNode, -1);
-            addButton.userData = new ChildControlBinding(graphNode, 1);
+            removeButton.userData = new SlotControlBinding(node, slotNode, graphNode, -1);
+            addButton.userData = new SlotControlBinding(node, slotNode, graphNode, 1);
         }
 
-        private static VisualElement FindChildCountOptionField(VisualElement nodeView, BossGraphNode graphNode) {
-            object optionPortModel = GetChildCountOptionPortModel(graphNode);
+        private static VisualElement FindSlotCountOptionField(VisualElement nodeView, Unity.GraphToolkit.Editor.Node node, IResizableSlotNode slotNode) {
+            object optionPortModel = GetSlotCountOptionPortModel(node, slotNode);
             if (optionPortModel != null) {
                 foreach (VisualElement element in Traverse(nodeView)) {
                     if (IsInsideChildControls(element))
@@ -497,15 +533,15 @@ namespace TitanTool.Editor {
                 if (IsInsideChildControls(element))
                     continue;
 
-                if (element is Label label && string.Equals(label.text, "Children", StringComparison.OrdinalIgnoreCase))
+                if (element is Label label && string.Equals(label.text, slotNode.slotDisplayName, StringComparison.OrdinalIgnoreCase))
                     return GetOptionFieldRoot(label, nodeView);
             }
 
             return null;
         }
 
-        private static object GetChildCountOptionPortModel(BossGraphNode graphNode) {
-            INodeOption option = graphNode.GetNodeOptionByName(CHILD_COUNT_OPTION_NAME);
+        private static object GetSlotCountOptionPortModel(Unity.GraphToolkit.Editor.Node node, IResizableSlotNode slotNode) {
+            INodeOption option = node.GetNodeOptionByName(slotNode.slotCountOptionName);
             return GetProperty(option, "PortModel");
         }
 
@@ -628,35 +664,35 @@ namespace TitanTool.Editor {
         }
 
         private static void OnChildControlClicked(ClickEvent evt) {
-            if (evt.currentTarget is not VisualElement target || target.userData is not ChildControlBinding binding)
+            if (evt.currentTarget is not VisualElement target || target.userData is not SlotControlBinding binding)
                 return;
 
-            AdjustChildCount(binding.node, binding.delta);
+            AdjustSlotCount(binding.node, binding.slotNode, binding.graphNode, binding.delta);
             evt.StopPropagation();
         }
 
-        private static void AdjustChildCount(BossGraphNode graphNode, int delta) {
-            if (graphNode == null || !TryGetChildCount(graphNode, out int childCount))
+        private static void AdjustSlotCount(Unity.GraphToolkit.Editor.Node node, IResizableSlotNode slotNode, BossGraphNode graphNode, int delta) {
+            if (node == null || slotNode == null || !TryGetResizableSlotCount(node, slotNode, out int slotCount))
                 return;
 
-            int nextCount = Mathf.Max(graphNode.minimumChildCount, childCount + delta);
-            if (nextCount == childCount)
+            int nextCount = Mathf.Max(slotNode.minimumSlotCount, slotCount + delta);
+            if (nextCount == slotCount)
                 return;
 
-            if (delta < 0 && IsLastChildPortConnected(graphNode, childCount)) {
-                Debug.LogWarning("TitanTool: disconnect the last child slot before removing it.");
+            if (delta < 0 && IsLastSlotPortConnected(node, slotNode, slotCount)) {
+                Debug.LogWarning($"TitanTool: disconnect the last {slotNode.slotDisplayName.ToLowerInvariant()} slot before removing it.");
                 return;
             }
 
-            object graphModel = GetGraphModel(graphNode);
+            object graphModel = GetGraphModel(node);
             Type graphModelType = graphModel?.GetType();
             MethodInfo registerUndo = graphModelType?.GetMethod("RegisterUndo", FLAGS, null, new[] { typeof(string) }, null);
             MethodInfo endUndo = graphModelType?.GetMethod("EndUndo", FLAGS, null, Type.EmptyTypes, null);
 
             try {
-                registerUndo?.Invoke(graphModel, new object[] { delta > 0 ? "Add Child Slot" : "Remove Child Slot" });
-                if (TrySetChildCount(graphNode, nextCount)) {
-                    RedefineNode(graphNode);
+                registerUndo?.Invoke(graphModel, new object[] { delta > 0 ? $"Add {slotNode.slotDisplayName} Slot" : $"Remove {slotNode.slotDisplayName} Slot" });
+                if (TrySetResizableSlotCount(node, slotNode, nextCount)) {
+                    RedefineNode(node);
                     TitanToolEditorSoundSettings.Play(delta > 0
                         ? TitanToolEditorSoundEvent.ChildIncreased
                         : TitanToolEditorSoundEvent.ChildDecreased);
@@ -670,33 +706,39 @@ namespace TitanTool.Editor {
             }
         }
 
-        private static bool TryGetChildCount(BossGraphNode graphNode, out int childCount) {
-            childCount = 0;
-            INodeOption option = graphNode.GetNodeOptionByName(CHILD_COUNT_OPTION_NAME);
-            if (option == null || option.dataType != typeof(int) || !option.TryGetValue(out childCount))
+        private static bool TryGetResizableSlotCount(Unity.GraphToolkit.Editor.Node node, IResizableSlotNode slotNode, out int slotCount) {
+            slotCount = 0;
+            INodeOption option = node.GetNodeOptionByName(slotNode.slotCountOptionName);
+            if (option == null || option.dataType != typeof(int) || !option.TryGetValue(out slotCount))
                 return false;
 
-            childCount = Mathf.Max(graphNode.minimumChildCount, childCount);
+            slotCount = Mathf.Max(slotNode.minimumSlotCount, slotCount);
             return true;
         }
 
-        private static bool TrySetChildCount(BossGraphNode graphNode, int childCount) {
-            INodeOption option = graphNode.GetNodeOptionByName(CHILD_COUNT_OPTION_NAME);
+        private static bool TrySetResizableSlotCount(Unity.GraphToolkit.Editor.Node node, IResizableSlotNode slotNode, int slotCount) {
+            INodeOption option = node.GetNodeOptionByName(slotNode.slotCountOptionName);
             object portModel = GetProperty(option, "PortModel");
             object embeddedValue = GetProperty(portModel, "EmbeddedValue");
             PropertyInfo objectValueProperty = embeddedValue?.GetType().GetProperty("ObjectValue", FLAGS);
             if (objectValueProperty?.CanWrite != true)
                 return false;
 
-            objectValueProperty.SetValue(embeddedValue, Mathf.Max(graphNode.minimumChildCount, childCount));
+            objectValueProperty.SetValue(embeddedValue, Mathf.Max(slotNode.minimumSlotCount, slotCount));
             return true;
         }
 
-        private static bool IsLastChildPortConnected(BossGraphNode graphNode, int childCount) {
-            string lastPortName = $"Out{Mathf.Max(0, childCount - 1)}";
+        private static bool IsLastSlotPortConnected(Unity.GraphToolkit.Editor.Node graphNode, IResizableSlotNode slotNode, int slotCount) {
+            string lastPortName = slotNode.GetSlotPortName(Mathf.Max(0, slotCount - 1));
             INode node = graphNode;
-            for (int index = 0; index < node.outputPortCount; index++) {
-                IPort port = node.GetOutputPort(index);
+            int portCount = slotNode.slotPortDirection == ResizableSlotPortDirection.Output
+                ? node.outputPortCount
+                : node.inputPortCount;
+
+            for (int index = 0; index < portCount; index++) {
+                IPort port = slotNode.slotPortDirection == ResizableSlotPortDirection.Output
+                    ? node.GetOutputPort(index)
+                    : node.GetInputPort(index);
                 if (port?.name == lastPortName)
                     return port.isConnected;
             }
@@ -704,12 +746,12 @@ namespace TitanTool.Editor {
             return false;
         }
 
-        private static object GetGraphModel(BossGraphNode graphNode) {
+        private static object GetGraphModel(Unity.GraphToolkit.Editor.Node graphNode) {
             object implementation = GetMemberValue(graphNode, "m_Implementation");
             return GetProperty(implementation, "GraphModel");
         }
 
-        private static void RedefineNode(BossGraphNode graphNode) {
+        private static void RedefineNode(Unity.GraphToolkit.Editor.Node graphNode) {
             object implementation = GetMemberValue(graphNode, "m_Implementation");
             implementation?.GetType().GetMethod("DefineNode", FLAGS, null, Type.EmptyTypes, null)?.Invoke(implementation, null);
         }
@@ -848,14 +890,33 @@ namespace TitanTool.Editor {
             return null;
         }
 
-        private readonly struct ChildControlBinding {
-            public readonly BossGraphNode node;
+        private readonly struct SlotControlBinding {
+            public readonly Unity.GraphToolkit.Editor.Node node;
+            public readonly IResizableSlotNode slotNode;
+            public readonly BossGraphNode graphNode;
             public readonly int delta;
 
-            public ChildControlBinding(BossGraphNode node, int delta) {
+            public SlotControlBinding(Unity.GraphToolkit.Editor.Node node, IResizableSlotNode slotNode, BossGraphNode graphNode, int delta) {
                 this.node = node;
+                this.slotNode = slotNode;
+                this.graphNode = graphNode;
                 this.delta = delta;
             }
+        }
+
+        private readonly struct ChildSlotDescriptor : IResizableSlotNode {
+            private readonly BossGraphNode m_node;
+
+            public string slotCountOptionName => CHILD_COUNT_OPTION_NAME;
+            public string slotDisplayName => "Children";
+            public int minimumSlotCount => m_node?.minimumChildCount ?? 1;
+            public ResizableSlotPortDirection slotPortDirection => ResizableSlotPortDirection.Output;
+
+            public ChildSlotDescriptor(BossGraphNode node) {
+                m_node = node;
+            }
+
+            public string GetSlotPortName(int index) => $"Out{index}";
         }
 
         private readonly struct RuntimeViewState {

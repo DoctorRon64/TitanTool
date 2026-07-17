@@ -1655,9 +1655,9 @@ MonoBehaviour:
       data:
         m_Value: 1
     - rid: 1402544301841318250
-      type: {class: WaitNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
+      type: {class: DelayNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.WaitNode, TitanTool.Runtime,
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Custom.DelayNode, TitanTool.Runtime,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: ad5020b0-41a4-4556-a54a-2bff1b6a1dde
         m_childGuids: []

@@ -30,7 +30,7 @@ namespace TitanTool.Editor {
 
         private static readonly Dictionary<KeyCode, NodeShortcut> s_nodeShortcuts = new Dictionary<KeyCode, NodeShortcut> {
             { KeyCode.S, new NodeShortcut(typeof(SequenceNode), "Sequence") },
-            { KeyCode.D, new NodeShortcut(typeof(WaitNode), "Delay") },
+            { KeyCode.D, new NodeShortcut(typeof(DelayNode), "Delay") },
             { KeyCode.F, new NodeShortcut(typeof(RepeaterNode), "Loop") },
             { KeyCode.O, new NodeShortcut(typeof(RunOnceNode), "Do Once") },
             { KeyCode.R, new NodeShortcut(typeof(RerouteNode), "Reroute") },
