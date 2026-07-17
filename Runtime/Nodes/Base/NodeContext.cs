@@ -31,6 +31,10 @@ namespace TitanTool.Runtime.Nodes.Base {
         public NodeStatus status;
         public float executionTime;
         public bool visited;
+        public int tickCount;
+        public int lastStatusChangeFrame;
+        public float lastStatusChangeTime;
+        public string statusReason;
     }
     
     public class NodeContext {
@@ -110,6 +114,7 @@ namespace TitanTool.Runtime.Nodes.Base {
                 }
                 RuntimeNodeDebugData debug = GetDebug(node);
                 debug.visited = true;
+                debug.tickCount++;
                 debug.status = result;
                 debug.executionTime = duration;
                 return result;
@@ -130,6 +135,7 @@ namespace TitanTool.Runtime.Nodes.Base {
         }
 
         public void SetStatus(Node node, NodeStatus status) {
+            RuntimeNodeDebugData debug = GetDebug(node);
             if (m_status.TryGetValue(node, out NodeStatus current)) {
                 if (current == status) {
                     return;
@@ -137,7 +143,17 @@ namespace TitanTool.Runtime.Nodes.Base {
             }
 
             m_status[node] = status;
+            debug.status = status;
+            debug.lastStatusChangeFrame = Time.frameCount;
+            debug.lastStatusChangeTime = Time.realtimeSinceStartup;
             m_onNodeStatusChanged?.Invoke(node, status);
+        }
+
+        public void SetStatusReason(Node node, string reason) {
+            if (node == null)
+                return;
+
+            GetDebug(node).statusReason = reason;
         }
 
         public NodeStatus GetStatus(Node node) => m_status.GetValueOrDefault(node, NodeStatus.Failure);

@@ -7,11 +7,12 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.ParallelNode), "Run In Parallel", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Ticks every connected child branch in the same graph update. Use it when actions like moving and shooting must happen together.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.ParallelNode), "Run Together", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Ticks unfinished child branches in the same graph update. Running children keep ticking, completed children wait, and the selected preset decides when the whole node succeeds or fails.")]
     public class ParallelNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";
-        private const string OPTION_SUCCESS_RULE = "SuccessRule";
-        private const string OPTION_FAILURE_RULE = "FailureRule";
+        private const string OPTION_PRESET = "Preset";
+        private const string LEGACY_OPTION_SUCCESS_RULE = "SuccessRule";
+        private const string LEGACY_OPTION_FAILURE_RULE = "FailureRule";
 
         protected override int outputCount => GetChildCount();
         protected override bool hasInput => true;
@@ -30,14 +31,9 @@ namespace TitanTool.Editor.Nodes {
                 .WithDefaultValue(2)
                 .Delayed();
 
-            context.AddOption<ParallelSuccessRule>(OPTION_SUCCESS_RULE)
-                .WithDisplayName("Succeed When")
-                .WithDefaultValue(ParallelSuccessRule.AllChildren)
-                .Delayed();
-
-            context.AddOption<ParallelFailureRule>(OPTION_FAILURE_RULE)
-                .WithDisplayName("Fail When")
-                .WithDefaultValue(ParallelFailureRule.AnyChild)
+            context.AddOption<ParallelBehaviorPreset>(OPTION_PRESET)
+                .WithDisplayName("Behavior")
+                .WithDefaultValue(ParallelBehaviorPreset.FailFast)
                 .Delayed();
         }
 
@@ -49,8 +45,7 @@ namespace TitanTool.Editor.Nodes {
             if (runtimeNode is not TitanTool.Runtime.Nodes.Base.ParallelNode parallelRuntime)
                 return;
 
-            parallelRuntime.SetSuccessRule(GetSuccessRule());
-            parallelRuntime.SetFailureRule(GetFailureRule());
+            parallelRuntime.SetPreset(GetPreset());
         }
 
         public void Validate(BossGraphNodeValidationContext context) {
@@ -63,8 +58,7 @@ namespace TitanTool.Editor.Nodes {
                 context.Warning($"Parallel has {childCount} child slots but only {connectedChildren} connected.");
             }
 
-            if (GetSuccessRule() == ParallelSuccessRule.AnyChild &&
-                GetFailureRule() == ParallelFailureRule.AnyChild) {
+            if (GetPreset() == ParallelBehaviorPreset.FirstResultWins) {
                 context.Warning("Parallel is configured to finish on any success or failure. If both happen during the same update, failure takes priority.");
             }
         }
@@ -76,18 +70,30 @@ namespace TitanTool.Editor.Nodes {
             return 2;
         }
 
-        private ParallelSuccessRule GetSuccessRule() {
-            if (GetNodeOptionByName(OPTION_SUCCESS_RULE)?.TryGetValue(out ParallelSuccessRule rule) == true)
-                return rule;
+        private ParallelBehaviorPreset GetPreset() {
+            if (GetNodeOptionByName(OPTION_PRESET)?.TryGetValue(out ParallelBehaviorPreset preset) == true)
+                return preset;
 
-            return ParallelSuccessRule.AllChildren;
+            if (TryGetLegacyRules(out ParallelSuccessRule successRule, out ParallelFailureRule failureRule)) {
+                if (successRule == ParallelSuccessRule.AnyChild && failureRule == ParallelFailureRule.AllChildren)
+                    return ParallelBehaviorPreset.AnySuccessWins;
+
+                if (successRule == ParallelSuccessRule.AllChildren && failureRule == ParallelFailureRule.AllChildren)
+                    return ParallelBehaviorPreset.WaitForAll;
+
+                if (successRule == ParallelSuccessRule.AnyChild && failureRule == ParallelFailureRule.AnyChild)
+                    return ParallelBehaviorPreset.FirstResultWins;
+            }
+
+            return ParallelBehaviorPreset.FailFast;
         }
 
-        private ParallelFailureRule GetFailureRule() {
-            if (GetNodeOptionByName(OPTION_FAILURE_RULE)?.TryGetValue(out ParallelFailureRule rule) == true)
-                return rule;
-
-            return ParallelFailureRule.AnyChild;
+        private bool TryGetLegacyRules(out ParallelSuccessRule successRule, out ParallelFailureRule failureRule) {
+            successRule = ParallelSuccessRule.AllChildren;
+            failureRule = ParallelFailureRule.AnyChild;
+            bool hasSuccessRule = GetNodeOptionByName(LEGACY_OPTION_SUCCESS_RULE)?.TryGetValue(out successRule) == true;
+            bool hasFailureRule = GetNodeOptionByName(LEGACY_OPTION_FAILURE_RULE)?.TryGetValue(out failureRule) == true;
+            return hasSuccessRule || hasFailureRule;
         }
     }
 }

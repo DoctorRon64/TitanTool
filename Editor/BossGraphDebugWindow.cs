@@ -187,8 +187,10 @@ namespace TitanTool.Editor {
                 EditorGUILayout.LabelField("Status", m_columnHeaderStyle, GUILayout.Width(62));
                 EditorGUILayout.LabelField("Node", m_columnHeaderStyle, GUILayout.MinWidth(130));
                 EditorGUILayout.LabelField("Type", m_columnHeaderStyle, GUILayout.Width(142));
+                EditorGUILayout.LabelField("Ticks", m_columnHeaderStyle, GUILayout.Width(42));
                 EditorGUILayout.LabelField("Time", m_columnHeaderStyle, GUILayout.Width(64));
                 EditorGUILayout.LabelField("Ch", m_columnHeaderStyle, GUILayout.Width(28));
+                EditorGUILayout.LabelField("Reason", m_columnHeaderStyle, GUILayout.MinWidth(150));
                 EditorGUILayout.LabelField("Guid", m_columnHeaderStyle, GUILayout.MinWidth(80));
                 GUILayout.Space(50);
             }
@@ -196,6 +198,7 @@ namespace TitanTool.Editor {
 
         private void DrawNodeRow(RuntimeNode node, NodeContext context, bool visitedThisTick, int index) {
             NodeStatus status = context?.GetStatus(node) ?? NodeStatus.Failure;
+            RuntimeNodeDebugData debug = context?.GetDebug(node);
             Color color = context == null
                 ? new Color(0.35f, 0.35f, 0.35f)
                 : GetStatusColor(status, visitedThisTick);
@@ -209,8 +212,10 @@ namespace TitanTool.Editor {
             DrawStatusPill(visitedThisTick ? StatusShortName(status) : "Idle", color);
             EditorGUILayout.LabelField(node.displayName, visitedThisTick ? m_headerStyle : m_subtleLabelStyle, GUILayout.MinWidth(130));
             EditorGUILayout.LabelField(node.GetType().Name, m_subtleLabelStyle, GUILayout.Width(142));
+            EditorGUILayout.LabelField(debug != null ? debug.tickCount.ToString() : "--", m_monoStyle, GUILayout.Width(42));
             EditorGUILayout.LabelField(context != null ? $"{context.GetTiming(node) * 1000f:F2}" : "--", m_monoStyle, GUILayout.Width(64));
             EditorGUILayout.LabelField(node.children.Count(child => child != null).ToString(), m_monoStyle, GUILayout.Width(28));
+            EditorGUILayout.LabelField(GetDebugReason(debug), m_subtleLabelStyle, GUILayout.MinWidth(150));
             EditorGUILayout.LabelField(ShortGuid(node.guid), m_guidStyle, GUILayout.MinWidth(80));
             if (GUILayout.Button("Ping", m_miniButtonStyle, GUILayout.Width(44))) {
                     Selection.activeObject = node;
@@ -338,6 +343,18 @@ namespace TitanTool.Editor {
                 NodeStatus.Running => "Run",
                 _ => status.ToString()
             };
+        }
+
+        private static string GetDebugReason(RuntimeNodeDebugData debug) {
+            if (debug == null)
+                return "--";
+
+            if (!string.IsNullOrWhiteSpace(debug.statusReason))
+                return debug.statusReason;
+
+            return debug.tickCount > 0
+                ? $"Last status changed on frame {debug.lastStatusChangeFrame}"
+                : "Not ticked yet";
         }
 
         private static string ShortGuid(string guid) {

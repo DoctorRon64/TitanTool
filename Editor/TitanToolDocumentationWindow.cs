@@ -42,8 +42,23 @@ namespace TitanTool.Editor {
         private static readonly DocLine[] NodeChoiceLines = {
             new("Order", "Run In Order", "Use Sequence when several steps must all finish in order, such as move, wait, then shoot."),
             new("Choice", "Try Children", "Use Selector when the first valid branch should win, such as phase behavior with a fallback."),
-            new("Together", "Run In Parallel", "Use Parallel when branches must happen at the same time, such as moving while shooting."),
+            new("Together", "Run Together", "Use Parallel when unfinished branches must tick together, such as moving while shooting. Completed branches wait until the preset finishes the group."),
+            new("Repeat", "Repeat Children", "Use Repeater when one small child group should run several times without copying the same nodes."),
             new("Random", "Random Nodes", "Use Pick Random Child for one random branch, Shuffle Bag for no-repeat variety, and RandomVariable for random values.")
+        };
+
+        private static readonly DocLine[] ParallelLines = {
+            new("FailFast", "Fail Fast", "All children must succeed, but the parallel node fails immediately when any child fails."),
+            new("AnyOK", "Any Success Wins", "The first successful child succeeds the parallel node. It fails only when every child failed."),
+            new("Wait", "Wait For All", "Every child gets a chance to finish. The node succeeds only when every child succeeded."),
+            new("First", "First Result Wins", "Any success or failure can finish the node. If success and failure happen in the same update, failure wins.")
+        };
+
+        private static readonly DocLine[] PatternLines = {
+            new("Move", "Move While Shooting", "Use Run Together with one movement branch and one shooting branch. Completed shot branches wait while movement keeps running."),
+            new("Repeat", "Repeat Attack Pattern", "Use Repeat Children around a small shoot, wait, move, or spawn group instead of copying those nodes."),
+            new("Gate", "Blackboard Counter Gate", "Use RuntimeMath and RuntimeCompare to count attempts, then reset the value after the gate passes."),
+            new("Intro", "Run Once Intro", "Use Run Once for a one-time opening animation or attack before normal phase logic starts.")
         };
 
         private static readonly DocLine[] TargetLines = {
@@ -170,6 +185,8 @@ namespace TitanTool.Editor {
             DrawTextSection("Execution Flow", ExecutionLines);
             DrawTextSection("Success / Failure / Running", StatusLines);
             DrawTextSection("Choosing Nodes", NodeChoiceLines);
+            DrawTextSection("Parallel Presets", ParallelLines);
+            DrawTextSection("Example Patterns", PatternLines);
             DrawTextSection("Target Points", TargetLines);
             DrawTextSection("Blackboard And Values", BlackboardLines);
             DrawTextSection("Search And Hover Text", SearchLines);

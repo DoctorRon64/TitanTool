@@ -12,6 +12,13 @@ namespace TitanTool.Runtime.Nodes.Base {
         AllChildren
     }
 
+    public enum ParallelBehaviorPreset {
+        FailFast,
+        AnySuccessWins,
+        WaitForAll,
+        FirstResultWins
+    }
+
     public class ParallelState {
         public readonly List<NodeStatus> statuses = new();
         public readonly List<bool> completed = new();
@@ -24,9 +31,34 @@ namespace TitanTool.Runtime.Nodes.Base {
 
         public void SetSuccessRule(ParallelSuccessRule rule) => m_successRule = rule;
         public void SetFailureRule(ParallelFailureRule rule) => m_failureRule = rule;
+        public void SetPreset(ParallelBehaviorPreset preset) {
+            switch (preset) {
+                case ParallelBehaviorPreset.AnySuccessWins:
+                    m_successRule = ParallelSuccessRule.AnyChild;
+                    m_failureRule = ParallelFailureRule.AllChildren;
+                    break;
+
+                case ParallelBehaviorPreset.WaitForAll:
+                    m_successRule = ParallelSuccessRule.AllChildren;
+                    m_failureRule = ParallelFailureRule.AllChildren;
+                    break;
+
+                case ParallelBehaviorPreset.FirstResultWins:
+                    m_successRule = ParallelSuccessRule.AnyChild;
+                    m_failureRule = ParallelFailureRule.AnyChild;
+                    break;
+
+                case ParallelBehaviorPreset.FailFast:
+                default:
+                    m_successRule = ParallelSuccessRule.AllChildren;
+                    m_failureRule = ParallelFailureRule.AnyChild;
+                    break;
+            }
+        }
 
         public override NodeStatus Tick(NodeContext ctx) {
             if (children.Count == 0) {
+                ctx.SetStatusReason(this, "No connected children");
                 ctx.SetStatus(this, NodeStatus.Failure);
                 return NodeStatus.Failure;
             }
@@ -45,6 +77,9 @@ namespace TitanTool.Runtime.Nodes.Base {
 
                 state.statuses[i] = result;
                 state.completed[i] = result != NodeStatus.Running;
+                ctx.SetStatusReason(child, state.completed[i]
+                    ? $"Parallel child completed with {result}"
+                    : "Parallel child still running");
             }
 
             int successes = 0;
@@ -70,15 +105,26 @@ namespace TitanTool.Runtime.Nodes.Base {
                 ? successes > 0
                 : successes == children.Count;
 
-            if (failureReached)
+            if (failureReached) {
+                ctx.SetStatusReason(this, failures == 1
+                    ? "Parallel finished because one child failed"
+                    : $"Parallel finished because {failures} children failed");
                 return Finish(ctx, NodeStatus.Failure);
+            }
 
-            if (successReached)
+            if (successReached) {
+                ctx.SetStatusReason(this, successes == 1
+                    ? "Parallel finished because one child succeeded"
+                    : "Parallel finished because all children succeeded");
                 return Finish(ctx, NodeStatus.Success);
+            }
 
-            if (completed == children.Count)
+            if (completed == children.Count) {
+                ctx.SetStatusReason(this, "Parallel finished with mixed child results");
                 return Finish(ctx, NodeStatus.Failure);
+            }
 
+            ctx.SetStatusReason(this, $"Waiting for {children.Count - completed} child branch(es)");
             ctx.SetStatus(this, NodeStatus.Running);
             return NodeStatus.Running;
         }

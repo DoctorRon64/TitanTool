@@ -1,7 +1,7 @@
 {
     "name":  "com.drron.titantool",
     "displayName":  "TitanTool",
-    "version":  "0.1.1",
+    "version":  "0.2.0",
     "unity":  "6000.0",
     "description":  "A Unity boss behavior graph tool for building, validating, compiling, and debugging boss encounters.",
     "keywords":  [

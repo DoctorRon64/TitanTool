@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0
+
+- Added clearer composite-node wording for Run Together, Run In Order, and Repeat Children.
+- Added Run Together behavior presets for fail-fast, any-success, wait-for-all, and first-result workflows.
+- Improved runtime debug data with tick counts, status change timing, and status reasons.
+- Updated the Runtime Debugger with tick count and reason columns.
+- Added documentation for parallel presets and common example graph patterns.
+
 ## 0.1.1
 
 - Refreshed package docs to describe the package layout instead of the in-project source layout.

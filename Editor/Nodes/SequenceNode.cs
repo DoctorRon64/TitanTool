@@ -6,7 +6,7 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.SequenceNode), "Run In Order", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs connected children from top to bottom. Stops on the first failure and succeeds only after every child succeeds.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.SequenceNode), "Run In Order", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs connected children from top to bottom. A running child pauses the sequence, failure stops the sequence, and the node succeeds after every child succeeds.")]
     public class SequenceNode : BossGraphNode, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";
         protected override int outputCount => GetChildCount();
