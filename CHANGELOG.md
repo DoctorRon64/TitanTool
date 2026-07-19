@@ -2,6 +2,9 @@
 
 ## 0.2.0
 
+- Added a Custom Scriptable Node action so projects can plug in ScriptableObject-backed boss behavior and optional polish-package adapters.
+- Extended editor node registration to discover compatible custom graph nodes from other loaded assemblies.
+- Added package default editor sound clips for graph open/create/detach, comment creation, and target point provider actions.
 - Removed the Starter Data and Cuphead Example samples so the package ships one maintained Template Scene sample.
 - Refreshed the packaged Template Scene `DefaultBoss.titan` from the current imported example project sample.
 - Renamed Repeat Children to Repeat Sequence and added an After Completion option for restart vs remember-success behavior.

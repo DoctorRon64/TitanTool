@@ -24,6 +24,7 @@ namespace TitanTool.Editor {
         [SerializeField] private string m_assetPath;
         [SerializeField] private int m_lastNodeCount = -1;
         [SerializeField] private int m_lastWireCount = -1;
+        [SerializeField] private int m_lastPlacematCount = -1;
         [NonSerialized] private bool m_ensuringStartNode;
         [NonSerialized] private bool m_enforcingWireRules;
         public string assetPath => m_assetPath;
@@ -83,8 +84,9 @@ namespace TitanTool.Editor {
         private void PlaySoundForGraphDelta() {
             int nodeCount = GetNodes().Count();
             int wireCount = CountWireModels();
+            int placematCount = CountPlacematModels();
 
-            if (m_lastNodeCount >= 0 && m_lastWireCount >= 0) {
+            if (m_lastNodeCount >= 0 && m_lastWireCount >= 0 && m_lastPlacematCount >= 0) {
                 if (nodeCount > m_lastNodeCount) {
                     TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.NodeCreated);
                     TitanToolUsageLogger.LogNodePlaced(this, nodeCount - m_lastNodeCount, nodeCount);
@@ -97,10 +99,13 @@ namespace TitanTool.Editor {
                     TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.WireConnected);
                 else if (wireCount < m_lastWireCount)
                     TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.WireRemoved);
+                else if (placematCount > m_lastPlacematCount)
+                    TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.CommentCreated);
             }
 
             m_lastNodeCount = nodeCount;
             m_lastWireCount = wireCount;
+            m_lastPlacematCount = placematCount;
         }
 
         private int CountWireModels() {
@@ -114,6 +119,24 @@ namespace TitanTool.Editor {
 
             int count = 0;
             if (wireModels is IEnumerable enumerable) {
+                foreach (object _ in enumerable)
+                    count++;
+            }
+
+            return count;
+        }
+
+        private int CountPlacematModels() {
+            object implementation = BossGraphReflection.graphImplementationField?.GetValue(this);
+            object placematModels = implementation?.GetType()
+                .GetProperty("PlacematModels", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                ?.GetValue(implementation);
+
+            if (placematModels is ICollection collection)
+                return collection.Count;
+
+            int count = 0;
+            if (placematModels is IEnumerable enumerable) {
                 foreach (object _ in enumerable)
                     count++;
             }

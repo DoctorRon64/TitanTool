@@ -87,7 +87,7 @@ namespace TitanTool.Editor {
         }
 
         [OnOpenAsset]
-        private static bool OnOpenAsset(int instanceId, int line) {
+        private static bool OnOpenAsset(EntityId instanceId, int line) {
             string assetPath = AssetDatabase.GetAssetPath(instanceId);
             if (IsTitanGraphPath(assetPath))
                 LogGraphOpened(assetPath);

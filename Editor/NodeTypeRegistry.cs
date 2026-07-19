@@ -47,10 +47,7 @@ namespace TitanTool.Editor {
             s_editorRegistrations = new();
             s_runtimeRegistrations = new();
 
-            IEnumerable<Type> editorTypes = Assembly
-                .GetAssembly(typeof(BossGraphNode))
-                .GetTypes()
-                .Where(t => !t.IsAbstract && typeof(BossGraphNode).IsAssignableFrom(t));
+            IEnumerable<Type> editorTypes = GetEditorNodeTypes();
 
             foreach (Type editorType in editorTypes) {
                 GraphNodeAttribute attr;
@@ -91,6 +88,36 @@ namespace TitanTool.Editor {
             GraphNodeRegistration registration = new(editorType, attr);
             s_editorRegistrations[editorType] = registration;
             s_runtimeRegistrations[attr.RuntimeType] = registration;
+        }
+
+        private static IEnumerable<Type> GetEditorNodeTypes() {
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+                foreach (Type type in GetLoadableTypes(assembly)) {
+                    if (type == null || type.IsAbstract || !typeof(BossGraphNode).IsAssignableFrom(type))
+                        continue;
+
+                    yield return type;
+                }
+            }
+        }
+
+        private static IEnumerable<Type> GetLoadableTypes(Assembly assembly) {
+            Type[] types;
+            try {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex) {
+                types = ex.Types;
+            }
+            catch (Exception ex) {
+                Debug.LogWarning($"TitanTool skipped node scan for {assembly.GetName().Name}: {ex.Message}");
+                yield break;
+            }
+
+            foreach (Type type in types) {
+                if (type != null)
+                    yield return type;
+            }
         }
 
         public static Type GetRuntime(Type editorType) {

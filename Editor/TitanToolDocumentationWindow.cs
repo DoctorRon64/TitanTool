@@ -44,6 +44,7 @@ namespace TitanTool.Editor {
             new("Choice", "Try Children", "Use Selector when the first valid branch should win, such as phase behavior with a fallback."),
             new("Together", "Run Together", "Use Parallel when unfinished branches must tick together, such as moving while shooting. Completed branches wait until the preset finishes the group."),
             new("Repeat", "Repeat Sequence", "Use Repeat Sequence when one small child group should run several times without copying the same nodes. Set After Completion to Remember Success when it should not replay after finishing once."),
+            new("Custom", "Custom Scriptable Node", "Use Custom Scriptable Node for project-specific boss actions, polish package calls, and one-off behavior without changing the TitanTool package."),
             new("Random", "Random Nodes", "Use Pick Random Child for one random branch, Shuffle Bag for no-repeat variety, and RandomVariable for random values.")
         };
 

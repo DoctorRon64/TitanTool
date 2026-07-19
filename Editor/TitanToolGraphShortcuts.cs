@@ -94,6 +94,12 @@ namespace TitanTool.Editor {
             if (IsTextInputFocused(graphView))
                 return;
 
+            if (evt.altKey && !evt.ctrlKey && !evt.commandKey && !evt.shiftKey && IsBackQuoteKey(evt)) {
+                if (TryCreateCommentPlacemat(graphView))
+                    Consume(evt);
+                return;
+            }
+
             if (evt.ctrlKey || evt.commandKey || evt.altKey || evt.shiftKey)
                 return;
 
@@ -756,6 +762,10 @@ namespace TitanTool.Editor {
             }
 
             return null;
+        }
+
+        private static bool IsBackQuoteKey(KeyDownEvent evt) {
+            return evt.keyCode == KeyCode.BackQuote || evt.character == '`';
         }
 
         private static object CreateAlignCommand(Type commandType, VisualElement graphView, object selection) {

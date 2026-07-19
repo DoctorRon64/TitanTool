@@ -4,17 +4,14 @@ TitanTool is a Unity boss-behavior graph tool for building, validating, compilin
 
 ## Install
 
-When this folder is pushed as its own repository, install it in Unity with that repository URL:
+For assessment or local use, install TitanTool through Unity Package Manager:
 
-```text
-https://github.com/<owner>/<repo>.git
-```
+1. Open `Window > Package Manager`.
+2. Press `+`.
+3. Choose `Add package from disk...`.
+4. Select this package's `package.json`.
 
-If this package folder stays inside another repository, install it with a path query instead:
-
-```text
-https://github.com/<owner>/<repo>.git?path=/com.drron.titantool
-```
+If the package is later pushed to its own Git repository, it can also be installed from that repository URL.
 
 ## Requirements
 
@@ -29,7 +26,7 @@ GraphToolkit and Cinemachine are declared as package dependencies in `package.js
 - `Runtime`: boss graph runtime, blackboard, boss director, target points, runtime nodes, and the small Utility support slice TitanTool currently depends on.
 - `Runtime/Data/Signals`: default signal assets used by the runtime, samples, and demo prefabs.
 - `Editor`: GraphToolkit editor nodes, graph compiler, validation, debugger window, inspector tooling, and icons.
-- `Documentation~`: node guide and project/package structure docs.
+- `Documentation~`: custom-node guidance and example boss graph patterns.
 - `Samples~`: optional Template Scene content importable through Unity Package Manager, including the current `DefaultBoss.titan` example graph.
 
 ## Quick Start
@@ -39,6 +36,14 @@ GraphToolkit and Cinemachine are declared as package dependencies in `package.js
 3. Add a `BossDirector` to a boss GameObject.
 4. Assign or create a boss graph asset.
 5. Open the graph, build a flow from `Start`, then compile/debug through the TitanTool editor workflow.
+
+## Custom Nodes And Optional Polish Packages
+
+Use `Custom Scriptable Node` when a project needs boss-specific logic without modifying the package. Create a `TitanToolScriptableNode` asset in the game project, put custom gameplay, feedback, tween, or async code in that asset, then assign it to the node's `Node Asset` port.
+
+TitanTool intentionally does not hard-depend on optional polish packages such as UniTask, DoTween, or FEEL. Projects that use those packages can reference them from their own custom node assets or adapter assemblies, while projects that do not use them can still install TitanTool cleanly.
+
+Advanced users can also create full custom editor/runtime nodes in their own assemblies with `BossGraphNode` and `[GraphNode]`; the node registry now scans loaded assemblies for compatible node registrations.
 
 ## Notes For This First Package Pass
 
