@@ -2,6 +2,8 @@
 
 ## 0.2.0
 
+- Removed the Starter Data and Cuphead Example samples so the package ships one maintained Template Scene sample.
+- Refreshed the packaged Template Scene `DefaultBoss.titan` from the current imported example project sample.
 - Renamed Repeat Children to Repeat Sequence and added an After Completion option for restart vs remember-success behavior.
 - Added graph value-source chips for constants, wires, variables, and blackboard keys.
 - Added clearer composite-node wording for Run Together, Run In Order, and Repeat Sequence.

@@ -20,7 +20,7 @@ https://github.com/<owner>/<repo>.git?path=/com.drron.titantool
 
 - Unity 6 or newer.
 - Unity GraphToolkit `0.4.0-exp.2`.
-- Cinemachine `3.1.6` for the Cuphead sample camera and impulse components.
+- Cinemachine `3.1.6` for sample camera and impulse components.
 
 GraphToolkit and Cinemachine are declared as package dependencies in `package.json`.
 
@@ -30,12 +30,12 @@ GraphToolkit and Cinemachine are declared as package dependencies in `package.js
 - `Runtime/Data/Signals`: default signal assets used by the runtime, samples, and demo prefabs.
 - `Editor`: GraphToolkit editor nodes, graph compiler, validation, debugger window, inspector tooling, and icons.
 - `Documentation~`: node guide and project/package structure docs.
-- `Samples~`: optional Starter Data and Cuphead Example content importable through Unity Package Manager, including the current `AllNodes.titan` reference graph.
+- `Samples~`: optional Template Scene content importable through Unity Package Manager, including the current `DefaultBoss.titan` example graph.
 
 ## Quick Start
 
 1. Install the package through Unity Package Manager.
-2. Import the `Starter Data` sample.
+2. Import the `Template Scene` sample.
 3. Add a `BossDirector` to a boss GameObject.
 4. Assign or create a boss graph asset.
 5. Open the graph, build a flow from `Start`, then compile/debug through the TitanTool editor workflow.

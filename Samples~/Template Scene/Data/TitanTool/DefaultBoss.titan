@@ -65,8 +65,6 @@ MonoBehaviour:
         - rid: 7926195740118876870
         - rid: 7926195740118876892
         - rid: 7926195740118876908
-        - rid: 7926195740118876954
-        - rid: 7926195740118876959
         m_GraphWireModels:
         - rid: 1402544186550911168
         - rid: 1402544186550911169
@@ -79,16 +77,13 @@ MonoBehaviour:
         - rid: 1402544186550911350
         - rid: 1402544186550911359
         - rid: 1402544186550911361
-        - rid: 1402544186550911402
         - rid: 1402544193823309835
         - rid: 1402544193823309845
         - rid: 1402544193823309868
         - rid: 1402544193823309869
         - rid: 1402544193823309877
         - rid: 1402544193823309881
-        - rid: 1402544193823309882
         - rid: 1402544193823309884
-        - rid: 1402544193823309887
         - rid: 7926195740118876857
         - rid: 7926195740118876865
         - rid: 7926195740118876866
@@ -96,15 +91,18 @@ MonoBehaviour:
         - rid: 7926195740118876868
         - rid: 7926195740118876869
         - rid: 7926195740118876875
-        - rid: 7926195740118876884
-        - rid: 7926195740118876897
         - rid: 7926195740118876898
         - rid: 7926195740118876899
         - rid: 7926195740118876900
-        - rid: 7926195740118876914
         - rid: 7926195740118876915
         - rid: 7926195740118876916
         - rid: 7926195740118876917
+        - rid: 7926196147291160873
+        - rid: 7926196147291160874
+        - rid: 7926196147291160875
+        - rid: 7926196147291160881
+        - rid: 7926196147291160882
+        - rid: 7926196147291160883
         m_GraphStickyNoteModels:
         - rid: 7926195740118876880
         - rid: 7926195740118876885
@@ -122,16 +120,15 @@ MonoBehaviour:
         m_GraphVariableModels:
         - rid: 1402544186550911218
         - rid: 7926195740118876952
-        - rid: 7926195748975149282
         m_GraphPortalModels: []
         m_SectionModels:
         - rid: 1402544186550911055
         m_LocalSubgraphs: []
         m_LastKnownBounds:
           serializedVersion: 2
-          x: -747
+          x: -817
           y: -957
-          width: 2423
+          width: 2575
           height: 3740
         m_GraphElementMetaData:
         - m_Guid:
@@ -399,14 +396,6 @@ MonoBehaviour:
           m_Category: 0
           m_Index: 20
         - m_Guid:
-            m_Value0: 5593203792634754695
-            m_Value1: 4151171197303569160
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: 87b65c20370d9f4d08bb1cc935ec9b39
-          m_Category: 2
-          m_Index: 11
-        - m_Guid:
             m_Value0: 16673426969561726041
             m_Value1: 4488929167701319131
           m_HashGuid:
@@ -437,7 +426,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 36975ffa6ffbe9e86e2918b11d0c8f99
           m_Category: 2
-          m_Index: 12
+          m_Index: 11
         - m_Guid:
             m_Value0: 12833372471358190131
             m_Value1: 15747325886263437653
@@ -453,7 +442,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: b66ad21004d6abd2f81b485e05effb48
           m_Category: 2
-          m_Index: 13
+          m_Index: 12
         - m_Guid:
             m_Value0: 4033940923404209732
             m_Value1: 15551807188655165891
@@ -477,7 +466,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: fb1f80ace2a4b3dbd67805d1e40bd744
           m_Category: 2
-          m_Index: 14
+          m_Index: 13
         - m_Guid:
             m_Value0: 10700969208169186853
             m_Value1: 859424980221331662
@@ -485,7 +474,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 25465175cc7a8194ce883051774aed0b
           m_Category: 2
-          m_Index: 15
+          m_Index: 14
         - m_Guid:
             m_Value0: 15455217689427347762
             m_Value1: 18307735580852839363
@@ -501,7 +490,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 8915de6c097bb47f61eb8d462ed46977
           m_Category: 2
-          m_Index: 16
+          m_Index: 15
         - m_Guid:
             m_Value0: 13277168239035129961
             m_Value1: 1783639783151532746
@@ -517,15 +506,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: f804a11a54fe33a6de1d32d11c201930
           m_Category: 2
-          m_Index: 17
-        - m_Guid:
-            m_Value0: 7407334220249374168
-            m_Value1: 7829021939228152401
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: d81d8f423a23cc6651126f4af945a66c
-          m_Category: 2
-          m_Index: 18
+          m_Index: 16
         - m_Guid:
             m_Value0: 6981696929839160328
             m_Value1: 12394642153460888812
@@ -541,15 +522,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 8f07fe1066c47d5bed2aa54f9f129f34
           m_Category: 2
-          m_Index: 19
-        - m_Guid:
-            m_Value0: 3771636092986677448
-            m_Value1: 4442836900722574857
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: c85883280b8b57340906913e9f20a83d
-          m_Category: 2
-          m_Index: 20
+          m_Index: 17
         - m_Guid:
             m_Value0: 3522426256498549587
             m_Value1: 3360952640189193434
@@ -565,7 +538,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 954873f5275a1bc8e73cd30bdbfed76a
           m_Category: 2
-          m_Index: 21
+          m_Index: 18
         - m_Guid:
             m_Value0: 16594300447254977273
             m_Value1: 13488318767792860461
@@ -581,7 +554,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 19137a7dfe408ef4916a9a39eccca72e
           m_Category: 2
-          m_Index: 22
+          m_Index: 19
         - m_Guid:
             m_Value0: 15535286282750727798
             m_Value1: 9326977298851615281
@@ -589,7 +562,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 76165b8f906c98d731d22ed66f147081
           m_Category: 2
-          m_Index: 23
+          m_Index: 20
         - m_Guid:
             m_Value0: 16535089025453474154
             m_Value1: 6640235451084382486
@@ -597,7 +570,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 6a419dabdc6f78e51621d716f6da265c
           m_Category: 2
-          m_Index: 24
+          m_Index: 21
         - m_Guid:
             m_Value0: 14246295542098026500
             m_Value1: 246334938106275944
@@ -605,7 +578,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 04e0fbbf5002b5c568a8973152286b03
           m_Category: 2
-          m_Index: 25
+          m_Index: 22
         - m_Guid:
             m_Value0: 15449672841221407042
             m_Value1: 6096230456988783359
@@ -613,7 +586,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 428100dd974368d6ffd2bb294d299a54
           m_Category: 2
-          m_Index: 26
+          m_Index: 23
         - m_Guid:
             m_Value0: 9605188316567370377
             m_Value1: 18310103857151787014
@@ -629,15 +602,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 6b735c14d1ccc0634f12f7c49b94c891
           m_Category: 2
-          m_Index: 27
-        - m_Guid:
-            m_Value0: 10443526370718648526
-            m_Value1: 10263479425551002215
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: ce081ce9e6dbee90676a7fc728346f8e
-          m_Category: 2
-          m_Index: 28
+          m_Index: 24
         - m_Guid:
             m_Value0: 12013275056197604907
             m_Value1: 6265526419170034150
@@ -647,21 +612,13 @@ MonoBehaviour:
           m_Category: 0
           m_Index: 33
         - m_Guid:
-            m_Value0: 13862324054068830492
-            m_Value1: 15294089463233124143
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: 1c21200c48de60c02f170ed355853fd4
-          m_Category: 2
-          m_Index: 29
-        - m_Guid:
             m_Value0: 8113467824410559165
             m_Value1: 10549442685704461960
           m_HashGuid:
             serializedVersion: 2
             Hash: bd828dd2ffd3987088dec1b33a266792
           m_Category: 2
-          m_Index: 30
+          m_Index: 25
         - m_Guid:
             m_Value0: 483947378456103906
             m_Value1: 12659849486229514701
@@ -669,7 +626,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: e28bdb9e9353b706cd299f7008d2b0af
           m_Category: 2
-          m_Index: 31
+          m_Index: 26
         - m_Guid:
             m_Value0: 18179409819521392590
             m_Value1: 9834986959771183194
@@ -677,7 +634,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: ce1fd286e93c4afc5aa8c22b88e47c88
           m_Category: 2
-          m_Index: 32
+          m_Index: 27
         - m_Guid:
             m_Value0: 13252629016826890395
             m_Value1: 13985031126830564860
@@ -687,21 +644,13 @@ MonoBehaviour:
           m_Category: 0
           m_Index: 34
         - m_Guid:
-            m_Value0: 4941444000687659421
-            m_Value1: 6211829269841619855
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: 9d197942238993448fab482acfd93456
-          m_Category: 2
-          m_Index: 33
-        - m_Guid:
             m_Value0: 18141151931803143389
             m_Value1: 561487297750906290
           m_HashGuid:
             serializedVersion: 2
             Hash: dd8c84e79051c2fbb23556f0b8cdca07
           m_Category: 2
-          m_Index: 34
+          m_Index: 28
         - m_Guid:
             m_Value0: 995515137338963887
             m_Value1: 6810436863114710126
@@ -709,7 +658,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: aff79c31bec7d00d6e8c2d673e88835e
           m_Category: 2
-          m_Index: 35
+          m_Index: 29
         - m_Guid:
             m_Value0: 10031908054184820916
             m_Value1: 2152566969239023829
@@ -717,7 +666,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: b4001155397f388bd530bbf44074df1d
           m_Category: 2
-          m_Index: 36
+          m_Index: 30
         - m_Guid:
             m_Value0: 6738778742142981138
             m_Value1: 10884715368866895008
@@ -727,21 +676,13 @@ MonoBehaviour:
           m_Category: 1
           m_Index: 1
         - m_Guid:
-            m_Value0: 1491482872225814996
-            m_Value1: 7374872625244842787
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: d4599923c5cfb21423ab783394cf5866
-          m_Category: 0
-          m_Index: 35
-        - m_Guid:
             m_Value0: 11612964930670686758
             m_Value1: 6545046465116991440
           m_HashGuid:
             serializedVersion: 2
             Hash: 26f2b189138a29a1d06fb93715add45a
           m_Category: 2
-          m_Index: 37
+          m_Index: 31
         - m_Guid:
             m_Value0: 14542895944632961496
             m_Value1: 2557762230479771266
@@ -749,7 +690,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: d8095161cfbed2c98256a86f32ff7e23
           m_Category: 2
-          m_Index: 38
+          m_Index: 32
         - m_Guid:
             m_Value0: 10416137192606069921
             m_Value1: 2575860071441276561
@@ -757,7 +698,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: a1f404f1968d8d90919e5e65164bbf23
           m_Category: 2
-          m_Index: 39
+          m_Index: 33
         - m_Guid:
             m_Value0: 2192053325617305928
             m_Value1: 7773660172406961977
@@ -765,15 +706,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 481922bae2bc6b1e3937eb7cbd96e16b
           m_Category: 2
-          m_Index: 40
-        - m_Guid:
-            m_Value0: 9972696527172331502
-            m_Value1: 7168801584349474323
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: eee7e062a722668a136e681c0fb37c63
-          m_Category: 0
-          m_Index: 36
+          m_Index: 34
         - m_Guid:
             m_Value0: 6159627061155127125
             m_Value1: 10898015340351945728
@@ -781,15 +714,55 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: 55df08512d647b55007c6f3e36873d97
           m_Category: 2
-          m_Index: 41
+          m_Index: 35
         - m_Guid:
-            m_Value0: 192185073579085655
-            m_Value1: 1792803375700676713
+            m_Value0: 16272754717366231378
+            m_Value1: 17417345429506518788
           m_HashGuid:
             serializedVersion: 2
-            Hash: 574fd0614ec7aa026990c2e82b51e118
-          m_Category: 1
-          m_Index: 2
+            Hash: 5221addd3270d4e1046f021863d7b6f1
+          m_Category: 2
+          m_Index: 31
+        - m_Guid:
+            m_Value0: 5953042443683449908
+            m_Value1: 8102398842252380044
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 344c93dc8f749d528c47fd94d1807170
+          m_Category: 2
+          m_Index: 32
+        - m_Guid:
+            m_Value0: 11599173873469040065
+            m_Value1: 2148954375537104726
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: c1251dd02e8bf8a0561769709e9ed21d
+          m_Category: 2
+          m_Index: 33
+        - m_Guid:
+            m_Value0: 9352326841378852552
+            m_Value1: 2842451912622032791
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: c8cebc23b623ca819747f75ef46a7227
+          m_Category: 2
+          m_Index: 34
+        - m_Guid:
+            m_Value0: 10491534531346694487
+            m_Value1: 8412324804668952444
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 5701aad9116b99917c0f80e5d694be74
+          m_Category: 2
+          m_Index: 35
+        - m_Guid:
+            m_Value0: 3011884623093034288
+            m_Value1: 17490734294813750969
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 30edeb671b5dcc29b9b61dd72b92bbf2
+          m_Category: 2
+          m_Index: 36
         m_EntryPoint:
           rid: 1402544186550911057
         m_Graph:
@@ -807,13 +780,14 @@ MonoBehaviour:
         m_Items:
         - rid: 1402544186550911218
         - rid: 7926195740118876952
-        - rid: 7926195748975149282
         m_Title: 
     - rid: 1402544186550911056
       type: {class: BossGraph, ns: TitanTool.Editor, asm: TitanTool.Editor}
       data:
         m_rebuildQueued: 0
         m_assetPath: 
+        m_lastNodeCount: 35
+        m_lastWireCount: 37
     - rid: 1402544186550911057
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -824,9 +798,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: d300ed9ca20e7d1f0403b0aa34442402
         m_Version: 2
-        m_Position: {x: -713.76624, y: 334.72867}
+        m_Position: {x: -814.144, y: 340.8122}
         m_Title: 
-        m_Tooltip: Entry point for the boss graph.
+        m_Tooltip: Automatic entry point. Connect Start to the first branch of the
+          boss behavior; it cannot be added or deleted manually.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -865,9 +840,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 80222be0184f6bc6f1900cd25b309716
         m_Version: 2
-        m_Position: {x: 1092.4131, y: -931.6822}
+        m_Position: {x: 1125.7631, y: -927.08215}
         m_Title: 
-        m_Tooltip: Moves the boss toward a player, point, or fixed position.
+        m_Tooltip: Moves the boss toward the target with positive speed or away from
+          it with negative speed until the stop distance is reached.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -880,6 +856,7 @@ MonoBehaviour:
           - Speed
           - StopDistance
           - SpawnPointKey
+          - __option_TargetPointUpdateMode
           m_ValueList:
           - rid: 1402544186550911066
           - rid: 1402544186550911067
@@ -888,6 +865,7 @@ MonoBehaviour:
           - rid: 1402544186550911070
           - rid: 1402544186550911071
           - rid: 1402544186550911074
+          - rid: 7926196147291160860
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -933,10 +911,6 @@ MonoBehaviour:
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Value: 0.2
-    - rid: 1402544186550911072
-      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 0
     - rid: 1402544186550911073
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -947,7 +921,7 @@ MonoBehaviour:
     - rid: 1402544186550911074
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: b82e417f15874604804cbf2a282ee289, type: 2}
+        m_Value: {fileID: 11400000, guid: 99235ddfe4da2b3439d6750c949e970f, type: 2}
     - rid: 1402544186550911075
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -960,7 +934,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 1265.8771, y: 473.27768}
         m_Title: 
-        m_Tooltip: Spawns bullets in the selected pattern from the chosen source.
+        m_Tooltip: Fires bullet or projectile prefabs from the selected source using
+          single, burst, or spread patterns.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1088,7 +1063,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 1271.1665, y: 820.0689}
         m_Title: 
-        m_Tooltip: Pauses this branch for the configured duration.
+        m_Tooltip: Keeps this branch Running for the configured duration, then returns
+          Success.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1138,9 +1114,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: cb4f6942eac58e417e5b4fe1b39b8bcc
         m_Version: 2
-        m_Position: {x: 1089.9165, y: -113.79538}
+        m_Position: {x: 1123.2665, y: -109.19537}
         m_Title: MoveToNode
-        m_Tooltip: Moves the boss toward a player, point, or fixed position.
+        m_Tooltip: Moves the boss toward the target with positive speed or away from
+          it with negative speed until the stop distance is reached.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1153,6 +1130,7 @@ MonoBehaviour:
           - Speed
           - StopDistance
           - SpawnPointKey
+          - __option_TargetPointUpdateMode
           m_ValueList:
           - rid: 1402544186550911109
           - rid: 1402544186550911110
@@ -1161,6 +1139,7 @@ MonoBehaviour:
           - rid: 1402544186550911113
           - rid: 1402544186550911114
           - rid: 1402544186550911116
+          - rid: 7926196147291160861
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -1206,14 +1185,10 @@ MonoBehaviour:
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Value: 0.2
-    - rid: 1402544186550911115
-      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 0
     - rid: 1402544186550911116
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 1232b016765a43ddacc7543d692d480c, type: 2}
+        m_Value: {fileID: 11400000, guid: 28cb5ee984390ab4090ac3d179b0144b, type: 2}
     - rid: 1402544186550911117
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -1231,9 +1206,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: c0085f5931637c837908426a0a829911
         m_Version: 2
-        m_Position: {x: 1093.9094, y: -662.6535}
+        m_Position: {x: 1127.2594, y: -658.05347}
         m_Title: MoveToNode
-        m_Tooltip: Moves the boss toward a player, point, or fixed position.
+        m_Tooltip: Moves the boss toward the target with positive speed or away from
+          it with negative speed until the stop distance is reached.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1246,6 +1222,7 @@ MonoBehaviour:
           - Speed
           - StopDistance
           - SpawnPointKey
+          - __option_TargetPointUpdateMode
           m_ValueList:
           - rid: 1402544186550911133
           - rid: 1402544186550911134
@@ -1254,6 +1231,7 @@ MonoBehaviour:
           - rid: 1402544186550911137
           - rid: 1402544186550911138
           - rid: 1402544186550911140
+          - rid: 7926196147291160862
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -1299,14 +1277,10 @@ MonoBehaviour:
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Value: 0.2
-    - rid: 1402544186550911139
-      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 0
     - rid: 1402544186550911140
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 77f4952a79f44f2dae6218884f2a6dd2, type: 2}
+        m_Value: {fileID: 11400000, guid: b3a1e9957b8bad94083ca4aed89e75f8, type: 2}
     - rid: 1402544186550911141
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -1324,9 +1298,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: ad2a494a6be21ac4b28fe768ec48178b
         m_Version: 2
-        m_Position: {x: 1091.9094, y: -391.266}
+        m_Position: {x: 1125.2594, y: -386.666}
         m_Title: MoveToNode
-        m_Tooltip: Moves the boss toward a player, point, or fixed position.
+        m_Tooltip: Moves the boss toward the target with positive speed or away from
+          it with negative speed until the stop distance is reached.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1339,6 +1314,7 @@ MonoBehaviour:
           - Speed
           - StopDistance
           - SpawnPointKey
+          - __option_TargetPointUpdateMode
           m_ValueList:
           - rid: 1402544186550911152
           - rid: 1402544186550911153
@@ -1347,6 +1323,7 @@ MonoBehaviour:
           - rid: 1402544186550911156
           - rid: 1402544186550911157
           - rid: 1402544186550911159
+          - rid: 7926196147291160863
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -1392,14 +1369,10 @@ MonoBehaviour:
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Value: 0.2
-    - rid: 1402544186550911158
-      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 0
     - rid: 1402544186550911159
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 8b978306a908439184e44a71e224b92b, type: 2}
+        m_Value: {fileID: 11400000, guid: 08a23ce154904b74885c942d46aba913, type: 2}
     - rid: 1402544186550911160
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -1417,9 +1390,11 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: cb59996d9ae2cafe7aa4ddf7bee824b0
         m_Version: 2
-        m_Position: {x: 832.26434, y: -659.68604}
+        m_Position: {x: 786.6381, y: -665.76953}
         m_Title: SequenceNode
-        m_Tooltip: Runs children in order and stops when one fails.
+        m_Tooltip: Runs connected children from top to bottom. A running child pauses
+          the sequence, failure stops the sequence, and the node succeeds after every
+          child succeeds.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1597,9 +1572,11 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 8c03ebbfb63c217e5740042e8d0508d8
         m_Version: 2
-        m_Position: {x: 973.9253, y: 294.9712}
+        m_Position: {x: 930.069, y: 294.21506}
         m_Title: SequenceNode
-        m_Tooltip: Runs children in order and stops when one fails.
+        m_Tooltip: Runs connected children from top to bottom. A running child pauses
+          the sequence, failure stops the sequence, and the node succeeds after every
+          child succeeds.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1651,7 +1628,13 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 491.58362, y: 296.37125}
         m_Title: 
-        m_Tooltip: Runs connected child branches in order, repeats that sequence for Loops, and can remember success after finishing once.
+        m_Tooltip: 'Runs connected child branches in order, repeats that whole group
+          for the Loops count, then returns Success. If the parent enters it again
+          later, Restart When Re-entered loops again; Remember Success returns Success
+          without replaying until the graph resets.
+
+
+          Badge: xN'
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1659,9 +1642,13 @@ MonoBehaviour:
           m_KeyList:
           - In
           - RepeatCount
+          - __option_ChildCount
+          - __option_CompletionMode
           m_ValueList:
           - rid: 1402544186550911185
           - rid: 1402544186550911186
+          - rid: 7926196147291160864
+          - rid: 7926196147291160871
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -1763,7 +1750,7 @@ MonoBehaviour:
           serializedVersion: 2
           x: 453
           y: -957
-          width: 1097.7075
+          width: 1293.5
           height: 1144
         m_Comment: 
         m_ElementColor:
@@ -1779,9 +1766,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: ded57200dacc57a32cb55b8dd3245baf
         m_Version: 2
-        m_Position: {x: 125.06444, y: 92.09796}
+        m_Position: {x: 112.27573, y: 87.76821}
         m_Title: 
-        m_Tooltip: Chooses one child at random, using weights to favor some branches.
+        m_Tooltip: Chooses one connected child at random, runs only that branch,
+          then rolls again the next time this node starts.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1789,13 +1777,9 @@ MonoBehaviour:
           m_KeyList:
           - __option_ChildCount
           - In
-          - Weight0
-          - Weight1
           m_ValueList:
           - rid: 1402544186550911201
           - rid: 1402544186550911202
-          - rid: 1402544186550911203
-          - rid: 1402544186550911204
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -1818,19 +1802,11 @@ MonoBehaviour:
     - rid: 1402544186550911202
       type: {class: 'Constant`1[[TitanTool.Editor.NodeFlow, TitanTool.Editor]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data: 
-    - rid: 1402544186550911203
-      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 1
-    - rid: 1402544186550911204
-      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 1
     - rid: 1402544186550911205
       type: {class: RandomSelectorNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
-        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.RandomSelectorNode,
-          TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        m_runtimeTypeName: TitanTool.Runtime.Nodes.Base.RandomSelectorNode, TitanTool.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 6df928f6-8907-40e9-b9fc-b252f3ca8c97
         m_childGuids: []
     - rid: 1402544186550911207
@@ -1877,7 +1853,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 486.74457, y: 641.1626}
         m_Title: 
-        m_Tooltip: Outputs a random value between the minimum and maximum range.
+        m_Tooltip: 'Random Variable: outputs a random float, int, or Vector2 between
+          Min and Max. Connect it to compatible value ports.'
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1934,7 +1911,7 @@ MonoBehaviour:
     - rid: 1402544186550911219
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: -7
+        m_Value: 7
     - rid: 1402544186550911254
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -1947,7 +1924,9 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 832.70557, y: 1858.2548}
         m_Title: SequenceNode
-        m_Tooltip: Runs children in order and stops when one fails.
+        m_Tooltip: Runs connected children from top to bottom. A running child pauses
+          the sequence, failure stops the sequence, and the node succeeds after every
+          child succeeds.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -1999,7 +1978,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 1132.9458, y: 2039.3746}
         m_Title: 
-        m_Tooltip: Launches a Rigidbody2D prefab from one source toward another.
+        m_Tooltip: Launches a Rigidbody2D prefab, such as a bomb, from a spawn source
+          toward a target source.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2117,10 +2097,10 @@ MonoBehaviour:
         m_TitleAlignment: 0
         m_Position:
           serializedVersion: 2
-          x: 456.292
-          y: 1806.009
-          width: 1220
-          height: 976.55005
+          x: 375.5
+          y: 1806
+          width: 1382.5
+          height: 977
         m_Comment: 
         m_ElementColor:
           m_Color: {r: 0, g: 0.7830189, b: 0.66380197, a: 1}
@@ -2137,7 +2117,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: -320.16, y: 124.71752}
         m_Title: 
-        m_Tooltip: Runs its child only while boss health is inside this percent range.
+        m_Tooltip: Allows its child to run only while the boss health percentage
+          is inside the configured range.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2225,9 +2206,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 7b19e4b896d85da725dfcd77c5add2c6
         m_Version: 2
-        m_Position: {x: 24.849922, y: 1888.9226}
+        m_Position: {x: 14.499916, y: 1906.1726}
         m_Title: PhaseNode
-        m_Tooltip: Runs its child only while boss health is inside this percent range.
+        m_Tooltip: Allows its child to run only while the boss health percentage
+          is inside the configured range.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2285,7 +2267,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 1135.5903, y: 2335.6897}
         m_Title: DelayNode
-        m_Tooltip: Pauses this branch for the configured duration.
+        m_Tooltip: Keeps this branch Running for the configured duration, then returns
+          Success.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2335,9 +2318,15 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 884874b0a30cbff5571d9b4d93e1077a
         m_Version: 2
-        m_Position: {x: 500.0418, y: 1855.0278}
-        m_Title: Repeat Sequence
-        m_Tooltip: Runs connected child branches in order, repeats that sequence for Loops, and can remember success after finishing once.
+        m_Position: {x: 411.49176, y: 1849.2778}
+        m_Title: RepeaterNode
+        m_Tooltip: 'Runs connected child branches in order, repeats that whole group
+          for the Loops count, then returns Success. If the parent enters it again
+          later, Restart When Re-entered loops again; Remember Success returns Success
+          without replaying until the graph resets.
+
+
+          Badge: xN'
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2345,9 +2334,13 @@ MonoBehaviour:
           m_KeyList:
           - In
           - RepeatCount
+          - __option_ChildCount
+          - __option_CompletionMode
           m_ValueList:
           - rid: 1402544186550911346
           - rid: 1402544186550911347
+          - rid: 7926196147291160865
+          - rid: 7926196147291160872
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -2451,9 +2444,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 3059a0f282da90a712b90766bd3aff9f
         m_Version: 2
-        m_Position: {x: -503.17392, y: 337.93573}
+        m_Position: {x: -603.55164, y: 344.01926}
         m_Title: 
-        m_Tooltip: Runs children in order until one succeeds.
+        m_Tooltip: Tries connected children from top to bottom until one succeeds.
+          Use it for fallback behavior or priority choices.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2569,7 +2563,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 1126.3804, y: 2480.4297}
         m_Title: MoveToNode
-        m_Tooltip: Moves the boss toward a player, point, or fixed position.
+        m_Tooltip: Moves the boss toward the target with positive speed or away from
+          it with negative speed until the stop distance is reached.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2582,6 +2577,7 @@ MonoBehaviour:
           - Speed
           - StopDistance
           - SpawnPointKey
+          - __option_TargetPointUpdateMode
           m_ValueList:
           - rid: 1402544186550911391
           - rid: 1402544186550911392
@@ -2590,6 +2586,7 @@ MonoBehaviour:
           - rid: 1402544186550911395
           - rid: 1402544186550911396
           - rid: 1402544186550911398
+          - rid: 7926196147291160866
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -2635,14 +2632,10 @@ MonoBehaviour:
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Value: 0.2
-    - rid: 1402544186550911397
-      type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 1
     - rid: 1402544186550911398
       type: {class: 'Constant`1[[TitanTool.Runtime.TargetPointKey, TitanTool.Runtime]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: {fileID: 11400000, guid: 8b978306a908439184e44a71e224b92b, type: 2}
+        m_Value: {fileID: 11400000, guid: b3a1e9957b8bad94083ca4aed89e75f8, type: 2}
     - rid: 1402544186550911399
       type: {class: MoveToNode, ns: TitanTool.Editor.Nodes, asm: TitanTool.Editor}
       data:
@@ -2660,7 +2653,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: e12f214098deca50934cfb8011b8d12f
         m_Version: 2
-        m_Position: {x: 825.9397, y: 2664.2773}
+        m_Position: {x: 820.6497, y: 2696.0173}
         m_Title: BossSpeed
         m_Tooltip: 
         m_NodePreviewModel:
@@ -2687,38 +2680,6 @@ MonoBehaviour:
         m_DeclarationModelHashGuid:
           serializedVersion: 2
           Hash: 1e3c0d959c3b6c8ba2277fd0cfa9b77d
-    - rid: 1402544186550911402
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Guid:
-          m_Value0: 5593203792634754695
-          m_Value1: 4151171197303569160
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: 87b65c20370d9f4d08bb1cc935ec9b39
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 5821710213822099425
-            m_Value1: 3445737575233047699
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: e12f214098deca50934cfb8011b8d12f
-          m_UniqueId: MainPortName
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: MainPortName
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 13791980324654471865
-            m_Value1: 7403029562059339708
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: b9da344008f566bfbc3743ec29d8bc66
-          m_UniqueId: Speed
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: Move Speed
     - rid: 1402544186550911411
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -2731,7 +2692,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 1263.9249, y: 962.92126}
         m_Title: 
-        m_Tooltip: Sets or modifies a numeric value stored on the blackboard.
+        m_Tooltip: Sets, adds, subtracts, multiplies, or divides a numeric runtime
+          variable on the blackboard.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2813,10 +2775,13 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: ca02fc218835d0031c50482ef0b7f9b0
         m_Version: 2
-        m_Position: {x: 701.8623, y: 1479.0741}
+        m_Position: {x: 723.03436, y: 1471.5127}
         m_Title: 
-        m_Tooltip: Runs its child once, then returns the configured result on later
-          visits.
+        m_Tooltip: 'Runs its child one time. After that, later visits immediately
+          return the configured status.
+
+
+          Badge: ONCE'
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2873,9 +2838,11 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 0db33609641c678588d891a938eb72a7
         m_Version: 2
-        m_Position: {x: 478.47934, y: 1273.4404}
+        m_Position: {x: 436.13535, y: 1269.6598}
         m_Title: 
-        m_Tooltip: Runs children in order and stops when one fails.
+        m_Tooltip: Runs connected children from top to bottom. A running child pauses
+          the sequence, failure stops the sequence, and the node succeeds after every
+          child succeeds.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -2957,9 +2924,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 33f294c1444c19b255a90bed75bd89da
         m_Version: 2
-        m_Position: {x: 698.94763, y: 1264.7087}
+        m_Position: {x: 777.5866, y: 1265.465}
         m_Title: PhaseNode
-        m_Tooltip: Runs its child only while boss health is inside this percent range.
+        m_Tooltip: Allows its child to run only while the boss health percentage
+          is inside the configured range.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -3047,9 +3015,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 444e6ba8e56ffb37c35128b73d1ed3d7
         m_Version: 2
-        m_Position: {x: 1160.099, y: 1290.4115}
+        m_Position: {x: 1236.4695, y: 1283.6062}
         m_Title: 
-        m_Tooltip: Triggers parameters or plays animation clips on the boss animator.
+        m_Tooltip: Controls the boss Animator by setting parameters or playing a
+          clip. Use it when a graph branch should trigger a visual state.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -3114,7 +3083,9 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 958.1854, y: 1479.1729}
         m_Title: SequenceNode
-        m_Tooltip: Runs children in order and stops when one fails.
+        m_Tooltip: Runs connected children from top to bottom. A running child pauses
+          the sequence, failure stops the sequence, and the node succeeds after every
+          child succeeds.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -3228,9 +3199,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 3289a6709af67bd6c3638322832412fe
         m_Version: 2
-        m_Position: {x: 1221.5115, y: 1535.7904}
+        m_Position: {x: 1237.3905, y: 1532.0096}
         m_Title: DelayNode
-        m_Tooltip: Pauses this branch for the configured duration.
+        m_Tooltip: Keeps this branch Running for the configured duration, then returns
+          Success.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -3314,7 +3286,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: -277.0822, y: 1323.5173}
         m_Title: 
-        m_Tooltip: Redirects flow wires to keep the graph layout tidy.
+        m_Tooltip: Passes execution through without changing behavior. Use it to
+          bend long wires and keep the graph readable.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -3380,38 +3353,6 @@ MonoBehaviour:
           m_PortDirection: 1
           m_PortOrientation: 0
           m_Title: 
-    - rid: 1402544193823309882
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Guid:
-          m_Value0: 7407334220249374168
-          m_Value1: 7829021939228152401
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: d81d8f423a23cc6651126f4af945a66c
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 13277168239035129961
-            m_Value1: 1783639783151532746
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 69a0c9fe2afa41b8ca7a00c2eec2c018
-          m_UniqueId: Out0
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: 
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 9612683145622500109
-            m_Value1: 12065964980274583688
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 0db33609641c678588d891a938eb72a7
-          m_UniqueId: In
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: 
     - rid: 1402544193823309883
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -3422,9 +3363,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 089c7ff85df8e360ec741e735e9d02ac
         m_Version: 2
-        m_Position: {x: -285.36905, y: 1891.3525}
+        m_Position: {x: -375.0691, y: 1902.8525}
         m_Title: 
-        m_Tooltip: Redirects flow wires to keep the graph layout tidy.
+        m_Tooltip: Passes execution through without changing behavior. Use it to
+          bend long wires and keep the graph readable.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -3490,38 +3432,6 @@ MonoBehaviour:
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: d482abfa-b2e9-4947-8692-3a909e5e0345
         m_childGuids: []
-    - rid: 1402544193823309887
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Guid:
-          m_Value0: 3771636092986677448
-          m_Value1: 4442836900722574857
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: c85883280b8b57340906913e9f20a83d
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 6981696929839160328
-            m_Value1: 12394642153460888812
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 089c7ff85df8e360ec741e735e9d02ac
-          m_UniqueId: Out0
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: 
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 12060033519026706811
-            m_Value1: 14326704428249112357
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 7b19e4b896d85da725dfcd77c5add2c6
-          m_UniqueId: In
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: 
     - rid: 1402544193823309888
       type: {class: PlacematModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -3537,10 +3447,10 @@ MonoBehaviour:
         m_TitleAlignment: 0
         m_Position:
           serializedVersion: 2
-          x: 454.04996
-          y: 1235.05
-          width: 1036
-          height: 513.1499
+          x: 405.6
+          y: 1235
+          width: 1179.4
+          height: 513
         m_Comment: 
         m_ElementColor:
           m_Color: {r: 0.7735849, g: 0.35601705, b: 0, a: 1}
@@ -3637,7 +3547,9 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 477.99637, y: -684.40137}
         m_Title: SequenceNode
-        m_Tooltip: Runs children in order and stops when one fails.
+        m_Tooltip: Runs connected children from top to bottom. A running child pauses
+          the sequence, failure stops the sequence, and the node succeeds after every
+          child succeeds.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -3847,9 +3759,10 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 89faba29e27b4c8506c00a6e728e1afe
         m_Version: 2
-        m_Position: {x: 667.62726, y: -870.80676}
+        m_Position: {x: 766.48413, y: -879.932}
         m_Title: 
-        m_Tooltip: Triggers parameters or plays animation clips on the boss animator.
+        m_Tooltip: Controls the boss Animator by setting parameters or playing a
+          clip. Use it when a graph branch should trigger a visual state.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -3968,38 +3881,6 @@ MonoBehaviour:
           y: 47.465744
           width: 286.325
           height: 100
-    - rid: 7926195740118876884
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Guid:
-          m_Value0: 10443526370718648526
-          m_Value1: 10263479425551002215
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: ce081ce9e6dbee90676a7fc728346f8e
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 11885977859188250280
-            m_Value1: 13093391944003066681
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: a8d61269e379f3a4399b43ef9912b5b5
-          m_UniqueId: Value
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: Random Int
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 18227058666220045368
-            m_Value1: 12039932322416563279
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 3844402c4985f3fc4f14622da86e16a7
-          m_UniqueId: BulletCount
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: Bullets
     - rid: 7926195740118876885
       type: {class: StickyNoteModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4016,8 +3897,8 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 496
-          y: 456
+          x: 513.1925
+          y: 512.86755
           width: 253
           height: 100
     - rid: 7926195740118876886
@@ -4076,10 +3957,10 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: -747.35
-          y: 450.19995
-          width: 202
-          height: 100
+          x: -817
+          y: 450
+          width: 130
+          height: 147
     - rid: 7926195740118876889
       type: {class: StickyNoteModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4097,10 +3978,10 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: -360.00952
-          y: -0.5116272
-          width: 332.84573
-          height: 100
+          x: -318
+          y: -17.599998
+          width: 262
+          height: 128.6
     - rid: 7926195740118876890
       type: {class: StickyNoteModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4117,10 +3998,10 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 126.565216
-          y: 284.3913
-          width: 270.30432
-          height: 125
+          x: 108
+          y: 256
+          width: 205
+          height: 122
     - rid: 7926195740118876891
       type: {class: StickyNoteModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4137,10 +4018,10 @@ MonoBehaviour:
         m_TextSizeName: Small
         m_Position:
           serializedVersion: 2
-          x: 694.1499
-          y: 1620.6
-          width: 245
-          height: 100
+          x: 728
+          y: 1609
+          width: 205
+          height: 126.44995
     - rid: 7926195740118876892
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -4153,7 +4034,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 1135.9252, y: 1855.2345}
         m_Title: 
-        m_Tooltip: Triggers parameters or plays animation clips on the boss animator.
+        m_Tooltip: Controls the boss Animator by setting parameters or playing a
+          clip. Use it when a graph branch should trigger a visual state.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -4204,38 +4086,6 @@ MonoBehaviour:
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 7a38eb82-9fa2-4930-ae67-5ec06aaae225
         m_childGuids: []
-    - rid: 7926195740118876897
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Guid:
-          m_Value0: 13862324054068830492
-          m_Value1: 15294089463233124143
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: 1c21200c48de60c02f170ed355853fd4
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 1314320920126371569
-            m_Value1: 16454403413459058915
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: f136ffcce9673d12e3c033b2b9c859e4
-          m_UniqueId: Out3
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: 
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 13791980324654471865
-            m_Value1: 7403029562059339708
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: b9da344008f566bfbc3743ec29d8bc66
-          m_UniqueId: In
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: 
     - rid: 7926195740118876898
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4352,7 +4202,8 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: 1253.7872, y: 283.5325}
         m_Title: AnimationNode
-        m_Tooltip: Triggers parameters or plays animation clips on the boss animator.
+        m_Tooltip: Controls the boss Animator by setting parameters or playing a
+          clip. Use it when a graph branch should trigger a visual state.
         m_NodePreviewModel:
           rid: -2
         m_State: 0
@@ -4411,38 +4262,6 @@ MonoBehaviour:
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         m_runtimeGuid: 8fb5d01a-93fd-4afc-826f-ff6921548bc8
         m_childGuids: []
-    - rid: 7926195740118876914
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Guid:
-          m_Value0: 4941444000687659421
-          m_Value1: 6211829269841619855
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: 9d197942238993448fab482acfd93456
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 9088612278611936140
-            m_Value1: 15566698215926677591
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 8c03ebbfb63c217e5740042e8d0508d8
-          m_UniqueId: Out3
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: 
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 16673426969561726041
-            m_Value1: 4488929167701319131
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 59fc243d7de963e7db1dba6e4be14b3e
-          m_UniqueId: In
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: 
     - rid: 7926195740118876915
       type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -4566,104 +4385,280 @@ MonoBehaviour:
       type: {class: 'Constant`1[[System.Single, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Value: 0
-    - rid: 7926195740118876954
-      type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+    - rid: 7926196147291160860
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926196147291160861
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926196147291160862
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926196147291160863
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926196147291160864
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 7926196147291160865
+      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: 1
+    - rid: 7926196147291160866
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Custom.MoveTargetPointUpdateMode,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926196147291160871
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Base.RepeaterCompletionMode,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Base.RepeaterCompletionMode,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926196147291160872
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: TitanTool.Runtime.Nodes.Base.RepeaterCompletionMode,
+              TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 0
+        m_EnumType:
+          m_Identification: TitanTool.Runtime.Nodes.Base.RepeaterCompletionMode,
+            TitanTool.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7926196147291160873
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Guid:
-          m_Value0: 1491482872225814996
-          m_Value1: 7374872625244842787
+          m_Value0: 16272754717366231378
+          m_Value1: 17417345429506518788
         m_HashGuid:
           serializedVersion: 2
-          Hash: d4599923c5cfb21423ab783394cf5866
+          Hash: 5221addd3270d4e1046f021863d7b6f1
         m_Version: 2
-        m_Position: {x: 761, y: -61}
-        m_Title: Boss Timout sec
-        m_Tooltip: 
-        m_NodePreviewModel:
-          rid: -2
-        m_State: 0
-        m_InputConstantsById:
-          m_KeyList: []
-          m_ValueList: []
-        m_InputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_OutputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_Collapsed: 0
-        m_CurrentModeIndex: 0
-        m_ElementColor:
-          m_Color: {r: 0, g: 0, b: 0, a: 0}
-          m_HasUserColor: 0
-        m_DeclarationModel:
-          rid: 7926195740118876952
-        m_DeclarationModelHashGuid:
-          serializedVersion: 2
-          Hash: 12d462f98ff3845da0d48b52f5460e97
-    - rid: 7926195740118876959
-      type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 9088612278611936140
+            m_Value1: 15566698215926677591
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 8c03ebbfb63c217e5740042e8d0508d8
+          m_UniqueId: Out3
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: 
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 16673426969561726041
+            m_Value1: 4488929167701319131
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 59fc243d7de963e7db1dba6e4be14b3e
+          m_UniqueId: In
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: 
+    - rid: 7926196147291160874
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Guid:
-          m_Value0: 9972696527172331502
-          m_Value1: 7168801584349474323
+          m_Value0: 5953042443683449908
+          m_Value1: 8102398842252380044
         m_HashGuid:
           serializedVersion: 2
-          Hash: eee7e062a722668a136e681c0fb37c63
+          Hash: 344c93dc8f749d528c47fd94d1807170
         m_Version: 2
-        m_Position: {x: 794.18896, y: 2714.72}
-        m_Title: Boss Timout sec
-        m_Tooltip: 
-        m_NodePreviewModel:
-          rid: -2
-        m_State: 0
-        m_InputConstantsById:
-          m_KeyList: []
-          m_ValueList: []
-        m_InputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_OutputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_Collapsed: 0
-        m_CurrentModeIndex: 0
-        m_ElementColor:
-          m_Color: {r: 0, g: 0, b: 0, a: 0}
-          m_HasUserColor: 0
-        m_DeclarationModel:
-          rid: 7926195740118876952
-        m_DeclarationModelHashGuid:
-          serializedVersion: 2
-          Hash: 12d462f98ff3845da0d48b52f5460e97
-    - rid: 7926195748975149282
-      type: {class: VariableDeclarationModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 6981696929839160328
+            m_Value1: 12394642153460888812
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 089c7ff85df8e360ec741e735e9d02ac
+          m_UniqueId: Out0
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: 
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 12060033519026706811
+            m_Value1: 14326704428249112357
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 7b19e4b896d85da725dfcd77c5add2c6
+          m_UniqueId: In
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: 
+    - rid: 7926196147291160875
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Guid:
-          m_Value0: 192185073579085655
-          m_Value1: 1792803375700676713
+          m_Value0: 11599173873469040065
+          m_Value1: 2148954375537104726
         m_HashGuid:
           serializedVersion: 2
-          Hash: 574fd0614ec7aa026990c2e82b51e118
+          Hash: c1251dd02e8bf8a0561769709e9ed21d
         m_Version: 2
-        m_Name: StRING
-        m_UniqueId: 
-        m_DataType:
-          m_Identification: System.String, System.Private.CoreLib, Version=4.0.0.0,
-            Culture=neutral, PublicKeyToken=b77a5c561934e089
-        m_IsExposed: 0
-        m_Scope: 0
-        m_ShowOnInspectorOnly: 0
-        m_Tooltip: 
-        m_InitializationValue:
-          rid: 7926195748975149283
-        m_Modifiers: 1
-        m_VariableFlags: 0
-    - rid: 7926195748975149283
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 1314320920126371569
+            m_Value1: 16454403413459058915
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: f136ffcce9673d12e3c033b2b9c859e4
+          m_UniqueId: Out3
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: 
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 13791980324654471865
+            m_Value1: 7403029562059339708
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: b9da344008f566bfbc3743ec29d8bc66
+          m_UniqueId: In
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: 
+    - rid: 7926196147291160881
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: JOEY
+        m_Guid:
+          m_Value0: 9352326841378852552
+          m_Value1: 2842451912622032791
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: c8cebc23b623ca819747f75ef46a7227
+        m_Version: 2
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 13277168239035129961
+            m_Value1: 1783639783151532746
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 69a0c9fe2afa41b8ca7a00c2eec2c018
+          m_UniqueId: Out0
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: 
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 9612683145622500109
+            m_Value1: 12065964980274583688
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 0db33609641c678588d891a938eb72a7
+          m_UniqueId: In
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: 
+    - rid: 7926196147291160882
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 10491534531346694487
+          m_Value1: 8412324804668952444
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 5701aad9116b99917c0f80e5d694be74
+        m_Version: 2
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 5821710213822099425
+            m_Value1: 3445737575233047699
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: e12f214098deca50934cfb8011b8d12f
+          m_UniqueId: MainPortName
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: MainPortName
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 13791980324654471865
+            m_Value1: 7403029562059339708
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: b9da344008f566bfbc3743ec29d8bc66
+          m_UniqueId: Speed
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: Move Speed
+    - rid: 7926196147291160883
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 3011884623093034288
+          m_Value1: 17490734294813750969
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 30edeb671b5dcc29b9b61dd72b92bbf2
+        m_Version: 2
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 11885977859188250280
+            m_Value1: 13093391944003066681
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: a8d61269e379f3a4399b43ef9912b5b5
+          m_UniqueId: Value
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: Random Int
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 18227058666220045368
+            m_Value1: 12039932322416563279
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 3844402c4985f3fc4f14622da86e16a7
+          m_UniqueId: BulletCount
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: Bullets
