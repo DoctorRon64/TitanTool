@@ -96,6 +96,21 @@ namespace TitanTool.Editor {
     public interface IGraphValueNodeValidator {
         void Validate(GraphValueNodeValidationContext context);
     }
+    public readonly struct GraphBlackboardKeyUsage {
+        public GraphBlackboardKeyUsage(string keyName, Type valueType, string purpose) {
+            this.keyName = keyName;
+            this.valueType = valueType;
+            this.purpose = purpose;
+        }
+
+        public readonly string keyName;
+        public readonly Type valueType;
+        public readonly string purpose;
+    }
+
+    public interface IGraphBlackboardKeyUsageProvider {
+        IEnumerable<GraphBlackboardKeyUsage> GetBlackboardKeyUsages();
+    }
 
     public static class BossGraphValidator {
         public static List<BossGraphValidationIssue> Validate(IEnumerable<INode> nodes) {
@@ -119,6 +134,7 @@ namespace TitanTool.Editor {
             ValidateCycles(executableNodes.ToList(), issues);
             ValidateNodeRules(executableNodes.ToList(), issues);
             ValidateValueNodeRules(allNodes, issues);
+            ValidateBlackboardKeyTypes(allNodes, issues);
 
             return issues;
         }
@@ -276,6 +292,42 @@ namespace TitanTool.Editor {
             foreach (INode node in nodes) {
                 if (node is IGraphValueNodeValidator validator)
                     validator.Validate(new GraphValueNodeValidationContext(node, issues));
+            }
+        }
+        private static void ValidateBlackboardKeyTypes(List<INode> nodes, List<BossGraphValidationIssue> issues) {
+            Dictionary<string, GraphBlackboardKeyUsage> firstUsageByKey = new(StringComparer.Ordinal);
+            Dictionary<string, GraphBlackboardKeyUsage> firstUsageByCaseInsensitiveKey = new(StringComparer.OrdinalIgnoreCase);
+
+            foreach (INode node in nodes) {
+                if (node is not IGraphBlackboardKeyUsageProvider provider)
+                    continue;
+
+                foreach (GraphBlackboardKeyUsage usage in provider.GetBlackboardKeyUsages()) {
+                    if (string.IsNullOrWhiteSpace(usage.keyName) || usage.valueType == null)
+                        continue;
+
+                    if (firstUsageByCaseInsensitiveKey.TryGetValue(usage.keyName, out GraphBlackboardKeyUsage caseInsensitiveUsage) &&
+                        !string.Equals(caseInsensitiveUsage.keyName, usage.keyName, StringComparison.Ordinal)) {
+                        issues.Add(new BossGraphValidationIssue(
+                            BossGraphValidationSeverity.Warning,
+                            $"Blackboard key '{usage.keyName}' differs only by casing from '{caseInsensitiveUsage.keyName}'. Use one spelling unless these are intentionally separate keys.",
+                            node));
+                    } else {
+                        firstUsageByCaseInsensitiveKey.TryAdd(usage.keyName, usage);
+                    }
+
+                    if (!firstUsageByKey.TryGetValue(usage.keyName, out GraphBlackboardKeyUsage firstUsage)) {
+                        firstUsageByKey.Add(usage.keyName, usage);
+                        continue;
+                    }
+
+                    if (firstUsage.valueType != usage.valueType) {
+                        issues.Add(new BossGraphValidationIssue(
+                            BossGraphValidationSeverity.Error,
+                            $"Blackboard key '{usage.keyName}' is used as both {firstUsage.valueType.Name} ({firstUsage.purpose}) and {usage.valueType.Name} ({usage.purpose}). Use separate keys or matching number types.",
+                            node));
+                    }
+                }
             }
         }
     }

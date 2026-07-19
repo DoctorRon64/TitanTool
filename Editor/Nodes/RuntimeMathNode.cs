@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TitanTool.Runtime.Nodes.Custom;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 using Unity.GraphToolkit.Editor;
@@ -7,7 +8,7 @@ namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.RuntimeMathNode), "Runtime Math", "Action/Runtime/", BossGraphNodeCategory.Action, tooltip: "Sets, adds, subtracts, multiplies, or divides a numeric runtime variable on the blackboard.", searchKeywords: "blackboard variable counter add subtract multiply divide set number")]
-    public class RuntimeMathNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
+    public class RuntimeMathNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator, IGraphBlackboardKeyUsageProvider {
         private const string IN_PORT_KEY_NAME = "KeyName";
         private const string IN_PORT_INT_OPERAND = "IntOperand";
         private const string IN_PORT_FLOAT_OPERAND = "FloatOperand";
@@ -79,6 +80,11 @@ namespace TitanTool.Editor.Nodes {
             }
         }
 
+        public IEnumerable<GraphBlackboardKeyUsage> GetBlackboardKeyUsages() {
+            string keyName = GraphNodePortUtility.GetInputValue<string>(this, IN_PORT_KEY_NAME);
+            Type valueType = GetValueType() == BlackboardNumberType.Float ? typeof(float) : typeof(int);
+            yield return new GraphBlackboardKeyUsage(keyName, valueType, $"Runtime Math {GetOperation()}");
+        }
         private BlackboardNumberType GetValueType() {
             if (GetNodeOptionByName(OPTION_VALUE_TYPE)?.TryGetValue(out BlackboardNumberType valueType) == true)
                 return valueType;

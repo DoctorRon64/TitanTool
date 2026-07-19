@@ -7,9 +7,10 @@ using Unity.GraphToolkit.Editor;
 namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
-    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RepeaterNode), "Repeat Children", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs each connected child branch in order, then repeats that whole group for the configured loop count. A running child pauses the repeat, failure stops the repeat, and success advances to the next child or loop.")]
+    [GraphNode(typeof(TitanTool.Runtime.Nodes.Base.RepeaterNode), "Repeat Sequence", "Composite/", BossGraphNodeCategory.Composite, tooltip: "Runs connected child branches in order, repeats that whole group for the Loops count, then returns Success. If the parent enters it again later, Restart When Re-entered loops again; Remember Success returns Success without replaying until the graph resets.")]
     public class RepeaterNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
         private const string OPTION_CHILD_COUNT = "ChildCount";
+        private const string OPTION_COMPLETION_MODE = "CompletionMode";
         private const string IN_PORT_REPEAT_COUNT = "RepeatCount";
 
         protected override int outputCount => GetChildCount();
@@ -27,6 +28,11 @@ namespace TitanTool.Editor.Nodes {
                 .WithDisplayName("Children")
                 .WithDefaultValue(1)
                 .Delayed();
+
+            context.AddOption<RepeaterCompletionMode>(OPTION_COMPLETION_MODE)
+                .WithDisplayName("After Completion")
+                .WithDefaultValue(RepeaterCompletionMode.RestartWhenReentered)
+                .Delayed();
         }
 
         protected override void OnDefinePorts(IPortDefinitionContext context) {
@@ -43,6 +49,7 @@ namespace TitanTool.Editor.Nodes {
                 return;
 
             repeaterRuntime.SetRepeatCount(GraphNodePortUtility.GetRuntimeIntValue(this, IN_PORT_REPEAT_COUNT));
+            repeaterRuntime.SetCompletionMode(GetCompletionMode());
         }
 
         public void Validate(BossGraphNodeValidationContext context) {
@@ -64,6 +71,13 @@ namespace TitanTool.Editor.Nodes {
                 return Math.Max(minimumChildCount, childCount);
 
             return 1;
+        }
+
+        private RepeaterCompletionMode GetCompletionMode() {
+            if (GetNodeOptionByName(OPTION_COMPLETION_MODE)?.TryGetValue(out RepeaterCompletionMode completionMode) == true)
+                return completionMode;
+
+            return RepeaterCompletionMode.RestartWhenReentered;
         }
     }
 }

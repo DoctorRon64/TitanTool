@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utility;
 
@@ -27,6 +28,26 @@ namespace TitanTool.Runtime.Nodes.Base {
         }
     }
 
+    public readonly struct RuntimeNodeTraceEvent {
+        public RuntimeNodeTraceEvent(int frame, float time, int depth, Node node, NodeStatus status, float duration, string reason) {
+            this.frame = frame;
+            this.time = time;
+            this.depth = depth;
+            this.node = node;
+            this.status = status;
+            this.duration = duration;
+            this.reason = reason;
+        }
+
+        public readonly int frame;
+        public readonly float time;
+        public readonly int depth;
+        public readonly Node node;
+        public readonly NodeStatus status;
+        public readonly float duration;
+        public readonly string reason;
+    }
+
     public class RuntimeNodeDebugData {
         public NodeStatus status;
         public float executionTime;
@@ -38,14 +59,18 @@ namespace TitanTool.Runtime.Nodes.Base {
     }
     
     public class NodeContext {
+        private const int MaxTraceEvents = 160;
+
         public readonly Blackboard blackboard = new();
         public IReadOnlyDictionary<Node, float> timings => m_timings;
+        public IReadOnlyList<RuntimeNodeTraceEvent> traceEvents => m_traceEvents.ToList();
         
         private readonly Dictionary<Node, object> m_state = new();
         private readonly Dictionary<Node, NodeStatus> m_status = new();
         private readonly Signal<Node, NodeStatus> m_onNodeStatusChanged = new();
         private readonly Dictionary<Node, float> m_timings = new();
         private readonly List<Node> m_executionStack = new();
+        private readonly Queue<RuntimeNodeTraceEvent> m_traceEvents = new();
             
         public float deltaTime;
         public bool debugLogging;
@@ -117,10 +142,27 @@ namespace TitanTool.Runtime.Nodes.Base {
                 debug.tickCount++;
                 debug.status = result;
                 debug.executionTime = duration;
+                RecordTraceEvent(node, result, duration, debug.statusReason);
                 return result;
             }
             finally {
                 m_executionStack.RemoveAt(m_executionStack.Count - 1);
+            }
+        }
+
+        private void RecordTraceEvent(Node node, NodeStatus status, float duration, string reason) {
+            m_traceEvents.Enqueue(new RuntimeNodeTraceEvent(
+                Time.frameCount,
+                Time.realtimeSinceStartup,
+                Mathf.Max(0, m_executionStack.Count - 1),
+                node,
+                status,
+                duration,
+                reason
+            ));
+
+            while (m_traceEvents.Count > MaxTraceEvents) {
+                m_traceEvents.Dequeue();
             }
         }
 
@@ -233,6 +275,7 @@ namespace TitanTool.Runtime.Nodes.Base {
         public void ResetAll() {
             m_state.Clear();
             m_status.Clear();
+            m_traceEvents.Clear();
         }
     }
 }

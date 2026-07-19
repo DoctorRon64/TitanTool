@@ -43,7 +43,7 @@ namespace TitanTool.Editor {
             new("Order", "Run In Order", "Use Sequence when several steps must all finish in order, such as move, wait, then shoot."),
             new("Choice", "Try Children", "Use Selector when the first valid branch should win, such as phase behavior with a fallback."),
             new("Together", "Run Together", "Use Parallel when unfinished branches must tick together, such as moving while shooting. Completed branches wait until the preset finishes the group."),
-            new("Repeat", "Repeat Children", "Use Repeater when one small child group should run several times without copying the same nodes."),
+            new("Repeat", "Repeat Sequence", "Use Repeat Sequence when one small child group should run several times without copying the same nodes. Set After Completion to Remember Success when it should not replay after finishing once."),
             new("Random", "Random Nodes", "Use Pick Random Child for one random branch, Shuffle Bag for no-repeat variety, and RandomVariable for random values.")
         };
 
@@ -56,7 +56,7 @@ namespace TitanTool.Editor {
 
         private static readonly DocLine[] PatternLines = {
             new("Move", "Move While Shooting", "Use Run Together with one movement branch and one shooting branch. Completed shot branches wait while movement keeps running."),
-            new("Repeat", "Repeat Attack Pattern", "Use Repeat Children around a small shoot, wait, move, or spawn group instead of copying those nodes."),
+            new("Repeat", "Repeat Attack Pattern", "Use Repeat Sequence around a small shoot, wait, move, or spawn group instead of copying those nodes."),
             new("Gate", "Blackboard Counter Gate", "Use RuntimeMath and RuntimeCompare to count attempts, then reset the value after the gate passes."),
             new("Intro", "Run Once Intro", "Use Run Once for a one-time opening animation or attack before normal phase logic starts.")
         };
@@ -73,7 +73,8 @@ namespace TitanTool.Editor {
             new("Write", "RuntimeMathNode", "Writes or modifies numeric runtime variables."),
             new("Read", "RuntimeCompareNode", "Checks numeric runtime variables to decide whether a branch can continue."),
             new("Random", "RandomVariableNode", "Feeds random int, float, or Vector2 values into compatible ports."),
-            new("Target", "RandomTargetPointKeyNode", "Picks one assigned TargetPointKey at random for target point inputs.")
+            new("Target", "RandomTargetPointKeyNode", "Picks one assigned TargetPointKey at random for target point inputs."),
+            new("Source", "Value Source Chips", "Graph nodes show compact CONST, WIRE, VAR, and BB chips so you can see whether inputs come from inline constants, connected nodes, graph variables, or blackboard keys.")
         };
 
         private static readonly DocLine[] SearchLines = {

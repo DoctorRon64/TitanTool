@@ -33,7 +33,11 @@ namespace TitanTool.Editor {
         private const string ICON_BADGE_NAME = "titantool-icon-badge";
         private const string CATEGORY_BADGE_NAME = "titantool-category-badge";
         private const string STATUS_BADGE_NAME = "titantool-status-badge";
+        private const string VALIDATION_BADGE_NAME = "titantool-validation-badge";
+        private const string BLACKBOARD_CHIP_NAME = "titantool-blackboard-chip";
+        private const string VALUE_SOURCE_CHIP_NAME = "titantool-value-source-chip";
         private const string CHILD_CONTROLS_NAME = "titantool-child-controls";
+        private const string CHILD_MESSAGE_NAME = "child-message";
         private const string CHILD_COUNT_OPTION_NAME = "ChildCount";
 
         private static double s_nextUpdateTime;
@@ -101,11 +105,15 @@ namespace TitanTool.Editor {
             HashSet<BossGraphNode> executableNodes = graph != null
                 ? BossGraphValidator.GetExecutableNodes(graph.GetNodes().OfType<BossGraphNode>())
                 : new HashSet<BossGraphNode>();
+            Dictionary<BossGraphNode, List<BossGraphValidationIssue>> validationIssues = graph != null
+                ? BuildValidationIssueMap(graph)
+                : new Dictionary<BossGraphNode, List<BossGraphValidationIssue>>();
 
             foreach (VisualElement element in Traverse(graphView)) {
                 BossGraphNode graphNode = GetGraphNodeFromView(element);
                 if (graphNode != null) {
-                    ApplyNodeColor(element, graphNode, executableNodes.Contains(graphNode), runtimeState);
+                    validationIssues.TryGetValue(graphNode, out List<BossGraphValidationIssue> nodeIssues);
+                    ApplyNodeColor(element, graphNode, executableNodes.Contains(graphNode), runtimeState, nodeIssues);
                     continue;
                 }
 
@@ -146,6 +154,24 @@ namespace TitanTool.Editor {
             return node as Unity.GraphToolkit.Editor.Node;
         }
 
+        private static Dictionary<BossGraphNode, List<BossGraphValidationIssue>> BuildValidationIssueMap(BossGraph graph) {
+            Dictionary<BossGraphNode, List<BossGraphValidationIssue>> issuesByNode = new();
+
+            foreach (BossGraphValidationIssue issue in BossGraphValidator.Validate(graph.GetNodes().OfType<INode>())) {
+                if (issue.node is not BossGraphNode node)
+                    continue;
+
+                if (!issuesByNode.TryGetValue(node, out List<BossGraphValidationIssue> nodeIssues)) {
+                    nodeIssues = new List<BossGraphValidationIssue>();
+                    issuesByNode.Add(node, nodeIssues);
+                }
+
+                nodeIssues.Add(issue);
+            }
+
+            return issuesByNode;
+        }
+
         private static void ApplyWireColor(VisualElement wireView, RuntimeViewState runtimeState) {
             object wireModel = GetProperty(wireView, "Model");
             if (!IsWireModel(wireModel))
@@ -171,8 +197,9 @@ namespace TitanTool.Editor {
             }
 
             Color color = GetStatusColor(activePath ? NodeStatus.Running : status);
-            color.a = activePath ? 1f : 0.78f;
-            SetWireVisual(wireView, color, activePath ? 4.2f : 2.4f);
+            float pulse = GetPulse01(2.7f);
+            color.a = activePath ? Mathf.Lerp(0.72f, 1f, pulse) : 0.78f;
+            SetWireVisual(wireView, color, activePath ? Mathf.Lerp(3.2f, 5.6f, pulse) : 2.4f);
         }
 
         private static bool IsWireModel(object model) {
@@ -221,7 +248,7 @@ namespace TitanTool.Editor {
                 visualElement.MarkDirtyRepaint();
         }
 
-        private static void ApplyNodeColor(VisualElement nodeView, BossGraphNode graphNode, bool isExecutable, RuntimeViewState runtimeState) {
+        private static void ApplyNodeColor(VisualElement nodeView, BossGraphNode graphNode, bool isExecutable, RuntimeViewState runtimeState, IReadOnlyList<BossGraphValidationIssue> validationIssues) {
             Color baseColor = TryGetUserNodeColor(nodeView, out Color userColor)
                 ? userColor
                 : graphNode.categoryColor;
@@ -231,6 +258,9 @@ namespace TitanTool.Editor {
             EnsureCategoryGlow(nodeView).style.backgroundColor = new Color(baseColor.r, baseColor.g, baseColor.b, 0.18f);
             SetIconBadge(nodeView, GetIconBadgeText(graphNode), baseColor, graphNode.tooltip);
             SetCategoryBadge(nodeView, graphNode.category.ToString(), baseColor);
+            SetValidationBadge(nodeView, validationIssues);
+            ApplyBlackboardChip(nodeView, graphNode, runtimeState);
+            ApplyValueSourceChip(nodeView, graphNode);
             ApplyChildControls(nodeView, graphNode, baseColor);
 
             nodeView.style.backgroundColor = new Color(
@@ -246,13 +276,17 @@ namespace TitanTool.Editor {
 
             if (!isExecutable) {
                 ApplyGhostNodeVisual(nodeView);
+                HideBlackboardChip(nodeView);
+                HideValueSourceChip(nodeView);
                 return;
             }
 
             if (TryGetRuntimeStatus(graphNode, runtimeState, out NodeStatus status, out bool visitedThisTick)) {
                 Color statusColor = GetStatusColor(status);
-                ApplyBorder(nodeView, statusColor, visitedThisTick ? 3f : 1.5f);
-                SetStatusBadge(nodeView, StatusShortName(status), statusColor);
+                float pulse = visitedThisTick ? GetPulse01(2.8f) : 0f;
+                ApplyBorder(nodeView, statusColor, visitedThisTick ? Mathf.Lerp(2.4f, 4.5f, pulse) : 1.5f);
+                EnsureCategoryGlow(nodeView).style.backgroundColor = new Color(statusColor.r, statusColor.g, statusColor.b, visitedThisTick ? Mathf.Lerp(0.24f, 0.48f, pulse) : 0.16f);
+                SetStatusBadge(nodeView, StatusShortName(status), statusColor, GetRuntimeStatusTooltip(graphNode, runtimeState));
                 return;
             }
 
@@ -423,6 +457,316 @@ namespace TitanTool.Editor {
             };
         }
 
+        private static Label EnsureValidationBadge(VisualElement nodeView) {
+            Label badge = nodeView.Q<Label>(VALIDATION_BADGE_NAME);
+            if (badge != null)
+                return badge;
+
+            badge = new Label { name = VALIDATION_BADGE_NAME };
+            badge.pickingMode = PickingMode.Ignore;
+            badge.style.position = Position.Absolute;
+            badge.style.right = 6f;
+            badge.style.top = 26f;
+            badge.style.minWidth = 42f;
+            badge.style.height = 18f;
+            badge.style.paddingLeft = 5f;
+            badge.style.paddingRight = 5f;
+            badge.style.unityTextAlign = TextAnchor.MiddleCenter;
+            badge.style.borderTopLeftRadius = 9f;
+            badge.style.borderTopRightRadius = 9f;
+            badge.style.borderBottomLeftRadius = 9f;
+            badge.style.borderBottomRightRadius = 9f;
+            badge.style.unityFontStyleAndWeight = FontStyle.Bold;
+            badge.style.fontSize = 9f;
+            badge.style.color = Color.white;
+            nodeView.Add(badge);
+            return badge;
+        }
+
+        private static void SetValidationBadge(VisualElement nodeView, IReadOnlyList<BossGraphValidationIssue> issues) {
+            Label badge = EnsureValidationBadge(nodeView);
+            if (issues == null || issues.Count == 0) {
+                badge.style.display = DisplayStyle.None;
+                return;
+            }
+
+            bool hasError = issues.Any(issue => issue.severity == BossGraphValidationSeverity.Error);
+            int errorCount = issues.Count(issue => issue.severity == BossGraphValidationSeverity.Error);
+            int warningCount = issues.Count - errorCount;
+            Color color = hasError ? new Color(0.92f, 0.18f, 0.16f) : new Color(1f, 0.68f, 0.12f);
+            badge.text = hasError ? $"ERR {errorCount}" : $"WARN {warningCount}";
+            badge.tooltip = string.Join("\n", issues.Select(issue => $"{issue.severity}: {issue.message}"));
+            badge.style.display = DisplayStyle.Flex;
+            badge.style.backgroundColor = color;
+        }
+
+        private static Label EnsureBlackboardChip(VisualElement nodeView) {
+            Label chip = nodeView.Q<Label>(BLACKBOARD_CHIP_NAME);
+            if (chip != null)
+                return chip;
+
+            chip = new Label { name = BLACKBOARD_CHIP_NAME };
+            chip.pickingMode = PickingMode.Ignore;
+            chip.style.position = Position.Absolute;
+            chip.style.right = 6f;
+            chip.style.bottom = 5f;
+            chip.style.maxWidth = 150f;
+            chip.style.paddingLeft = 5f;
+            chip.style.paddingRight = 5f;
+            chip.style.paddingTop = 1f;
+            chip.style.paddingBottom = 1f;
+            chip.style.borderTopLeftRadius = 4f;
+            chip.style.borderTopRightRadius = 4f;
+            chip.style.borderBottomLeftRadius = 4f;
+            chip.style.borderBottomRightRadius = 4f;
+            chip.style.unityFontStyleAndWeight = FontStyle.Bold;
+            chip.style.fontSize = 8f;
+            chip.style.color = Color.white;
+            nodeView.Add(chip);
+            return chip;
+        }
+
+        private static void ApplyBlackboardChip(VisualElement nodeView, BossGraphNode graphNode, RuntimeViewState runtimeState) {
+            if (graphNode is not IGraphBlackboardKeyUsageProvider usageProvider) {
+                HideBlackboardChip(nodeView);
+                return;
+            }
+
+            GraphBlackboardKeyUsage usage = usageProvider.GetBlackboardKeyUsages()
+                .FirstOrDefault(item => !string.IsNullOrWhiteSpace(item.keyName));
+            if (string.IsNullOrWhiteSpace(usage.keyName)) {
+                HideBlackboardChip(nodeView);
+                return;
+            }
+
+            Label chip = EnsureBlackboardChip(nodeView);
+            if (runtimeState.isValid &&
+                runtimeState.context.blackboard.values.TryGetValue(usage.keyName, out object value)) {
+                chip.text = $"BB {usage.keyName} = {FormatRuntimeValue(value)}";
+                chip.tooltip = $"Blackboard key: {usage.keyName}\nType: {usage.valueType?.Name ?? value?.GetType().Name ?? "Unknown"}\nRuntime value: {FormatRuntimeValue(value)}";
+                chip.style.backgroundColor = new Color(0.30f, 0.22f, 0.55f, 0.88f);
+            } else {
+                chip.text = $"BB {usage.keyName}";
+                chip.tooltip = $"Blackboard key: {usage.keyName}\nType: {usage.valueType?.Name ?? "Unknown"}\nRuntime value appears here in Play Mode.";
+                chip.style.backgroundColor = new Color(0.26f, 0.24f, 0.42f, 0.78f);
+            }
+
+            chip.style.display = DisplayStyle.Flex;
+        }
+
+        private static void HideBlackboardChip(VisualElement nodeView) {
+            Label chip = nodeView.Q<Label>(BLACKBOARD_CHIP_NAME);
+            if (chip != null)
+                chip.style.display = DisplayStyle.None;
+        }
+
+        private static string FormatRuntimeValue(object value) {
+            return value switch {
+                null => "null",
+                float number => number.ToString("0.###"),
+                double number => number.ToString("0.###"),
+                Vector2 vector => $"({vector.x:0.##}, {vector.y:0.##})",
+                Vector3 vector => $"({vector.x:0.##}, {vector.y:0.##}, {vector.z:0.##})",
+                UnityEngine.Object unityObject => unityObject != null ? unityObject.name : "Missing",
+                _ => value.ToString()
+            };
+        }
+
+        private static Label EnsureValueSourceChip(VisualElement nodeView) {
+            Label chip = nodeView.Q<Label>(VALUE_SOURCE_CHIP_NAME);
+            if (chip != null)
+                return chip;
+
+            chip = new Label { name = VALUE_SOURCE_CHIP_NAME };
+            chip.pickingMode = PickingMode.Ignore;
+            chip.style.position = Position.Absolute;
+            chip.style.left = 10f;
+            chip.style.bottom = 24f;
+            chip.style.maxWidth = 180f;
+            chip.style.paddingLeft = 5f;
+            chip.style.paddingRight = 5f;
+            chip.style.paddingTop = 1f;
+            chip.style.paddingBottom = 1f;
+            chip.style.borderTopLeftRadius = 4f;
+            chip.style.borderTopRightRadius = 4f;
+            chip.style.borderBottomLeftRadius = 4f;
+            chip.style.borderBottomRightRadius = 4f;
+            chip.style.unityFontStyleAndWeight = FontStyle.Bold;
+            chip.style.fontSize = 8f;
+            chip.style.color = Color.white;
+            nodeView.Add(chip);
+            return chip;
+        }
+
+        private static void ApplyValueSourceChip(VisualElement nodeView, INode node) {
+            List<ValueSourceSummary> summaries = BuildValueSourceSummaries(node).ToList();
+            if (summaries.Count == 0) {
+                HideValueSourceChip(nodeView);
+                return;
+            }
+
+            int wireCount = summaries.Count(summary => summary.source == ValueSourceKind.Wire);
+            int variableCount = summaries.Count(summary => summary.source == ValueSourceKind.Variable);
+            int constantCount = summaries.Count(summary => summary.source == ValueSourceKind.Constant);
+            int blackboardCount = summaries.Count(summary => summary.source == ValueSourceKind.Blackboard);
+
+            List<string> parts = new();
+            if (wireCount > 0)
+                parts.Add($"WIRE {wireCount}");
+            if (variableCount > 0)
+                parts.Add($"VAR {variableCount}");
+            if (constantCount > 0)
+                parts.Add($"CONST {constantCount}");
+            if (blackboardCount > 0)
+                parts.Add($"BB {blackboardCount}");
+
+            Label chip = EnsureValueSourceChip(nodeView);
+            chip.text = string.Join("  ", parts);
+            chip.tooltip = "Value Sources\n" + string.Join("\n", summaries.Select(summary => summary.tooltip));
+            chip.style.display = DisplayStyle.Flex;
+            chip.style.backgroundColor = new Color(0.08f, 0.16f, 0.20f, 0.86f);
+        }
+
+        private static void HideValueSourceChip(VisualElement nodeView) {
+            Label chip = nodeView.Q<Label>(VALUE_SOURCE_CHIP_NAME);
+            if (chip != null)
+                chip.style.display = DisplayStyle.None;
+        }
+
+        private static IEnumerable<ValueSourceSummary> BuildValueSourceSummaries(INode node) {
+            if (node == null)
+                yield break;
+
+            foreach (IPort port in node.GetInputPorts()) {
+                if (port == null || IsExecutionPort(port))
+                    continue;
+
+                List<IPort> connectedPorts = new();
+                port.GetConnectedPorts(connectedPorts);
+
+                if (connectedPorts.Count > 0) {
+                    foreach (IPort connectedPort in connectedPorts) {
+                        INode connectedNode = connectedPort.GetNode();
+                        ValueSourceKind sourceKind = connectedNode is IVariableNode
+                            ? ValueSourceKind.Variable
+                            : connectedNode is IGraphBlackboardKeyUsageProvider
+                                ? ValueSourceKind.Blackboard
+                                : ValueSourceKind.Wire;
+                        string sourceName = connectedNode != null ? GetReadableNodeName(connectedNode) : "Connected value";
+                        yield return new ValueSourceSummary(sourceKind, $"{port.name}: {sourceKind.ToString().ToUpperInvariant()} from {sourceName}");
+                    }
+
+                    continue;
+                }
+
+                if (TryReadPortDisplayValue(port, out string displayValue))
+                    yield return new ValueSourceSummary(ValueSourceKind.Constant, $"{port.name}: CONST {displayValue}");
+            }
+        }
+
+        private static bool IsExecutionPort(IPort port) {
+            Type dataType = GetPortDataType(port);
+            if (dataType == typeof(NodeFlow))
+                return true;
+
+            return string.Equals(port.name, "In", StringComparison.Ordinal) ||
+                   (port.name != null &&
+                    port.name.StartsWith("Out", StringComparison.Ordinal) &&
+                    int.TryParse(port.name["Out".Length..], out _));
+        }
+
+        private static Type GetPortDataType(IPort port) {
+            return GetProperty(port, "dataType") as Type ??
+                   GetProperty(port, "DataType") as Type ??
+                   GetProperty(port, "portType") as Type ??
+                   GetProperty(port, "PortType") as Type;
+        }
+
+        private static bool TryReadPortDisplayValue(IPort port, out string displayValue) {
+            displayValue = null;
+            Type dataType = GetPortDataType(port);
+            if (dataType == typeof(string) && port.TryGetValue(out string stringValue)) {
+                displayValue = string.IsNullOrEmpty(stringValue) ? "\"\"" : stringValue;
+                return true;
+            }
+
+            if (dataType == typeof(int) && port.TryGetValue(out int intValue)) {
+                displayValue = intValue.ToString();
+                return true;
+            }
+
+            if (dataType == typeof(float) && port.TryGetValue(out float floatValue)) {
+                displayValue = floatValue.ToString("0.###");
+                return true;
+            }
+
+            if (dataType == typeof(bool) && port.TryGetValue(out bool boolValue)) {
+                displayValue = boolValue ? "true" : "false";
+                return true;
+            }
+
+            if (dataType == typeof(Vector2) && port.TryGetValue(out Vector2 vector2)) {
+                displayValue = $"({vector2.x:0.##}, {vector2.y:0.##})";
+                return true;
+            }
+
+            if (dataType == typeof(Vector3) && port.TryGetValue(out Vector3 vector3)) {
+                displayValue = $"({vector3.x:0.##}, {vector3.y:0.##}, {vector3.z:0.##})";
+                return true;
+            }
+
+            if (dataType != null &&
+                typeof(UnityEngine.Object).IsAssignableFrom(dataType) &&
+                TryReadUnityObjectValue(port, dataType, out UnityEngine.Object objectValue)) {
+                displayValue = objectValue != null ? objectValue.name : "None";
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool TryReadUnityObjectValue(IPort port, Type dataType, out UnityEngine.Object value) {
+            value = null;
+            MethodInfo method = typeof(TitanToolGraphVisualFeedback)
+                .GetMethod(nameof(TryReadUnityObjectValueGeneric), BindingFlags.Static | BindingFlags.NonPublic)
+                ?.MakeGenericMethod(dataType);
+            if (method == null)
+                return false;
+
+            object[] args = { port, null };
+            bool success = (bool)method.Invoke(null, args);
+            value = args[1] as UnityEngine.Object;
+            return success;
+        }
+
+        private static bool TryReadUnityObjectValueGeneric<T>(IPort port, out T value) where T : UnityEngine.Object {
+            return port.TryGetValue(out value);
+        }
+
+        private static string GetReadableNodeName(INode node) {
+            return node switch {
+                BossGraphNode bossGraphNode => string.IsNullOrWhiteSpace(bossGraphNode.displayName) ? bossGraphNode.GetType().Name : bossGraphNode.displayName,
+                Unity.GraphToolkit.Editor.Node graphNode => graphNode.GetType().Name,
+                _ => node.GetType().Name
+            };
+        }
+
+        private enum ValueSourceKind {
+            Constant,
+            Wire,
+            Variable,
+            Blackboard
+        }
+
+        private readonly struct ValueSourceSummary {
+            public ValueSourceSummary(ValueSourceKind source, string tooltip) {
+                this.source = source;
+                this.tooltip = tooltip;
+            }
+
+            public readonly ValueSourceKind source;
+            public readonly string tooltip;
+        }
         private static Label EnsureStatusBadge(VisualElement nodeView) {
             Label badge = nodeView.Q<Label>(STATUS_BADGE_NAME);
             if (badge != null)
@@ -448,9 +792,10 @@ namespace TitanTool.Editor {
             return badge;
         }
 
-        private static void SetStatusBadge(VisualElement nodeView, string text, Color color) {
+        private static void SetStatusBadge(VisualElement nodeView, string text, Color color, string tooltip = null) {
             Label badge = EnsureStatusBadge(nodeView);
             badge.text = text;
+            badge.tooltip = tooltip ?? string.Empty;
             badge.style.display = DisplayStyle.Flex;
             badge.style.backgroundColor = color;
         }
@@ -500,17 +845,25 @@ namespace TitanTool.Editor {
             Button removeButton = controls.Q<Button>("child-remove");
             Button addButton = controls.Q<Button>("child-add");
             Label countLabel = controls.Q<Label>("child-count");
+            Label messageLabel = controls.Q<Label>(CHILD_MESSAGE_NAME);
 
-            bool canRemove = slotCount > slotNode.minimumSlotCount && !IsLastSlotPortConnected(node, slotNode, slotCount);
-            removeButton.SetEnabled(canRemove);
+            bool lastSlotConnected = IsLastSlotPortConnected(node, slotNode, slotCount);
+            bool aboveMinimum = slotCount > slotNode.minimumSlotCount;
+            bool canRemove = aboveMinimum && !lastSlotConnected;
+            removeButton.SetEnabled(aboveMinimum);
             removeButton.tooltip = canRemove
                 ? $"Remove the last empty {slotNode.slotDisplayName.ToLowerInvariant()} slot."
-                : slotCount <= slotNode.minimumSlotCount
+                : !aboveMinimum
                     ? $"This node needs at least {slotNode.minimumSlotCount} {slotNode.slotDisplayName.ToLowerInvariant()} slot(s)."
                     : $"Cannot remove because the last {slotNode.slotDisplayName.ToLowerInvariant()} slot is still connected.";
 
             countLabel.text = $"{slotNode.slotDisplayName} {slotCount}";
             countLabel.tooltip = $"{slotCount} {slotNode.slotDisplayName.ToLowerInvariant()} slots";
+            SetChildControlMessage(messageLabel, !aboveMinimum
+                ? $"Minimum {slotNode.minimumSlotCount}"
+                : lastSlotConnected
+                    ? "Disconnect last slot"
+                    : string.Empty);
 
             removeButton.userData = new SlotControlBinding(node, slotNode, graphNode, -1);
             addButton.userData = new SlotControlBinding(node, slotNode, graphNode, 1);
@@ -627,13 +980,31 @@ namespace TitanTool.Editor {
             countLabel.style.fontSize = 9f;
             countLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
             countLabel.style.color = Color.white;
+            Label messageLabel = new Label { name = CHILD_MESSAGE_NAME };
+            messageLabel.style.minWidth = 92f;
+            messageLabel.style.height = 18f;
+            messageLabel.style.marginLeft = 2f;
+            messageLabel.style.marginRight = 3f;
+            messageLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+            messageLabel.style.fontSize = 9f;
+            messageLabel.style.color = new Color(1f, 0.88f, 0.55f);
             Button addButton = CreateChildControlButton("child-add", "+");
 
             controls.Add(removeButton);
             controls.Add(countLabel);
+            controls.Add(messageLabel);
             controls.Add(addButton);
             parent.Insert(Mathf.Clamp(index, 0, parent.childCount), controls);
             return controls;
+        }
+
+        private static void SetChildControlMessage(Label label, string text) {
+            if (label == null)
+                return;
+
+            label.text = text;
+            label.tooltip = text;
+            label.style.display = string.IsNullOrEmpty(text) ? DisplayStyle.None : DisplayStyle.Flex;
         }
 
         private static Button CreateChildControlButton(string name, string text) {
@@ -667,6 +1038,14 @@ namespace TitanTool.Editor {
             if (evt.currentTarget is not VisualElement target || target.userData is not SlotControlBinding binding)
                 return;
 
+            if (binding.delta < 0 &&
+                TryGetResizableSlotCount(binding.node, binding.slotNode, out int slotCount) &&
+                IsLastSlotPortConnected(binding.node, binding.slotNode, slotCount)) {
+                SetChildControlMessage(target.parent?.Q<Label>(CHILD_MESSAGE_NAME), "Disconnect last slot");
+                evt.StopPropagation();
+                return;
+            }
+
             AdjustSlotCount(binding.node, binding.slotNode, binding.graphNode, binding.delta);
             evt.StopPropagation();
         }
@@ -680,7 +1059,6 @@ namespace TitanTool.Editor {
                 return;
 
             if (delta < 0 && IsLastSlotPortConnected(node, slotNode, slotCount)) {
-                Debug.LogWarning($"TitanTool: disconnect the last {slotNode.slotDisplayName.ToLowerInvariant()} slot before removing it.");
                 return;
             }
 
@@ -851,6 +1229,23 @@ namespace TitanTool.Editor {
             return true;
         }
 
+        private static string GetRuntimeStatusTooltip(BossGraphNode graphNode, RuntimeViewState runtimeState) {
+            if (!runtimeState.isValid || string.IsNullOrEmpty(graphNode.runtimeGuid))
+                return null;
+
+            RuntimeNode runtimeNode = runtimeState.graph.GetNode(graphNode.runtimeGuid);
+            if (runtimeNode == null)
+                return null;
+
+            RuntimeNodeDebugData debugData = runtimeState.context.GetDebug(runtimeNode);
+            return string.IsNullOrWhiteSpace(debugData.statusReason)
+                ? $"Last ticked {debugData.tickCount} time(s)."
+                : debugData.statusReason;
+        }
+
+        private static float GetPulse01(float speed) {
+            return 0.5f + 0.5f * Mathf.Sin((float)EditorApplication.timeSinceStartup * Mathf.PI * 2f * speed);
+        }
         private static Color GetStatusColor(NodeStatus status) {
             return status switch {
                 NodeStatus.Success => new Color(0.18f, 0.78f, 0.36f),

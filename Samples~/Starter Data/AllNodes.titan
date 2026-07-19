@@ -834,7 +834,7 @@ MonoBehaviour:
         m_Version: 2
         m_Position: {x: -715.81726, y: 303.71512}
         m_Title: 
-        m_Tooltip: Runs its child repeatedly for the configured number of loops.
+        m_Tooltip: Runs connected child branches in order, repeats that sequence for Loops, and can remember success after finishing once.
         m_NodePreviewModel:
           rid: -2
         m_State: 0

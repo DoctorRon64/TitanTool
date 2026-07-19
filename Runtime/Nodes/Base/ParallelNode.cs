@@ -13,9 +13,13 @@ namespace TitanTool.Runtime.Nodes.Base {
     }
 
     public enum ParallelBehaviorPreset {
+        [InspectorName("Fail Fast - all children must succeed")]
         FailFast,
+        [InspectorName("Any Success Wins - finish on first success")]
         AnySuccessWins,
+        [InspectorName("Wait For All - every child finishes")]
         WaitForAll,
+        [InspectorName("First Result Wins - success or failure ends it")]
         FirstResultWins
     }
 

@@ -13,14 +13,14 @@ Completed branches wait inside the parallel node while unfinished branches keep 
 
 ## Repeat Attack Pattern
 
-Use **Repeat Children** around a compact group such as:
+Use **Repeat Sequence** around a compact group such as:
 
 - shoot
 - wait
 - shoot
 - wait
 
-The repeater runs the connected child branches in order, then repeats the whole group for the configured loop count.
+The repeater runs the connected child branches in order, then repeats the whole group for the configured loop count. Use `After Completion > Remember Success` when the repeated sequence should finish once and not replay the next time its parent reaches it.
 
 ## Parallel With Delay
 

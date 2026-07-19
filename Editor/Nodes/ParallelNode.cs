@@ -32,7 +32,7 @@ namespace TitanTool.Editor.Nodes {
                 .Delayed();
 
             context.AddOption<ParallelBehaviorPreset>(OPTION_PRESET)
-                .WithDisplayName("Behavior")
+                .WithDisplayName("Finish Rule")
                 .WithDefaultValue(ParallelBehaviorPreset.FailFast)
                 .Delayed();
         }
@@ -59,7 +59,7 @@ namespace TitanTool.Editor.Nodes {
             }
 
             if (GetPreset() == ParallelBehaviorPreset.FirstResultWins) {
-                context.Warning("Parallel is configured to finish on any success or failure. If both happen during the same update, failure takes priority.");
+                context.Warning("First Result Wins ends the parallel group on the first child result. If success and failure happen during the same update, failure takes priority.");
             }
         }
 

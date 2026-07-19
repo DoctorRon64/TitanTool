@@ -1,11 +1,33 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TitanTool.Runtime {
+    public readonly struct BlackboardChange {
+        public BlackboardChange(int frame, float time, string key, Type type, object oldValue, object newValue, bool removed) {
+            this.frame = frame;
+            this.time = time;
+            this.key = key;
+            this.type = type;
+            this.oldValue = oldValue;
+            this.newValue = newValue;
+            this.removed = removed;
+        }
+
+        public readonly int frame;
+        public readonly float time;
+        public readonly string key;
+        public readonly Type type;
+        public readonly object oldValue;
+        public readonly object newValue;
+        public readonly bool removed;
+    }
     public class Blackboard {
+        private const int MaxChangeHistory = 80;
         private readonly Dictionary<string, object> m_data = new();
         private readonly Dictionary<string, Type> m_types = new();
+        private readonly Queue<BlackboardChange> m_changes = new();
 
         public void Set<T>(BlackboardKey<T> key, T value) {
             SetValue(key.Name, value);
@@ -27,7 +49,9 @@ namespace TitanTool.Runtime {
                 m_types[keyName] = typeof(T);
             }
 
+            m_data.TryGetValue(keyName, out object oldValue);
             m_data[keyName] = value;
+            RecordChange(keyName, typeof(T), oldValue, value, false);
         }
 
         public T Get<T>(BlackboardKey<T> key) {
@@ -57,12 +81,27 @@ namespace TitanTool.Runtime {
         }
 
         public void RemoveValue(string keyName) {
-            m_data.Remove(keyName);
+            m_data.TryGetValue(keyName, out object oldValue);
+            m_types.TryGetValue(keyName, out Type oldType);
+            bool removed = m_data.Remove(keyName);
             m_types.Remove(keyName);
+
+            if (removed) {
+                RecordChange(keyName, oldType, oldValue, null, true);
+            }
+        }
+
+        private void RecordChange(string keyName, Type type, object oldValue, object newValue, bool removed) {
+            m_changes.Enqueue(new BlackboardChange(Time.frameCount, Time.realtimeSinceStartup, keyName, type, oldValue, newValue, removed));
+
+            while (m_changes.Count > MaxChangeHistory) {
+                m_changes.Dequeue();
+            }
         }
 
         public IReadOnlyDictionary<string, object> values => m_data;
         public IReadOnlyDictionary<string, Type> types => m_types;
+        public IReadOnlyList<BlackboardChange> changes => m_changes.ToList();
     }
 
     public class BlackboardKey<T> {

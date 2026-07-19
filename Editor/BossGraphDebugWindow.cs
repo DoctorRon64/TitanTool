@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TitanTool.Runtime;
@@ -14,6 +15,7 @@ namespace TitanTool.Editor {
         private Vector2 m_scroll;
         private string m_filter = string.Empty;
         private bool m_showOnlyVisited;
+        private string m_selectedNodeGuid = string.Empty;
 
         private GUIStyle m_headerStyle;
         private GUIStyle m_subtleLabelStyle;
@@ -80,7 +82,11 @@ namespace TitanTool.Editor {
 
                 HashSet<RuntimeNode> lastTickPath = director.context.lastTickPath.ToHashSet();
                 DrawRuntimeSummary(director, lastTickPath);
+                DrawSelectedNodeDetails(director.context, lastTickPath);
+                DrawActiveEdges(director.context);
+                DrawTraceTimeline(director.context);
                 DrawBlackboard(director.context);
+                DrawBlackboardChanges(director.context);
                 DrawNodeList(director.context, lastTickPath);
             }
             finally {
@@ -90,7 +96,7 @@ namespace TitanTool.Editor {
 
         private void DrawToolbar() {
             using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar)) {
-                Object picked = EditorGUILayout.ObjectField(m_graph, typeof(BossGraphAsset), false, GUILayout.MinWidth(220));
+                UnityEngine.Object picked = EditorGUILayout.ObjectField(m_graph, typeof(BossGraphAsset), false, GUILayout.MinWidth(220));
                 if (picked is BossGraphAsset graph)
                     m_graph = graph;
 
@@ -151,6 +157,61 @@ namespace TitanTool.Editor {
             DrawActivePath(director.context.lastTickPath);
         }
 
+        private void DrawActiveEdges(NodeContext context) {
+            if (context == null || context.lastTickEdges.Count == 0)
+                return;
+
+            EditorGUILayout.Space(2);
+            using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
+                using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                    EditorGUILayout.LabelField("Active Edges", m_headerStyle, GUILayout.Width(86));
+                    EditorGUILayout.LabelField($"{context.lastTickEdges.Count} this tick", m_subtleLabelStyle, GUILayout.Width(92));
+                    GUILayout.FlexibleSpace();
+                }
+
+                foreach (RuntimeNodeEdge edge in context.lastTickEdges.Skip(Math.Max(0, context.lastTickEdges.Count - 8))) {
+                    string from = edge.from != null ? edge.from.displayName : "Missing";
+                    string to = edge.to != null ? edge.to.displayName : "Missing";
+                    NodeStatus status = edge.to != null ? context.GetStatus(edge.to) : NodeStatus.Failure;
+
+                    using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                        DrawStatusPill(StatusShortName(status), GetStatusColor(status, true));
+                        EditorGUILayout.LabelField(from, m_metricValueStyle, GUILayout.Width(150));
+                        EditorGUILayout.LabelField(">", m_guidStyle, GUILayout.Width(16));
+                        EditorGUILayout.LabelField(to, m_subtleLabelStyle);
+                    }
+                }
+            }
+        }
+
+        private void DrawTraceTimeline(NodeContext context) {
+            if (context == null || context.traceEvents.Count == 0)
+                return;
+
+            EditorGUILayout.Space(2);
+            using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
+                using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                    EditorGUILayout.LabelField("Timeline", m_headerStyle, GUILayout.Width(70));
+                    EditorGUILayout.LabelField($"last {Math.Min(12, context.traceEvents.Count)} events", m_subtleLabelStyle, GUILayout.Width(96));
+                    GUILayout.FlexibleSpace();
+                }
+
+                foreach (RuntimeNodeTraceEvent trace in context.traceEvents.Skip(Math.Max(0, context.traceEvents.Count - 12)).Reverse()) {
+                    RuntimeNode node = trace.node;
+                    string indent = new string(' ', Math.Min(trace.depth, 8) * 2);
+                    string nodeName = node != null ? node.displayName : "Missing";
+                    string reason = string.IsNullOrWhiteSpace(trace.reason) ? string.Empty : $" - {trace.reason}";
+
+                    using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                        EditorGUILayout.LabelField(trace.frame.ToString(), m_guidStyle, GUILayout.Width(48));
+                        DrawStatusPill(StatusShortName(trace.status), GetStatusColor(trace.status, true));
+                        EditorGUILayout.LabelField($"{indent}{nodeName}", m_metricValueStyle, GUILayout.MinWidth(140));
+                        EditorGUILayout.LabelField($"{trace.duration * 1000f:F2} ms{reason}", m_subtleLabelStyle);
+                    }
+                }
+            }
+        }
+
         private void DrawNodeList(NodeContext context, HashSet<RuntimeNode> lastTickPath) {
             List<RuntimeNode> visibleNodes = m_graph.nodes
                 .Where(node => node != null)
@@ -205,12 +266,17 @@ namespace TitanTool.Editor {
 
             GUIStyle rowStyle = index % 2 == 0 ? m_nodeRowStyle : m_nodeRowAltStyle;
             Rect rect = EditorGUILayout.BeginHorizontal(rowStyle, GUILayout.Height(26));
+            bool selected = string.Equals(m_selectedNodeGuid, node.guid, StringComparison.Ordinal);
+            if (selected) {
+                EditorGUI.DrawRect(new Rect(rect.x + 4f, rect.y + 1f, Mathf.Max(1f, rect.width - 8f), Mathf.Max(1f, rect.height - 2f)), new Color(0.22f, 0.35f, 0.58f, 0.28f));
+            }
+
             Rect borderRect = new(rect.x, rect.y + 1f, 4f, Mathf.Max(1f, rect.height - 2f));
             EditorGUI.DrawRect(borderRect, color);
 
             GUILayout.Space(8);
             DrawStatusPill(visitedThisTick ? StatusShortName(status) : "Idle", color);
-            EditorGUILayout.LabelField(node.displayName, visitedThisTick ? m_headerStyle : m_subtleLabelStyle, GUILayout.MinWidth(130));
+            EditorGUILayout.LabelField(node.displayName, selected || visitedThisTick ? m_headerStyle : m_subtleLabelStyle, GUILayout.MinWidth(130));
             EditorGUILayout.LabelField(node.GetType().Name, m_subtleLabelStyle, GUILayout.Width(142));
             EditorGUILayout.LabelField(debug != null ? debug.tickCount.ToString() : "--", m_monoStyle, GUILayout.Width(42));
             EditorGUILayout.LabelField(context != null ? $"{context.GetTiming(node) * 1000f:F2}" : "--", m_monoStyle, GUILayout.Width(64));
@@ -223,6 +289,109 @@ namespace TitanTool.Editor {
             }
 
             EditorGUILayout.EndHorizontal();
+
+            if (Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition)) {
+                m_selectedNodeGuid = node.guid;
+                GUI.FocusControl(null);
+                Repaint();
+                Event.current.Use();
+            }
+        }
+
+        private void DrawSelectedNodeDetails(NodeContext context, HashSet<RuntimeNode> lastTickPath) {
+            RuntimeNode node = ResolveSelectedNode(context, lastTickPath);
+            if (node == null)
+                return;
+
+            RuntimeNodeDebugData debug = context.GetDebug(node);
+            NodeStatus status = context.GetStatus(node);
+            bool visitedThisTick = lastTickPath.Contains(node);
+            List<RuntimeNode> parents = m_graph.nodes
+                .Where(candidate => candidate != null && candidate.children.Contains(node))
+                .ToList();
+            List<RuntimeNode> activeParents = context.lastTickEdges
+                .Where(edge => ReferenceEquals(edge.to, node) && edge.from != null)
+                .Select(edge => edge.from)
+                .Distinct()
+                .ToList();
+
+            EditorGUILayout.Space(2);
+            using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
+                using (new EditorGUILayout.HorizontalScope(GUILayout.Height(20))) {
+                    DrawStatusPill(visitedThisTick ? StatusShortName(status) : "Idle", GetStatusColor(status, visitedThisTick));
+                    EditorGUILayout.LabelField(node.displayName, m_headerStyle, GUILayout.MinWidth(150));
+                    EditorGUILayout.LabelField(node.GetType().Name, m_subtleLabelStyle, GUILayout.Width(150));
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("Ping", m_miniButtonStyle, GUILayout.Width(44))) {
+                        Selection.activeObject = node;
+                        EditorGUIUtility.PingObject(node);
+                    }
+                }
+
+                using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                    DrawDetailMetric("Ticks", debug.tickCount.ToString(), 86f);
+                    DrawDetailMetric("Time", $"{context.GetTiming(node) * 1000f:F2} ms", 112f);
+                    DrawDetailMetric("Children", node.children.Count(child => child != null).ToString(), 98f);
+                    DrawDetailMetric("Guid", ShortGuid(node.guid), 116f);
+                    GUILayout.FlexibleSpace();
+                }
+
+                DrawDetailLine("Reason", GetDebugReason(debug));
+                DrawDetailLine("Parents", parents.Count == 0 ? "None" : string.Join(", ", parents.Select(parent => parent.displayName)));
+                DrawDetailLine("Active Parent", activeParents.Count == 0 ? "None this tick" : string.Join(", ", activeParents.Select(parent => parent.displayName)));
+
+                if (node.children.Any(child => child != null)) {
+                    EditorGUILayout.Space(2);
+                    EditorGUILayout.LabelField("Child Status", m_columnHeaderStyle);
+                    foreach (RuntimeNode child in node.children.Where(child => child != null)) {
+                        NodeStatus childStatus = context.GetStatus(child);
+                        RuntimeNodeDebugData childDebug = context.GetDebug(child);
+                        bool childVisited = lastTickPath.Contains(child);
+                        using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                            DrawStatusPill(childVisited ? StatusShortName(childStatus) : "Idle", GetStatusColor(childStatus, childVisited));
+                            EditorGUILayout.LabelField(child.displayName, m_metricValueStyle, GUILayout.Width(150));
+                            EditorGUILayout.LabelField(GetDebugReason(childDebug), m_subtleLabelStyle);
+                        }
+                    }
+                }
+            }
+        }
+
+        private RuntimeNode ResolveSelectedNode(NodeContext context, HashSet<RuntimeNode> lastTickPath) {
+            RuntimeNode selected = !string.IsNullOrEmpty(m_selectedNodeGuid)
+                ? m_graph.nodes.FirstOrDefault(node => node != null && node.guid == m_selectedNodeGuid)
+                : null;
+
+            if (selected != null)
+                return selected;
+
+            RuntimeNode activeNode = lastTickPath.LastOrDefault(node => node != null);
+            if (activeNode != null) {
+                m_selectedNodeGuid = activeNode.guid;
+                return activeNode;
+            }
+
+            RuntimeNode tracedNode = context.traceEvents.LastOrDefault(trace => trace.node != null).node;
+            if (tracedNode != null) {
+                m_selectedNodeGuid = tracedNode.guid;
+                return tracedNode;
+            }
+
+            return null;
+        }
+
+        private void DrawDetailMetric(string label, string value, float width) {
+            using (new EditorGUILayout.HorizontalScope(GUILayout.Width(width))) {
+                EditorGUILayout.LabelField(label, m_metricLabelStyle, GUILayout.Width(48));
+                EditorGUILayout.LabelField(value, m_metricValueStyle);
+            }
+        }
+
+        private void DrawDetailLine(string label, string value) {
+            using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                EditorGUILayout.LabelField(label, m_metricLabelStyle, GUILayout.Width(86));
+                EditorGUILayout.LabelField(value, m_subtleLabelStyle);
+            }
         }
 
         private void DrawCompactMetric(string label, string value, Color accent, float width) {
@@ -271,6 +440,34 @@ namespace TitanTool.Editor {
                         EditorGUILayout.LabelField(pair.Key, m_metricValueStyle, GUILayout.Width(150));
                         EditorGUILayout.LabelField(pair.Value != null ? pair.Value.GetType().Name : "null", m_guidStyle, GUILayout.Width(96));
                         EditorGUILayout.LabelField(FormatBlackboardValue(pair.Value), m_subtleLabelStyle);
+                    }
+                }
+            }
+        }
+
+        private void DrawBlackboardChanges(NodeContext context) {
+            if (context?.blackboard == null || context.blackboard.changes.Count == 0)
+                return;
+
+            EditorGUILayout.Space(2);
+            using (new EditorGUILayout.VerticalScope(m_cardStyle)) {
+                using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                    EditorGUILayout.LabelField("Blackboard Changes", m_headerStyle, GUILayout.Width(132));
+                    EditorGUILayout.LabelField($"last {Math.Min(8, context.blackboard.changes.Count)}", m_subtleLabelStyle, GUILayout.Width(54));
+                    GUILayout.FlexibleSpace();
+                }
+
+                foreach (BlackboardChange change in context.blackboard.changes.Skip(Math.Max(0, context.blackboard.changes.Count - 8)).Reverse()) {
+                    string typeName = change.type != null ? change.type.Name : "Unknown";
+                    string arrow = change.removed ? "removed" : "=";
+                    string value = change.removed ? FormatBlackboardValue(change.oldValue) : FormatBlackboardValue(change.newValue);
+
+                    using (new EditorGUILayout.HorizontalScope(GUILayout.Height(18))) {
+                        EditorGUILayout.LabelField(change.frame.ToString(), m_guidStyle, GUILayout.Width(48));
+                        EditorGUILayout.LabelField(change.key, m_metricValueStyle, GUILayout.Width(150));
+                        EditorGUILayout.LabelField(typeName, m_guidStyle, GUILayout.Width(96));
+                        EditorGUILayout.LabelField(arrow, m_guidStyle, GUILayout.Width(56));
+                        EditorGUILayout.LabelField(value, m_subtleLabelStyle);
                     }
                 }
             }

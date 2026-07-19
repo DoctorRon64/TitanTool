@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TitanTool.Runtime.Nodes.Custom;
 using RuntimeNode = TitanTool.Runtime.Nodes.Base.Node;
 using Unity.GraphToolkit.Editor;
@@ -7,7 +8,7 @@ namespace TitanTool.Editor.Nodes {
     [Serializable]
     [UseWithGraph(typeof(BossGraph))]
     [GraphNode(typeof(TitanTool.Runtime.Nodes.Custom.RuntimeCompareNode), "Runtime Compare", "Condition/Runtime/", BossGraphNodeCategory.Condition, tooltip: "Checks a numeric runtime variable and succeeds only when the selected comparison is true.", searchKeywords: "blackboard variable counter condition compare less greater equal number")]
-    public class RuntimeCompareNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator {
+    public class RuntimeCompareNode : BossGraphNode, IRuntimeNodeCompiler, IGraphNodeValidator, IGraphBlackboardKeyUsageProvider {
         private const string IN_PORT_KEY_NAME = "KeyName";
         private const string IN_PORT_INT_THRESHOLD = "IntThreshold";
         private const string IN_PORT_FLOAT_THRESHOLD = "FloatThreshold";
@@ -71,6 +72,11 @@ namespace TitanTool.Editor.Nodes {
                 context.Error("Blackboard key is required.");
         }
 
+        public IEnumerable<GraphBlackboardKeyUsage> GetBlackboardKeyUsages() {
+            string keyName = GraphNodePortUtility.GetInputValue<string>(this, IN_PORT_KEY_NAME);
+            Type valueType = GetValueType() == BlackboardNumberType.Float ? typeof(float) : typeof(int);
+            yield return new GraphBlackboardKeyUsage(keyName, valueType, $"Runtime Compare {GetComparison()}");
+        }
         private BlackboardNumberType GetValueType() {
             if (GetNodeOptionByName(OPTION_VALUE_TYPE)?.TryGetValue(out BlackboardNumberType valueType) == true)
                 return valueType;
