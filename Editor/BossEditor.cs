@@ -61,6 +61,7 @@ namespace TitanTool.Editor {
                             graph.objectReferenceValue = null;
                             EditorUtility.SetDirty(bossDirector);
                             AssetDatabase.SaveAssets();
+                            TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.GraphDetached);
                         }
                     }
 
@@ -138,6 +139,7 @@ namespace TitanTool.Editor {
             targetPoints.objectReferenceValue = provider;
             EditorUtility.SetDirty(bossDirector);
             Selection.activeObject = providerObject;
+            TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.ProviderCreated);
         }
 
         private static void AssignSceneProvider(SerializedProperty targetPoints) {
@@ -147,6 +149,7 @@ namespace TitanTool.Editor {
 
             targetPoints.objectReferenceValue = provider;
             Selection.activeObject = provider;
+            TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.ProviderAssigned);
         }
 
         private void DrawCard(string title, Action content) {
@@ -198,6 +201,7 @@ namespace TitanTool.Editor {
             UnityEngine.Object graphAsset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(graphPath);
             if (graphAsset != null) {
                 AssetDatabase.OpenAsset(graphAsset);
+                TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.GraphOpened);
                 return;
             }
 
@@ -265,6 +269,7 @@ namespace TitanTool.Editor {
             serializedObject.FindProperty("m_graph").objectReferenceValue = runtimeGraphAsset;
             EditorUtility.SetDirty(bossDirector);
             AssetDatabase.SaveAssets();
+            TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.GraphCreated);
         }
 
         private void EnsureStyles() {

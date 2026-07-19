@@ -10,7 +10,18 @@ namespace TitanTool.Editor {
         WireConnected,
         WireRemoved,
         ChildIncreased,
-        ChildDecreased
+        ChildDecreased,
+        GraphOpened,
+        GraphCreated,
+        GraphDetached,
+        SelectionAligned,
+        CommentCreated,
+        WireSplit,
+        ProviderCreated,
+        ProviderAssigned,
+        TargetPointCreated,
+        TargetPointsCollected,
+        TargetPointKeysUpdated
     }
 
     public class TitanToolEditorSoundSettings : ScriptableObject {
@@ -27,6 +38,17 @@ namespace TitanTool.Editor {
         [SerializeField] private AudioClip m_wireRemovedClip;
         [SerializeField] private AudioClip m_childIncreasedClip;
         [SerializeField] private AudioClip m_childDecreasedClip;
+        [SerializeField] private AudioClip m_graphOpenedClip;
+        [SerializeField] private AudioClip m_graphCreatedClip;
+        [SerializeField] private AudioClip m_graphDetachedClip;
+        [SerializeField] private AudioClip m_selectionAlignedClip;
+        [SerializeField] private AudioClip m_commentCreatedClip;
+        [SerializeField] private AudioClip m_wireSplitClip;
+        [SerializeField] private AudioClip m_providerCreatedClip;
+        [SerializeField] private AudioClip m_providerAssignedClip;
+        [SerializeField] private AudioClip m_targetPointCreatedClip;
+        [SerializeField] private AudioClip m_targetPointsCollectedClip;
+        [SerializeField] private AudioClip m_targetPointKeysUpdatedClip;
 
         public bool enabled => m_enabled;
         public bool useGeneratedFallbacks => m_useGeneratedFallbacks;
@@ -54,6 +76,17 @@ namespace TitanTool.Editor {
                 TitanToolEditorSoundEvent.WireRemoved => m_wireRemovedClip,
                 TitanToolEditorSoundEvent.ChildIncreased => m_childIncreasedClip,
                 TitanToolEditorSoundEvent.ChildDecreased => m_childDecreasedClip,
+                TitanToolEditorSoundEvent.GraphOpened => m_graphOpenedClip,
+                TitanToolEditorSoundEvent.GraphCreated => m_graphCreatedClip,
+                TitanToolEditorSoundEvent.GraphDetached => m_graphDetachedClip,
+                TitanToolEditorSoundEvent.SelectionAligned => m_selectionAlignedClip,
+                TitanToolEditorSoundEvent.CommentCreated => m_commentCreatedClip,
+                TitanToolEditorSoundEvent.WireSplit => m_wireSplitClip,
+                TitanToolEditorSoundEvent.ProviderCreated => m_providerCreatedClip,
+                TitanToolEditorSoundEvent.ProviderAssigned => m_providerAssignedClip,
+                TitanToolEditorSoundEvent.TargetPointCreated => m_targetPointCreatedClip,
+                TitanToolEditorSoundEvent.TargetPointsCollected => m_targetPointsCollectedClip,
+                TitanToolEditorSoundEvent.TargetPointKeysUpdated => m_targetPointKeysUpdatedClip,
                 _ => null
             };
 
@@ -75,6 +108,17 @@ namespace TitanTool.Editor {
                 TitanToolEditorSoundEvent.WireRemoved => "wire_delete.mp3",
                 TitanToolEditorSoundEvent.ChildIncreased => "child_increase.mp3",
                 TitanToolEditorSoundEvent.ChildDecreased => "child_decrease.mp3",
+                TitanToolEditorSoundEvent.GraphOpened => "wire_add.mp3",
+                TitanToolEditorSoundEvent.GraphCreated => "note_add.mp3",
+                TitanToolEditorSoundEvent.GraphDetached => "note_delete.mp3",
+                TitanToolEditorSoundEvent.SelectionAligned => "wire_add.mp3",
+                TitanToolEditorSoundEvent.CommentCreated => "note_add.mp3",
+                TitanToolEditorSoundEvent.WireSplit => "wire_add.mp3",
+                TitanToolEditorSoundEvent.ProviderCreated => "note_add.mp3",
+                TitanToolEditorSoundEvent.ProviderAssigned => "wire_add.mp3",
+                TitanToolEditorSoundEvent.TargetPointCreated => "note_add.mp3",
+                TitanToolEditorSoundEvent.TargetPointsCollected => "wire_add.mp3",
+                TitanToolEditorSoundEvent.TargetPointKeysUpdated => "child_increase.mp3",
                 _ => null
             };
 
@@ -189,6 +233,17 @@ namespace TitanTool.Editor {
                 TitanToolEditorSoundEvent.WireRemoved => 440f,
                 TitanToolEditorSoundEvent.ChildIncreased => 740f,
                 TitanToolEditorSoundEvent.ChildDecreased => 370f,
+                TitanToolEditorSoundEvent.GraphOpened => 620f,
+                TitanToolEditorSoundEvent.GraphCreated => 700f,
+                TitanToolEditorSoundEvent.GraphDetached => 300f,
+                TitanToolEditorSoundEvent.SelectionAligned => 520f,
+                TitanToolEditorSoundEvent.CommentCreated => 590f,
+                TitanToolEditorSoundEvent.WireSplit => 980f,
+                TitanToolEditorSoundEvent.ProviderCreated => 780f,
+                TitanToolEditorSoundEvent.ProviderAssigned => 560f,
+                TitanToolEditorSoundEvent.TargetPointCreated => 820f,
+                TitanToolEditorSoundEvent.TargetPointsCollected => 680f,
+                TitanToolEditorSoundEvent.TargetPointKeysUpdated => 760f,
                 _ => 550f
             };
 

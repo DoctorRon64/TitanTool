@@ -52,12 +52,16 @@ namespace TitanTool.Editor {
                     using (new EditorGUILayout.HorizontalScope()) {
                         using (new EditorGUI.DisabledScope(missingKeyCount == 0)) {
                             string label = missingKeyCount > 0 ? $"Create Missing Target Point Keys ({missingKeyCount})" : "Create Missing Target Point Keys";
-                            if (GUILayout.Button(label, GUILayout.Height(24)))
+                            if (GUILayout.Button(label, GUILayout.Height(24))) {
                                 EnsureTargetPointKeys(GetTargetPoints(points));
+                                TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.TargetPointKeysUpdated);
+                            }
                         }
 
-                        if (GUILayout.Button("Rename Keys From Objects", GUILayout.Height(24)))
+                        if (GUILayout.Button("Rename Keys From Objects", GUILayout.Height(24))) {
                             RenameTargetPointKeys(GetTargetPoints(points));
+                            TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.TargetPointKeysUpdated);
+                        }
                     }
 
                     DrawTargetPointRows(points);
@@ -136,11 +140,15 @@ namespace TitanTool.Editor {
 
             if (current.type == EventType.DragPerform && hasValidObject) {
                 DragAndDrop.AcceptDrag();
+                bool addedAny = false;
                 foreach (UnityEngine.Object droppedObject in DragAndDrop.objectReferences) {
                     TargetPoint point = GetOrCreateTargetPoint(droppedObject);
-                    if (point != null)
-                        AddTargetPoint(points, point);
+                    if (point != null && AddTargetPoint(points, point))
+                        addedAny = true;
                 }
+
+                if (addedAny)
+                    TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.TargetPointsCollected);
             }
 
             current.Use();
@@ -157,6 +165,7 @@ namespace TitanTool.Editor {
             EnsureTargetPointKeys(new[] { point });
             AddTargetPoint(points, point);
             Selection.activeObject = pointObject;
+            TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.TargetPointCreated);
         }
 
         private static string GetNextChildTargetPointName(Transform parent) {
@@ -205,6 +214,7 @@ namespace TitanTool.Editor {
 
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(target);
+            TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.TargetPointsCollected);
         }
 
         private static bool CanConvertToTargetPoint(UnityEngine.Object value) {
@@ -232,20 +242,21 @@ namespace TitanTool.Editor {
             return Undo.AddComponent<TargetPoint>(gameObject);
         }
 
-        private static void AddTargetPoint(SerializedProperty points, TargetPoint point) {
+        private static bool AddTargetPoint(SerializedProperty points, TargetPoint point) {
             if (point == null)
-                return;
+                return false;
 
             EnsureTargetPointKeys(new[] { point });
 
             for (int i = 0; i < points.arraySize; i++) {
                 if (points.GetArrayElementAtIndex(i).objectReferenceValue == point)
-                    return;
+                    return false;
             }
 
             int index = points.arraySize;
             points.arraySize++;
             points.GetArrayElementAtIndex(index).objectReferenceValue = point;
+            return true;
         }
 
         private static IEnumerable<TargetPoint> GetTargetPoints(SerializedProperty points) {

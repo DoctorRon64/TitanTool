@@ -551,7 +551,11 @@ namespace TitanTool.Editor {
             if (command == null)
                 return false;
 
-            return TryDispatchCommand(graphView, command);
+            bool dispatched = TryDispatchCommand(graphView, command);
+            if (dispatched)
+                TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.WireSplit);
+
+            return dispatched;
         }
 
         private static bool HasCompatiblePortsForWire(object wireModel, object nodeModel) {
@@ -655,7 +659,11 @@ namespace TitanTool.Editor {
             if (command == null)
                 return false;
 
-            return TryDispatchCommand(graphView, command);
+            bool dispatched = TryDispatchCommand(graphView, command);
+            if (dispatched)
+                TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.SelectionAligned);
+
+            return dispatched;
         }
 
         private static bool TryCreateCommentPlacemat(VisualElement graphView) {
@@ -668,7 +676,11 @@ namespace TitanTool.Editor {
             if (command == null)
                 return false;
 
-            return TryDispatchCommand(graphView, command);
+            bool dispatched = TryDispatchCommand(graphView, command);
+            if (dispatched)
+                TitanToolEditorSoundSettings.Play(TitanToolEditorSoundEvent.CommentCreated);
+
+            return dispatched;
         }
 
         private static Rect GetCommentBounds(VisualElement graphView) {
