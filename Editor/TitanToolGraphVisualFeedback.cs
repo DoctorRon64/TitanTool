@@ -39,8 +39,12 @@ namespace TitanTool.Editor {
         private const string CHILD_CONTROLS_NAME = "titantool-child-controls";
         private const string CHILD_COUNT_OPTION_NAME = "ChildCount";
         private const string GRAPH_TOOLKIT_EXECUTION_PORT_CLASS = "ge-port--data-type-execution-flow";
+        private const string GRAPH_TOOLKIT_OUTPUT_PORT_CLASS = "ge-port--direction-output";
+        private const string GRAPH_TOOLKIT_PORT_CONNECTOR_CLASS = "ge-port-connector-part__connector";
         private const string GRAPH_TOOLKIT_PORT_CONNECTOR_LABEL_CLASS = "ge-port-connector-part__label";
         private const string GRAPH_TOOLKIT_PORT_ICON_CLASS = "ge-port__icon";
+        private const string GRAPH_TOOLKIT_EXECUTION_ICON_CLASS = "ge-icon--data-type-execution-flow";
+        private const string EXECUTION_PORT_MARKER_NAME = "titantool-execution-port-marker";
 
         private static double s_nextUpdateTime;
 
@@ -673,8 +677,11 @@ namespace TitanTool.Editor {
                 return;
 
             element.tooltip = "Execution flow";
-            HideDescendantsWithClass(element, GRAPH_TOOLKIT_PORT_CONNECTOR_LABEL_CLASS);
-            HideDescendantsWithClass(element, GRAPH_TOOLKIT_PORT_ICON_CLASS);
+            HidePortChrome(element, GRAPH_TOOLKIT_PORT_CONNECTOR_CLASS);
+            HidePortChrome(element, GRAPH_TOOLKIT_PORT_CONNECTOR_LABEL_CLASS);
+            HidePortChrome(element, GRAPH_TOOLKIT_PORT_ICON_CLASS);
+            HidePortChrome(element, GRAPH_TOOLKIT_EXECUTION_ICON_CLASS);
+            EnsureExecutionPortMarker(element, element.ClassListContains(GRAPH_TOOLKIT_OUTPUT_PORT_CLASS));
         }
 
         private static bool IsExecutionPortView(VisualElement element) {
@@ -699,11 +706,36 @@ namespace TitanTool.Editor {
                     int.TryParse(portName["Out".Length..], out _));
         }
 
-        private static void HideDescendantsWithClass(VisualElement root, string className) {
+        private static void HidePortChrome(VisualElement root, string className) {
             foreach (VisualElement child in Traverse(root)) {
-                if (child != root && child.ClassListContains(className))
-                    child.style.display = DisplayStyle.None;
+                if (child != root && child.ClassListContains(className)) {
+                    child.style.opacity = 0f;
+                    child.pickingMode = PickingMode.Ignore;
+                }
             }
+        }
+
+        private static VisualElement EnsureExecutionPortMarker(VisualElement portView, bool isOutput) {
+            VisualElement marker = portView.Q<VisualElement>(EXECUTION_PORT_MARKER_NAME);
+            if (marker == null) {
+                marker = new VisualElement { name = EXECUTION_PORT_MARKER_NAME };
+                marker.pickingMode = PickingMode.Ignore;
+                marker.style.position = Position.Absolute;
+                marker.style.width = 7f;
+                marker.style.height = 7f;
+                marker.style.top = 8f;
+                marker.style.borderTopLeftRadius = 4f;
+                marker.style.borderTopRightRadius = 4f;
+                marker.style.borderBottomLeftRadius = 4f;
+                marker.style.borderBottomRightRadius = 4f;
+                marker.style.backgroundColor = new Color(0.98f, 0.78f, 0.25f, 0.92f);
+                portView.Add(marker);
+            }
+
+            marker.style.display = DisplayStyle.Flex;
+            marker.style.left = isOutput ? StyleKeyword.Auto : 8f;
+            marker.style.right = isOutput ? 8f : StyleKeyword.Auto;
+            return marker;
         }
 
         private static bool IsExecutionPort(IPort port) {
