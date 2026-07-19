@@ -37,8 +37,10 @@ namespace TitanTool.Editor {
         private const string BLACKBOARD_CHIP_NAME = "titantool-blackboard-chip";
         private const string VALUE_SOURCE_CHIP_NAME = "titantool-value-source-chip";
         private const string CHILD_CONTROLS_NAME = "titantool-child-controls";
-        private const string CHILD_MESSAGE_NAME = "child-message";
         private const string CHILD_COUNT_OPTION_NAME = "ChildCount";
+        private const string GRAPH_TOOLKIT_EXECUTION_PORT_CLASS = "ge-port--data-type-execution-flow";
+        private const string GRAPH_TOOLKIT_PORT_CONNECTOR_LABEL_CLASS = "ge-port-connector-part__label";
+        private const string GRAPH_TOOLKIT_PORT_ICON_CLASS = "ge-port__icon";
 
         private static double s_nextUpdateTime;
 
@@ -110,6 +112,8 @@ namespace TitanTool.Editor {
                 : new Dictionary<BossGraphNode, List<BossGraphValidationIssue>>();
 
             foreach (VisualElement element in Traverse(graphView)) {
+                ApplyExecutionPortChrome(element);
+
                 BossGraphNode graphNode = GetGraphNodeFromView(element);
                 if (graphNode != null) {
                     validationIssues.TryGetValue(graphNode, out List<BossGraphValidationIssue> nodeIssues);
@@ -664,6 +668,44 @@ namespace TitanTool.Editor {
             }
         }
 
+        private static void ApplyExecutionPortChrome(VisualElement element) {
+            if (!IsExecutionPortView(element))
+                return;
+
+            element.tooltip = "Execution flow";
+            HideDescendantsWithClass(element, GRAPH_TOOLKIT_PORT_CONNECTOR_LABEL_CLASS);
+            HideDescendantsWithClass(element, GRAPH_TOOLKIT_PORT_ICON_CLASS);
+        }
+
+        private static bool IsExecutionPortView(VisualElement element) {
+            if (element == null)
+                return false;
+
+            if (element.ClassListContains(GRAPH_TOOLKIT_EXECUTION_PORT_CLASS))
+                return true;
+
+            object model = GetProperty(element, "Model");
+            if (model == null || !model.GetType().Name.Contains("PortModel", StringComparison.Ordinal))
+                return false;
+
+            string portName = GetProperty(model, "UniqueName") as string ??
+                              GetProperty(model, "UniqueId") as string ??
+                              GetProperty(model, "Name") as string ??
+                              GetProperty(model, "name") as string;
+
+            return string.Equals(portName, "In", StringComparison.Ordinal) ||
+                   (portName != null &&
+                    portName.StartsWith("Out", StringComparison.Ordinal) &&
+                    int.TryParse(portName["Out".Length..], out _));
+        }
+
+        private static void HideDescendantsWithClass(VisualElement root, string className) {
+            foreach (VisualElement child in Traverse(root)) {
+                if (child != root && child.ClassListContains(className))
+                    child.style.display = DisplayStyle.None;
+            }
+        }
+
         private static bool IsExecutionPort(IPort port) {
             Type dataType = GetPortDataType(port);
             if (dataType == typeof(NodeFlow))
@@ -845,7 +887,6 @@ namespace TitanTool.Editor {
             Button removeButton = controls.Q<Button>("child-remove");
             Button addButton = controls.Q<Button>("child-add");
             Label countLabel = controls.Q<Label>("child-count");
-            Label messageLabel = controls.Q<Label>(CHILD_MESSAGE_NAME);
 
             bool lastSlotConnected = IsLastSlotPortConnected(node, slotNode, slotCount);
             bool aboveMinimum = slotCount > slotNode.minimumSlotCount;
@@ -859,11 +900,6 @@ namespace TitanTool.Editor {
 
             countLabel.text = $"{slotNode.slotDisplayName} {slotCount}";
             countLabel.tooltip = $"{slotCount} {slotNode.slotDisplayName.ToLowerInvariant()} slots";
-            SetChildControlMessage(messageLabel, !aboveMinimum
-                ? $"Minimum {slotNode.minimumSlotCount}"
-                : lastSlotConnected
-                    ? "Disconnect last slot"
-                    : string.Empty);
 
             removeButton.userData = new SlotControlBinding(node, slotNode, graphNode, -1);
             addButton.userData = new SlotControlBinding(node, slotNode, graphNode, 1);
@@ -980,31 +1016,13 @@ namespace TitanTool.Editor {
             countLabel.style.fontSize = 9f;
             countLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
             countLabel.style.color = Color.white;
-            Label messageLabel = new Label { name = CHILD_MESSAGE_NAME };
-            messageLabel.style.minWidth = 92f;
-            messageLabel.style.height = 18f;
-            messageLabel.style.marginLeft = 2f;
-            messageLabel.style.marginRight = 3f;
-            messageLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-            messageLabel.style.fontSize = 9f;
-            messageLabel.style.color = new Color(1f, 0.88f, 0.55f);
             Button addButton = CreateChildControlButton("child-add", "+");
 
             controls.Add(removeButton);
             controls.Add(countLabel);
-            controls.Add(messageLabel);
             controls.Add(addButton);
             parent.Insert(Mathf.Clamp(index, 0, parent.childCount), controls);
             return controls;
-        }
-
-        private static void SetChildControlMessage(Label label, string text) {
-            if (label == null)
-                return;
-
-            label.text = text;
-            label.tooltip = text;
-            label.style.display = string.IsNullOrEmpty(text) ? DisplayStyle.None : DisplayStyle.Flex;
         }
 
         private static Button CreateChildControlButton(string name, string text) {
@@ -1041,7 +1059,6 @@ namespace TitanTool.Editor {
             if (binding.delta < 0 &&
                 TryGetResizableSlotCount(binding.node, binding.slotNode, out int slotCount) &&
                 IsLastSlotPortConnected(binding.node, binding.slotNode, slotCount)) {
-                SetChildControlMessage(target.parent?.Q<Label>(CHILD_MESSAGE_NAME), "Disconnect last slot");
                 evt.StopPropagation();
                 return;
             }
